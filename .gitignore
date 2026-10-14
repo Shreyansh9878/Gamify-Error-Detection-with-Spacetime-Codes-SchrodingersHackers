@@ -1,0 +1,13 @@
+node_modules/
+.pnpm-store/
+.next/
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.tsbuildinfo
+test-results/
+playwright-report/
+.env*
+!.env.example
+artifacts/

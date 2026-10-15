@@ -94,7 +94,11 @@ export function ResearchLab({ level }: { level: Level }) {
           </label>
         )}
         <button className="primary" disabled={busy} onClick={run}>
-          {busy ? "Evaluating observables…" : "Run research experiment"}
+          {busy
+            ? "Evaluating observables…"
+            : tCount
+              ? "Run T-doped baseline"
+              : "Run Paulice Synthesizer"}
         </button>
       </div>
       {error && (
@@ -105,6 +109,46 @@ export function ResearchLab({ level }: { level: Level }) {
       {result && (
         <div aria-live="polite">
           <h3>{result.label}</h3>
+          {result.gammaCosts && (
+            <details>
+              <summary>
+                Paulice-selected targets, syndrome supports & gamma cost
+              </summary>
+              <p className="muted">
+                Optimizer {result.optimizer}. Gamma is Paulice’s selection cost
+                under its gate/readout proxy, not the mission score. Settings
+                use different check circuits; their supports can include data
+                readout.
+              </p>
+              <div className="table-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Setting</th>
+                      <th>Targets</th>
+                      <th>Syndrome support wires</th>
+                      <th>Gamma cost</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.gammaCosts.map((c) => (
+                      <tr key={c.setting}>
+                        <td>{c.setting}</td>
+                        <td>{c.targets.join(", ") || "none"}</td>
+                        <td>
+                          {c.support.map((s) => s.join(" ⊕ ")).join("; ") ||
+                            "none"}
+                        </td>
+                        <td>
+                          {c.cost == null ? "not reported" : c.cost.toFixed(4)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          )}
           <div className="metrics">
             <div>
               <strong>{pct(result.fidelity)}</strong>

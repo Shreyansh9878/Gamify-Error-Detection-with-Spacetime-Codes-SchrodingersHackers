@@ -1,18 +1,25 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-  Play,
   ArrowLeft,
-  Star,
   Download,
+  Play,
+  Star,
   Volume2,
   VolumeX,
 } from "lucide-react";
-import type { Level, Gate, Check, Result } from "@/lib/types";
+import type {
+  Check,
+  CheckPreview,
+  FaultResult,
+  Level,
+  Result,
+} from "@/lib/types";
 import { api } from "@/lib/api";
 import { CircuitBuilder } from "./CircuitBuilder";
-import { StateView, pct } from "./Visualizers";
+import { pct, ShotHistogram, StateView } from "./Visualizers";
 import { ResearchLab } from "./ResearchLab";
+
 export function Mission({
   level: l,
   onBack,
@@ -26,19 +33,51 @@ export function Mission({
   sound: boolean;
   onSound: () => void;
 }) {
-  const [gates, setGates] = useState<Gate[]>(structuredClone(l.starter)),
-    [checks, setChecks] = useState<Check[]>([]),
+  const gates = l.target;
+  const [checks, setChecks] = useState<Check[]>([]),
+    [preview, setPreview] = useState<CheckPreview | null>(null),
+    [validating, setValidating] = useState(false),
     [noise, setNoise] = useState(1),
     [result, setResult] = useState<Result | null>(null),
     [history, setHistory] = useState<Result[]>([]),
+    [fault, setFault] = useState<FaultResult | null>(null),
+    [faultBusy, setFaultBusy] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
+    [validationError, setValidationError] = useState(""),
     [stale, setStale] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
-  useEffect(() => () => dialog.current?.close(), []);
-  function changed() {
+  useEffect(() => {
+    let current = true;
+    setPreview(null);
+    setValidationError("");
+    if (!checks.length) {
+      setValidating(false);
+      return;
+    }
+    setValidating(true);
+    const timer = setTimeout(() => {
+      api<CheckPreview>("validate-checks", { levelId: l.id, gates, checks })
+        .then((data) => {
+          if (current) setPreview(data);
+        })
+        .catch((e) => {
+          if (current) setValidationError((e as Error).message);
+        })
+        .finally(() => {
+          if (current) setValidating(false);
+        });
+    }, 200);
+    return () => {
+      current = false;
+      clearTimeout(timer);
+    };
+  }, [checks, gates, l.id]);
+  function change(next: Check[]) {
+    setChecks(next);
     setStale(true);
     setError("");
+    setFault(null);
   }
   async function run() {
     setBusy(true);
@@ -52,28 +91,32 @@ export function Mission({
       });
       setResult(r);
       setStale(false);
-      setHistory((h) => [r, ...h].slice(0, 4));
+      setHistory((h) => [r, ...h].slice(0, 10));
       if (r.eligible) onWin(r);
       if (r.passed) {
         dialog.current?.showModal();
         if (sound) {
-          const ctx = new AudioContext(),
-            osc = ctx.createOscillator(),
-            gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.frequency.setValueAtTime(523, ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(
-            1046,
-            ctx.currentTime + 0.2,
-          );
-          gain.gain.setValueAtTime(0.08, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-          osc.start();
-          osc.stop(ctx.currentTime + 0.4);
-          osc.onended = () => {
-            void ctx.close();
-          };
+          try {
+            const ctx = new AudioContext(),
+              o = ctx.createOscillator(),
+              g = ctx.createGain();
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.frequency.setValueAtTime(523, ctx.currentTime);
+            o.frequency.exponentialRampToValueAtTime(
+              1046,
+              ctx.currentTime + 0.2,
+            );
+            g.gain.setValueAtTime(0.08, ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+            o.start();
+            o.stop(ctx.currentTime + 0.4);
+            o.onended = () => {
+              void ctx.close();
+            };
+          } catch {
+            /* Audio availability does not affect scientific results. */
+          }
         }
       }
     } catch (e) {
@@ -82,25 +125,53 @@ export function Mission({
       setBusy(false);
     }
   }
+  async function inject(qubit: number, column: number, pauli: "X" | "Y" | "Z") {
+    setFaultBusy(true);
+    setError("");
+    setFault(null);
+    try {
+      setFault(
+        await api<FaultResult>("trace-fault", {
+          levelId: l.id,
+          gates,
+          checks,
+          faultQubit: qubit,
+          faultColumn: column,
+          faultPauli: pauli,
+        }),
+      );
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setFaultBusy(false);
+    }
+  }
   function download() {
-    if (!result) return;
+    if (!result || stale) return;
     const blob = new Blob(
-      [
-        JSON.stringify(
-          { level: l, request: { gates, checks, noiseScale: noise }, result },
-          null,
-          2,
-        ),
-      ],
-      { type: "application/json" },
-    );
-    const url = URL.createObjectURL(blob),
+        [
+          JSON.stringify(
+            {
+              level: l,
+              request: { levelId: l.id, gates, checks, noiseScale: noise },
+              result,
+              faultDiagnostic: fault,
+            },
+            null,
+            2,
+          ),
+        ],
+        { type: "application/json" },
+      ),
+      url = URL.createObjectURL(blob),
       a = document.createElement("a");
     a.href = url;
     a.download = `quantum-shield-mission-${l.id}.json`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
+  const canRun =
+    !busy && !faultBusy && !validating && (!checks.length || !!preview?.valid);
   return (
     <section>
       <button className="back ghost" onClick={onBack}>
@@ -109,7 +180,8 @@ export function Mission({
       <div className="section-heading">
         <div>
           <p className="eyebrow">
-            MISSION {String(l.id).padStart(2, "0")} / {l.chapter}
+            MISSION {String(l.id).padStart(2, "0")} / {l.chapter} /{" "}
+            {l.checkMode.toUpperCase()} CHECKS
           </p>
           <h1>{l.title}</h1>
           <p className="muted">{l.description}</p>
@@ -124,7 +196,7 @@ export function Mission({
       </div>
       <div className="goal-strip">
         <div>
-          <small>TARGET STATE</small>
+          <small>FIXED PAYLOAD TARGET</small>
           <b>{l.targetLabel}</b>
         </div>
         <div>
@@ -144,24 +216,20 @@ export function Mission({
         <div>
           <CircuitBuilder
             level={l}
-            gates={gates}
             checks={checks}
-            disabled={busy}
-            onChange={(g) => {
-              setGates(g);
-              changed();
-            }}
-            onChecks={(c) => {
-              setChecks(c);
-              changed();
-            }}
+            onChecks={change}
+            disabled={busy || faultBusy}
+            preview={preview}
+            validating={validating}
+            onFault={inject}
+            fault={fault}
           />
           <div className="panel run-panel">
             <label className="range-label">
-              Noise Radar sandbox <b>{Math.round(noise * 100)}%</b>
+              Noise sandbox <b>{Math.round(noise * 100)}%</b>
               <input
                 aria-label="Mission noise strength"
-                disabled={busy}
+                disabled={busy || faultBusy}
                 type="range"
                 min="0"
                 max="1.5"
@@ -169,21 +237,25 @@ export function Mission({
                 value={noise}
                 onChange={(e) => {
                   setNoise(+e.target.value);
-                  changed();
+                  setStale(true);
                 }}
               />
             </label>
             <p className="muted">
-              Stars use 100% noise. Other settings are experiments. Base idle
-              noise: {pct(l.noise)}.
+              {l.noiseLabel}. Stars use 100% noise. Run with no helpers to
+              measure the unprotected baseline.
             </p>
-            <button className="primary run" disabled={busy} onClick={run}>
+            <button className="primary run" disabled={!canRun} onClick={run}>
               <Play size={17} />
-              {busy ? "Running Qiskit…" : "Run circuit"}
+              {busy
+                ? "Running Qiskit…"
+                : validating
+                  ? "Validating invariant…"
+                  : "Run circuit"}
             </button>
-            {error && (
+            {(error || validationError) && (
               <p role="alert" className="error">
-                {error}
+                {error || validationError}
               </p>
             )}
             <details>
@@ -192,12 +264,64 @@ export function Mission({
               <p className="muted">{l.concept}</p>
             </details>
           </div>
+          {fault && (
+            <article
+              className={`panel fault-result ${fault.outcome}`}
+              aria-live="polite"
+            >
+              <p className="eyebrow">IDEAL SINGLE-FAULT DIAGNOSTIC</p>
+              <h3>
+                {fault.outcome === "caught"
+                  ? "Caught · syndrome ≠ 0"
+                  : fault.outcome === "probabilistic"
+                    ? "Probabilistic alarm"
+                    : "No alarm"}
+              </h3>
+              <p>
+                {fault.faultPauli} after q{fault.faultQubit}, column{" "}
+                {fault.faultColumn}: flag probability{" "}
+                {pct(fault.flagProbability)}.{" "}
+                {fault.outputChanged
+                  ? "The unfiltered output differs from this target state."
+                  : "This fault leaves this target state unchanged."}
+              </p>
+              <p className="muted">
+                A missed alarm is not automatically logical corruption.{" "}
+                {fault.protocol}
+              </p>
+              <div className="chips">
+                {Object.entries(fault.syndromeProbabilities).map(([s, p]) => (
+                  <span key={s}>
+                    Syndrome {s}: {pct(p)}
+                  </span>
+                ))}
+              </div>
+              <h3>Forward fault propagation</h3>
+              <div className="fault-trajectory">
+                {fault.trajectory.map((t) => (
+                  <div key={t.boundary}>
+                    <small>Boundary {t.boundary}</small>
+                    <code>
+                      {t.terms
+                        .map((v) => `${v.re.toFixed(3)} ${v.pauli}`)
+                        .join(" + ")}
+                    </code>
+                  </div>
+                ))}
+              </div>
+            </article>
+          )}
+          {faultBusy && (
+            <p role="status">Tracing the injected fault in Qiskit…</p>
+          )}
         </div>
         <article className="panel output" aria-live="polite" aria-busy={busy}>
           <div className="panel-title">
-            <h2>Signal monitor</h2>
+            <h2>Signal & throughput monitor</h2>
             <span className="chip">
-              {stale && result ? "Previous run" : "Qiskit density matrix"}
+              {stale && result
+                ? "Previous run · draft changed"
+                : "Qiskit density matrix"}
             </span>
           </div>
           {result ? (
@@ -208,8 +332,8 @@ export function Mission({
                   <span>Retained fidelity</span>
                 </div>
                 <div>
-                  <strong>{pct(result.retention)}</strong>
-                  <span>Runs kept</span>
+                  <strong>{result.samplingOverhead.toFixed(2)}×</strong>
+                  <span>Sampling overhead 1/p(keep)</span>
                 </div>
                 <div>
                   <strong>{result.score}</strong>
@@ -219,18 +343,22 @@ export function Mission({
                 </div>
               </div>
               <p className="muted">
-                Unprotected: {pct(result.baseline)} · noiseless target match:{" "}
-                {pct(result.idealMatch)}
+                Unprotected fidelity {pct(result.baseline)} · exact retained
+                fraction {pct(result.retention)}
               </p>
+              <ShotHistogram
+                shots={result.shots}
+                kept={result.keptShots}
+                discarded={result.discardedShots}
+                retention={result.retention}
+              />
               <StateView result={result} />
               <p>{result.feedback.join(" ")}</p>
               <div className="chips">
                 <span>Depth {result.depth}</span>
                 <span>+{result.addedGates} operations</span>
                 <span>+{result.addedTwoQubit} two-qubit gates</span>
-                <span>
-                  {result.keptShots}/{result.shots} sampled shots kept
-                </span>
+                <span>{result.ancillas} helpers</span>
               </div>
               {result.checkDetails.map((c, i) => (
                 <p className="muted" key={i}>
@@ -245,15 +373,18 @@ export function Mission({
           ) : (
             <div className="empty">
               <div className="orb">ψ</div>
-              <h3>Build. Protect. Measure.</h3>
-              <p>Your real simulation results will appear here.</p>
+              <h3>Open. Propagate. Close.</h3>
+              <p>
+                Choose Pauli taps around the locked payload, then compare
+                fidelity and shot cost.
+              </p>
             </div>
           )}
         </article>
       </div>
       {history.length > 1 && (
         <article className="panel">
-          <h3>Compare recent runs</h3>
+          <h3>Compare protection strategies</h3>
           <div className="table-scroll">
             <table>
               <thead>
@@ -261,8 +392,9 @@ export function Mission({
                   <th>Run</th>
                   <th>Fidelity</th>
                   <th>Kept</th>
+                  <th>Overhead</th>
                   <th>Depth</th>
-                  <th>Extra 2Q</th>
+                  <th>Helpers / extra 2Q</th>
                   <th>Score</th>
                 </tr>
               </thead>
@@ -272,8 +404,11 @@ export function Mission({
                     <td>{i === 0 ? "Latest" : `−${i}`}</td>
                     <td>{pct(r.fidelity)}</td>
                     <td>{pct(r.retention)}</td>
+                    <td>{r.samplingOverhead.toFixed(2)}×</td>
                     <td>{r.depth}</td>
-                    <td>{r.addedTwoQubit}</td>
+                    <td>
+                      {r.ancillas} / {r.addedTwoQubit}
+                    </td>
                     <td>
                       {r.score}
                       {!r.eligible ? " sandbox" : ""}
@@ -285,13 +420,15 @@ export function Mission({
           </div>
         </article>
       )}
-      <ResearchLab level={l} />
+      {l.id >= 6 && <ResearchLab level={l} />}
       <dialog ref={dialog} className="win-dialog">
         <div className="confetti" aria-hidden="true">
           ✦ · ✧ · ✦ · ✧ · ✦
         </div>
-        <p className="eyebrow">SIGNAL PROTECTED</p>
-        <h2>Mission complete.</h2>
+        <p className="eyebrow">INVARIANT PROTECTED</p>
+        <h2>
+          {l.id === 10 ? "Master Spacetime Architect" : "Mission complete."}
+        </h2>
         <div className="stars">
           {[1, 2, 3].map((s) => (
             <Star
@@ -303,7 +440,13 @@ export function Mission({
         <p>
           {result?.score} points · {pct(result?.fidelity || 0)} fidelity
         </p>
-        <p>Your personal best is saved on this device.</p>
+        <p>
+          {result?.samplingOverhead.toFixed(2)}× sampling overhead. Personal
+          best saved on this device.
+        </p>
+        {l.id === 10 && (
+          <button onClick={download}>Download final strategy report</button>
+        )}
         <button className="primary" onClick={() => dialog.current?.close()}>
           Keep experimenting
         </button>

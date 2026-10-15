@@ -150,6 +150,8 @@ export function Game() {
               onStep={(step) => setProgress((p) => ({ ...p, step }))}
               onFinish={() => unlock("complete")}
               onSkip={() => unlock("skipped")}
+              onBack={() => setScreen("map")}
+              unlocked={unlocked}
             />
           ) : screen === "mission" && selected ? (
             <Mission
@@ -174,7 +176,7 @@ export function Game() {
                     <em>A clearer signal.</em>
                   </h1>
                   <p>
-                    Build quantum circuits. Catch invisible glitches.
+                    Protect fixed circuits. Catch invisible glitches.
                     <br />
                     Discover how a little protection goes a long way.
                   </p>
@@ -241,6 +243,15 @@ export function Game() {
                   <span>Real quantum simulation</span>
                 </div>
               </div>
+              {(progress.best[10]?.stars || 0) > 0 && (
+                <div className="notice">
+                  <ShieldCheck size={20} />
+                  <strong>Master Spacetime Architect</strong>
+                  <span>
+                    Final mission certification earned · saved on this device
+                  </span>
+                </div>
+              )}
               <div className="section-heading mission-heading">
                 <div>
                   <p className="eyebrow">CHOOSE YOUR NEXT EXPERIMENT</p>

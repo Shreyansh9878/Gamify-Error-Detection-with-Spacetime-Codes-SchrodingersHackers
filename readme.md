@@ -1,6 +1,6 @@
 # Quantum Shield · Stage 1
 
-A fresh Next.js game with a real Qiskit 2.4 backend: six interactive onboarding experiments, ten playable missions, coherent spacetime checks, a separate Paulice research lab, and device-local progress. No database, paid API, IBM account, or quantum hardware is required.
+A Next.js game with a real Qiskit 2+ backend: six visual onboarding modules, ten locked-payload missions, manual and assisted spacetime checks, a separate Paulice research lab, and device-local progress. No database, paid API, IBM account, or quantum hardware is required.
 
 ## Run locally
 
@@ -38,7 +38,7 @@ For a local production build, keep Python running and execute `pnpm build`, then
 src/app/                    Next.js entry, metadata, responsive theme
 src/components/Game.tsx     Mission map, onboarding gate, saved personal bests
 src/components/Tutorial.tsx Six-step interactive lesson engine
-src/components/CircuitBuilder.tsx  Click/drag editor, undo, check controls
+src/components/CircuitBuilder.tsx  Locked payload, manual/assisted taps, boundary pins
 src/components/Mission.tsx  Run orchestration, results, export, stars, audio
 src/components/Visualizers.tsx     Probabilities, amplitudes, Bloch vectors, radar
 src/components/ResearchLab.tsx     Paulice and controlled T-family experiments
@@ -63,17 +63,17 @@ The previous terminal/notebook implementation is not used. The three `STAGE_*.md
 
 `Game` loads the authoritative level registry from Python and validates stored progress using Zod. New profiles open flight school automatically. Both completing all six lessons and the visible skip override unlock all ten missions. Mission cards suggest a progression without trapping advanced players behind sequential locks.
 
-`Tutorial` keeps an action-completion set for the current microstep. It only records successful server experiments. The current step persists; a refresh repeats that step's small experiments. `Mission` owns the gate/check draft, the last result, and a four-run comparison history. Edits mark results stale and disable exporting a result against a different draft. Gate edits support undo; a two-qubit gate is placed by choosing control then target in one column. Keyboard users can operate every cell as a button. Dragging is optional.
+`Tutorial` tracks completed experiments for the current module. An invalid manual loop does not complete the invariant task. The current module persists; a refresh repeats its short experiments. `Mission` owns only the protection draft: payload gates are read-only. Missions 1–5 require an explicit closing selection; missions 6–10 provide signed Clifford-tableau propagation with T-crossing validation. Multi-wire closing products are supported. Boundary pins and select controls are keyboard accessible. A ten-run comparison history, a single-fault tracer, and a live validation preview support strategy design. Changed settings mark results stale and disable exporting a mismatched result.
 
 Every scored run travels to Python. The server selects its own target, limits, noise, and score formula. The client cannot submit a score, target vector, Python code, or arbitrary circuit instructions. Noise settings other than 100% are sandbox runs and cannot earn stars. Score and star personal bests are tracked independently. Local storage can be edited by its owner and is not a trusted leaderboard.
 
-Storage key: `quantum-shield-v1`. Schema:
+Storage key: `quantum-shield-qed-v2`. Schema:
 
 ```json
-{"version":1,"tutorial":"new","step":0,"sound":false,"best":{"1":{"score":811,"stars":2}}}
+{"version":2,"tutorial":"new","step":0,"sound":false,"best":{"1":{"score":843,"stars":3}}}
 ```
 
-Tutorial values: `new`, `complete`, `skipped`. Corrupt or incompatible storage resets to safe defaults. Unavailable storage produces a visible session-only notice. The game sends no analytics or account information.
+The v2 storage namespace preserves old data without mixing scores from the previous state-building missions. Tutorial values: `new`, `complete`, `skipped`. Corrupt or incompatible storage resets to safe defaults. Unavailable storage produces a visible session-only notice. The game sends no analytics or account information.
 
 ## API
 
@@ -81,14 +81,16 @@ Tutorial values: `new`, `complete`, `skipped`. Corrupt or incompatible storage r
 |---|---|
 | `GET /api/health` | Engine and installed package versions |
 | `GET /api/levels` | Ten immutable server mission definitions |
-| `POST /api/tutorial/{1..6}` | `{action, noise}`; lesson-specific action whitelist |
-| `POST /api/run-circuit` | `{levelId, gates, checks, noiseScale}` |
+| `POST /api/tutorial/{1..6}` | `{action, noise, pauli, closingPauli, shots}`; module-specific experiments |
+| `POST /api/run-circuit` | `{levelId, gates, checks, noiseScale, shots}` |
+| `POST /api/validate-checks` | Fixed payload plus checks; returns closure, Pauli paths, and T-crossing diagnostics |
+| `POST /api/trace-fault` | Fixed payload plus checks, `faultQubit`, `faultColumn`, `faultPauli`; ideal single-fault diagnostic |
 | `POST /api/research` | `{levelId, targets, repetitions, tCount}` |
 
 Example mission request:
 
 ```json
-{"levelId":3,"gates":[{"id":"x-0","name":"x","qubits":[0],"column":0}],"checks":[{"qubit":0,"pauli":"Z","start":0,"end":4}],"noiseScale":1}
+{"levelId":1,"gates":[{"id":"x-0-0","name":"x","qubits":[0],"column":0}],"checks":[{"qubit":0,"pauli":"Z","start":1,"end":4,"closingQubit":0,"closingPauli":"Z"}],"noiseScale":1,"shots":1024}
 ```
 
 Gate names, arity, overlap, IDs, time bounds, fixed-payload integrity, gate budgets and ancilla budgets are checked on the server. `rz` uses integer multiples of π/2. Paulice rejects T inputs; manual T-crossing checks must remain Pauli at every gate. Invalid or interfering checks return 422, oversized requests 413, busy computation 429, and disabled simulation 503. The 16 KiB body cap, three data qubits, two helpers, three research repetitions, one concurrent simulation per process, and fixed shots bound each job. The application is a local Stage 1 service; distributed rate limits and public abuse controls belong to hosting work.
@@ -103,7 +105,7 @@ pnpm build
 .venv/Scripts/python.exe -m scripts.benchmark
 ```
 
-The Python suite verifies a passing solution for every level, noise-free state preservation, rejection of invalid T crossings and overlaps, real Paulice check insertion, tutorial syndromes, score penalties, and API validation. Frontend unit tests cover corrupt storage, skip state, and independent score/star records.
+The Python suite verifies authoritative payload enforcement, manual closure and products, independent tableau/operator agreement, fault timing, T barriers, shot conservation, and a passing solution for every level, noise-free state preservation, rejection of invalid T crossings and overlaps, real Paulice check insertion, tutorial syndromes, score penalties, and API validation. Frontend unit tests cover corrupt storage, skip state, independent score/star records, and rendered locked payloads, assisted/manual controls, Bloch vectors, and shot metrics.
 
 With both servers running, optional repeatable browser tests:
 
@@ -112,12 +114,14 @@ pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
-Playwright specifications cover tutorial completion, skipping, a scored mission, refresh persistence, and mobile overflow. They are supplied for repeatability; the browser checks performed during implementation used the Codex browser directly. See `docs/WALKTHROUGH.md`.
+Playwright specifications cover tutorial completion, skipping, a scored mission, refresh persistence, and mobile overflow. All four desktop/mobile journeys passed against the production build and real API. Additional visual checks used the Codex browser. See `docs/WALKTHROUGH.md`.
 
 ## Scientific scope
 
 The QFF PDF defines experiments, not ten official numbered levels or official gate budgets. These missions are authored translations. The supplied document does not include the organizer's calibration/noise parameters, so the implemented channel rates are explicitly synthetic development values. Replace and version those values when official parameters are available.
 
-The game implements the coherent-Pauli sandwich special case; the Research Lab uses the actual `qiskit-paulice` implementation. The app teaches detection and post-selection. It does not claim fault-tolerant correction, correction of arbitrary errors, or monotonic improvements from adding checks. A written report and reproducible results are included. Recording a presentation and publishing/submitting a repository remain user-controlled hackathon submission steps.
+The game implements localized two-endpoint coherent-Pauli invariants; the Research Lab uses the actual `qiskit-paulice` implementation. The app teaches detection and post-selection. It does not claim fault-tolerant correction, correction of arbitrary errors, or monotonic improvements from adding checks. A written report and reproducible results are included. Recording a presentation and publishing/submitting a repository remain user-controlled hackathon submission steps.
 
 Sources: the supplied QFF Advanced Track PDF; [Martiel and Javadi, arXiv:2504.15725](https://arxiv.org/abs/2504.15725); [Paulice spacetime tutorial](https://qiskit.github.io/qiskit-paulice/guides/low_overhead_error_detection_using_spacetime_codes.html); [Aer density-matrix save API](https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.library.save_density_matrix.html).
+
+The current redesign contracts and scientific clarifications are documented in [docs/REDESIGN_IMPLEMENTATION.md](docs/REDESIGN_IMPLEMENTATION.md).

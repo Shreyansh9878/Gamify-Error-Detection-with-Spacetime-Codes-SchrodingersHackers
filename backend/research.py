@@ -56,6 +56,7 @@ def run_research(req: ResearchRequest):
         group=group+[g.compose(generator) for g in group]
     raw_sum,post_sum=1.,1.
     total_kept,total_shots,max_depth,max_two,checks=0,0,0,0,0
+    gamma_costs=[]
     sim=AerSimulator(noise_model=noise,max_parallel_threads=1)
     for index,observable in enumerate(group[1:]):
         measured=circuit.copy()
@@ -67,8 +68,10 @@ def run_research(req: ResearchRequest):
         # Paulice accepts the documented gate set, so remove explicit idle markers
         # from its input. Research circuits have a separately labeled protocol.
         measured.data=[ins for ins in measured.data if ins.operation.name!='id']
-        variants=add_pauli_checks(measured,req.targets,PauliceNoise(gate_noise=.008,readout_noise=.005),cost='gamma',method='windowed',seed=SEED)
+        variants=add_pauli_checks(measured,req.targets,PauliceNoise(gate_noise=level.get('twoQubitNoise',.008),readout_noise=level.get('readoutNoise',.005)),cost='gamma',method='windowed',seed=SEED)
         checked=variants[-1]
+        gamma_costs.append(dict(setting=index,cost=float(checked.cost) if checked.cost is not None and np.isfinite(checked.cost) else None,
+            metric=checked.cost_metric,targets=list(checked.target_qubits),support=[list(s) for s in checked.check_support]))
         pair=[transpile(q,basis_gates=BASIS,optimization_level=0,seed_transpiler=SEED) for q in [measured,checked.circuit]]
         result=sim.run(pair,shots=1024,seed_simulator=SEED+index).result()
         before,_=expectation(result.get_counts(0),pair[0],observable)
@@ -79,6 +82,7 @@ def run_research(req: ResearchRequest):
         two=lambda q:sum(len(ins.qubits)==2 for ins in q.data)
         max_two=max(max_two,two(checked.circuit)-two(measured))
     return dict(metricId='paulice-observable-v1',fidelity=post_sum/len(group),baseline=raw_sum/len(group),
+        gammaCosts=gamma_costs,optimizer='gamma / windowed',
         exactReference=reference_fidelity,
         retention=total_kept/total_shots,shots=total_shots,keptShots=total_kept,checks=checks,
         depth=max_depth,addedTwoQubit=max_two,tCount=0,label='Paulice stabilizer benchmark',

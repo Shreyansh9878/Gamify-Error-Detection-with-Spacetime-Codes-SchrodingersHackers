@@ -1,26 +1,28 @@
-# Demonstration and verification
+# QED redesign walkthrough
 
-1. Start both services using `node scripts/dev.mjs`. Open the app. A fresh browser profile opens flight school. The mission map remains locked until completion or the explicit skip override.
-2. Run H in lesson 1, change noise, and run again. Explain why 50/50 output bars can conceal lost coherence. Run X to distinguish intentional flips from noise.
-3. In lesson 2 compare clean, X, and Z. The Z check flags the anticommuting X error. Explain why a commuting Z is not flagged and why Z has no effect on the example |0> input.
-4. Explore all three lesson-3 buttons. Distinguish discarding detected errors, correcting observable estimates, and decoding the restricted repetition code. The three comparison cards use different quantities; none claims that mitigation repairs individual qubits.
-5. Compare bare and protected runs in lesson 4. Point to both fidelity and kept fraction. Never report one without the other.
-6. In lesson 5 place H, then CX with the guided controls. In lesson 6 prepare and protect. Unlock missions. Experienced users can instead use the visible skip button at any time.
-7. Open First light. Select X, click q0/t0, run. Confirm real Qiskit results and the mission-complete dialog. Close it with Escape. Return to the map, refresh, and verify personal best persistence.
-8. Open Entangled allies. Place H(q0,t0), then choose CX and click q0/t1 followed by q1/t1. Add a Z helper from 0 to 5. Compare the retained state, baseline, helper overhead, syndrome distribution, and sampled kept shots. Export the JSON experiment.
-9. Change the noise slider to 0.5 and run. Confirm that it is a sandbox score and cannot award stars. Return it to 1 for scored runs. Edit a gate after running; verify the stale-results label and disabled export until a new run.
-10. Open mission 8. Add a Z helper from 3 to 7. Then try start 0: propagation through the leading H makes the T crossing invalid, and the server explains the rejection. The same letter at the opening and at the T location need not represent the same propagated operator.
-11. In mission 7's Research Lab choose three repetitions and targets 0 then 1. Run and inspect the actual number of Paulice checks. Compare one helper with two and reverse the target order. Use the benchmark file for a complete controlled comparison table.
-12. Compare T counts 0, 1, 2, 4 at the same repetition count. Use the explicitly labeled comparable unchecked state fidelity, not the separate observable-specific estimator. Explain why the synthetic fixed-slot model can improve fidelity when a T replaces an idle.
+1. Start both services with `node scripts/dev.mjs`. A fresh v2 profile opens the six-module flight school. Main levels stay locked until completion or the visible skip override. Payload gates are never part of the player's editing tools.
+2. In Quantum Noise compare X, Z, and depolarizing channels on the fixed plus state. Change noise strength and rerun. Z noise changes the Bloch vector and fidelity while Z-basis bars stay 50/50. X noise leaves this eigenstate unchanged. Relaxation uses |1> so energy decay is visible.
+3. Explore detection, mitigation, and correction. Distinguish the QED state/shot reference, a two-noise-scale observable extrapolation, and the restricted repetition decoder. The full-QEC resource footprint is explicitly illustrative. Answer QED for the small-helper retained-state task.
+4. Compare the boundary sandwich and localized interval on the fixed GHZ cascade. Explain operator spread, closing weight, two-qubit overhead, fidelity, and the fraction of shots kept. Report measured values without promising which strategy must win.
+5. In Close the Invariant leave X→X around S and test: this is an open loop and can raise false alarms. Change closing to Y and test again. Inject Z into the closed loop; syndrome 1 is flagged. Negative propagated signs are handled by a helper phase correction.
+6. In Shots Have a Cost compare no helpers, one, and two. Change total shots between 256, 1024, and 4096. Check integer conservation and distinguish sampled counts from the exact retained fraction that determines score and expected overhead.
+7. In The Non-Clifford Frontier test X through S and T, then Z through T. Explain that (X+Y)/sqrt(2) is not a Pauli and cannot close using the game's simple Pauli taps. General controlled non-Pauli operators are outside this resource model.
+8. Unlock missions. In mission 1 add a helper. Default Z(q0) from boundary 1 to 4 closes as Z(q0). Change the closing to X; observe red loop feedback and a disabled scored run. Restore Z; observe the green invariant.
+9. Toggle Inject Test Fault. Click X after q0 column 2 and inspect the unit-probability alarm. Try Z instead: no alarm, and |1> is unchanged by that fault up to global phase. A missed flag is not automatically output damage. The fault diagnostic is noiseless apart from the selected fault and never modifies the scored circuit.
+10. Run mission 1 and inspect fidelity, exact sampling overhead, observed kept/discarded counts, score, and resource cost. Close the result dialog, return to the map, refresh, and verify personal-best persistence. Run a non-100% noise setting and confirm it is a sandbox result.
+11. In mission 3 open X on q0 after H at boundary 1, ending at 4. A single closing X on q0 fails after CX. Switch to a multi-wire product and choose X on q0 and q1. The invariant closes. Compare its overhead with a localized Z strategy.
+12. In mission 6, select an opening tap and interval. Qiskit automatically supplies the signed closing product. Explore how a shorter interval can keep it localized. Competing checks may interfere and are validated together before scoring.
+13. In mission 8, place X on q0 from 4 to 8. The T at column 4 turns red and the backend rejects that Pauli crossing. Select Z: the T glows green. Move the opening before the initial H to see why the Pauli at the crossing matters more than the opening letter.
+14. In mission 7's Research Lab choose three repetitions and targets 0 then 1. Run Paulice Synthesizer. Inspect actual helpers, per-observable selected targets/supports, gamma costs, finite-shot estimates, retention, and added gates. Compare target order 1 then 0. These are observable-specific experiments, separate from game state fidelity and score.
+15. Compare T counts using the exact unchecked reference under a fixed mission and repetition count. Use `docs/benchmark-results.json` and `METHODS_AND_RESULTS.md` for the full controlled comparison. Passing mission 10 earns the saved Master Spacetime Architect badge and enables a final strategy export.
 
 ## Accessibility and responsive checks
 
-- Keyboard: Tab to gates and cells, Enter/Space to place; use selectors for checks. Undo and clear have accessible names. Dragging is never required.
-- Modal: focus stays inside the native dialog; Escape closes it and returns focus. Buttons retain visible focus rings.
-- Mobile: at 390 px the sidebar becomes compact navigation, tutorial and lab panels stack, and circuit/table content scrolls inside its container. The page itself must not overflow horizontally.
-- Motion/audio: system reduced-motion preference suppresses transitions and celebration animation. Audio is off by default and toggled explicitly.
-- Failure handling: stop Python and run an experiment; a visible error should appear, and controls should re-enable. Restart Python, retry, and verify recovery. No simulated client fallback fabricates a result.
+- Keyboard users can operate all tap selectors, boundary pins, diagnostic buttons, and dialogs. Payload graphics have no editing handlers. Fault overlays switch their cell to a group so diagnostic buttons remain exposed to assistive technology.
+- The mobile workspace stacks panels and scrolls the circuit, anchor grid, and tables inside their containers. The overall page must not overflow horizontally.
+- A native dialog contains the win overlay and supports Escape. Visible focus, reduced-motion support, and an explicit default-off sound toggle remain in place.
+- Draft changes mark old results stale and disable their export. Debounced validation ignores replies for obsolete drafts. Errors are visible and controls recover after failed requests.
 
 ## Recording outline
 
-Record a 5–7 minute walkthrough: 45 seconds on the problem and detection/mitigation/correction; 60 seconds on onboarding; 90 seconds building and protecting a circuit; 90 seconds comparing fidelity/retention/overhead; 60 seconds on T restrictions and Paulice; 45 seconds on limitations, reproducibility, and findings. Include the package versions and benchmark regeneration command. This repository supplies a recording outline, not a completed recorded presentation.
+Record 5–7 minutes covering: the fixed-workload protection role; detection versus mitigation/correction; manual loop matching and false alarms; a caught versus missed test fault; the fidelity/shot-cost trade-off; T crossings and assisted propagation; Paulice's richer check family and distinct estimator; reproducibility and model limitations. No recorded presentation or repository publication is implied by this code refactor.

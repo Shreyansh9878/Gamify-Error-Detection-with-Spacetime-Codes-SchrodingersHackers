@@ -7,9 +7,10 @@ from backend.models import RunRequest, TutorialRequest
 from backend.tutorial import lesson
 
 def solution(level):
+    from backend.tutorial import manual_check
     i=level['id']
-    checks=[] if i<3 else [dict(qubit=0,pauli='X' if i==5 else 'Z',start=1 if i==5 else 3 if i>=8 else 0,end=level['slots'])]
-    return RunRequest(levelId=i,gates=level['target'],checks=checks)
+    c=manual_check(level,1 if i==8 else 0,'X' if i in (2,8) else 'Z',level['defaultStart'],level['slots'])
+    return RunRequest(levelId=i,gates=level['target'],checks=[c])
 
 @pytest.mark.parametrize('level',LEVELS,ids=[l['title'] for l in LEVELS])
 def test_every_mission_has_a_passing_solution(level):
@@ -30,7 +31,7 @@ def test_noiseless_check_preserves_state():
     assert not result['eligible'] and not result['passed']
 
 def test_y_check_tracks_negative_conjugation_sign():
-    req=RunRequest(levelId=2,gates=LEVELS[1]['target'],checks=[dict(qubit=0,pauli='Y',start=0,end=4)],noiseScale=0)
+    req=RunRequest(levelId=1,gates=LEVELS[0]['target'],checks=[dict(qubit=0,pauli='Y',start=0,end=4,closingQubit=0,closingPauli='Y')],noiseScale=0)
     result=evaluate(req)
     assert result['retention']==pytest.approx(1)
     assert result['fidelity']==pytest.approx(1)
@@ -38,16 +39,19 @@ def test_y_check_tracks_negative_conjugation_sign():
 def test_interfering_checks_are_rejected():
     req=solution(LEVELS[5])
     from backend.models import Check
-    req.checks.append(Check(qubit=0,pauli='X',start=0,end=6))
+    req.checks.append(Check(qubit=0,pauli='X',start=0,end=LEVELS[5]['slots']))
     with pytest.raises(ValueError,match='interfere'):evaluate(req)
 
 def test_invalid_t_crossing_rejected():
     req=solution(LEVELS[7])
     req.checks[0].start=0
+    req.checks[0].qubit=0
+    req.checks[0].pauli='Z'
+    req.checks[0].closingOperators=None
     with pytest.raises(ValueError,match='Pauli'): evaluate(req)
 
 def test_detection_improves_bitflip_fidelity_at_retention_cost():
-    r=evaluate(solution(LEVELS[2]))
+    r=evaluate(solution(LEVELS[0]))
     assert r['fidelity']>r['baseline']+.1
     assert r['retention']<.95
 
@@ -56,10 +60,10 @@ def test_score_penalizes_resources_and_discarding():
     assert score_metrics(.95,.8,1,2,3)>score_metrics(.95,.5,1,2,3)
 
 def test_syndrome_distinguishes_anticommuting_error():
-    assert lesson(2,TutorialRequest(action='bit'))['syndrome']['1']==pytest.approx(1)
-    assert lesson(2,TutorialRequest(action='phase'))['syndrome']['1']==pytest.approx(0)
+    assert lesson(4,TutorialRequest(action='inject',pauli='X',closingPauli='Y'))['syndrome']['1']==pytest.approx(1)
+    assert lesson(4,TutorialRequest(action='inject',pauli='Z',closingPauli='Z'))['syndrome']['1']==pytest.approx(0)
 
-@pytest.mark.parametrize('step,action',[(1,'h'),(2,'bit'),(3,'correction'),(4,'protect'),(5,'bell'),(6,'protect')])
+@pytest.mark.parametrize('step,action',[(1,'z-noise'),(2,'correction'),(3,'localized'),(4,'match'),(5,'two'),(6,'t')])
 def test_tutorial_experiments(step,action):
     r=lesson(step,TutorialRequest(action=action))
     assert sum(r['noisy'])==pytest.approx(1)

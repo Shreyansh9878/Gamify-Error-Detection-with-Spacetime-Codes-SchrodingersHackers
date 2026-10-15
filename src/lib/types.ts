@@ -12,6 +12,9 @@ export type Check = {
   pauli: "X" | "Y" | "Z";
   start: number;
   end: number;
+  closingQubit?: number;
+  closingPauli?: "X" | "Y" | "Z";
+  closingOperators?: { qubit: number; pauli: "X" | "Y" | "Z" }[];
 };
 export type Level = {
   id: number;
@@ -34,6 +37,9 @@ export type Level = {
   target: Gate[];
   starter: Gate[];
   fixed: boolean;
+  checkMode: "manual" | "assisted";
+  defaultStart: number;
+  noiseLabel: string;
   chapter: string;
 };
 export type Result = {
@@ -72,6 +78,10 @@ export type Result = {
   feedback: string[];
   shots: number;
   keptShots: number;
+  discardedShots: number;
+  samplingOverhead: number;
+  expectedKeptShots: number;
+  expectedDiscardedShots: number;
   counts: Record<string, number>;
   durationMs: number;
 };
@@ -80,13 +90,45 @@ export type TutorialResult = {
   message: string;
   ideal: number[];
   noisy: number[];
-  coherence: number;
+  coherence: number | null;
   fidelity: number;
   retention: number;
   syndrome: Record<string, number>;
+  bloch?: number[][];
+  shots?: number;
+  keptShots?: number;
+  discardedShots?: number;
+  samplingOverhead?: number;
+  requiredShots?: number;
+  addedTwoQubit?: number;
+  depth?: number;
+  baseline?: number;
+  checkDetails?: Result["checkDetails"];
+  loopValid?: boolean;
+  opening?: string;
+  expectedClosing?: string;
+  selectedClosing?: string;
+  injected?: boolean;
+  gate?: string;
+  terms?: { pauli: string; coefficient: number }[];
+  resources?: {
+    data: number;
+    helpers: number;
+    settings: number;
+    illustrative: boolean;
+  };
+  extrapolation?: { scale: number; value: number }[];
   comparison?: { label: string; value: number; detail: string }[];
 };
 export type ResearchResult = {
+  optimizer?: string;
+  gammaCosts?: {
+    setting: number;
+    cost: number | null;
+    metric: string | null;
+    targets: number[];
+    support: number[][];
+  }[];
   exactReference: number;
   metricId: string;
   fidelity: number;
@@ -102,4 +144,43 @@ export type ResearchResult = {
   warning: string;
   settings: number;
   engineVersion: string;
+};
+
+export type CheckPreview = {
+  valid: boolean;
+  error: string;
+  mode: "manual" | "assisted";
+  checks: {
+    valid: boolean;
+    error?: string;
+    opening?: string;
+    closing?: string;
+    sign?: number;
+    leak?: string;
+    start: number;
+    end: number;
+    boundaries?: { boundary: number; pauli: string }[];
+    tCrossings?: {
+      column: number;
+      qubit: number;
+      component: string;
+      valid: boolean;
+    }[];
+  }[];
+};
+export type FaultResult = {
+  flagProbability: number;
+  caught: boolean;
+  outcome: "caught" | "missed" | "probabilistic";
+  outputFidelity: number;
+  outputChanged: boolean;
+  protocol: string;
+  faultQubit: number;
+  faultColumn: number;
+  faultPauli: "X" | "Y" | "Z";
+  syndromeProbabilities: Record<string, number>;
+  trajectory: {
+    boundary: number;
+    terms: { pauli: string; re: number; im: number }[];
+  }[];
 };

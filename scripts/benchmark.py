@@ -6,12 +6,13 @@ from backend.levels import LEVELS
 from backend.engine import evaluate, VERSION
 from backend.research import run_research
 from backend.models import RunRequest, ResearchRequest
+from backend.tutorial import manual_check
 
 def main():
     missions=[]
     for level in LEVELS:
         i=level['id']
-        checks=[] if i<3 else [dict(qubit=0,pauli='X' if i==5 else 'Z',start=1 if i==5 else 3 if i>=8 else 0,end=level['slots'])]
+        checks=[manual_check(level,1 if i==8 else 0,'X' if i in (2,8) else 'Z',level['defaultStart'],level['slots'])]
         request=RunRequest(levelId=i,gates=level['target'],checks=checks)
         result=evaluate(request)
         if not result['passed']:raise RuntimeError(f'Mission {i} solution failed')

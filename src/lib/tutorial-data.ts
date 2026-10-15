@@ -1,72 +1,75 @@
-export const lessons = [
+export type TutorialLesson = {
+  title: string;
+  tag: string;
+  text: string;
+  task: string;
+  actions: readonly (readonly [string, string])[];
+  required: readonly string[];
+};
+export const lessons: readonly TutorialLesson[] = [
   {
-    title: "The noisy qubit",
-    tag: "01 / SIGNAL",
-    text: "Think of a qubit as a tiny arrow. Gates turn it on purpose. Noise bumps it by accident. Decoherence fades the delicate relationships that make quantum states useful.",
-    task: "Apply X or H, then move the noise slider and run again.",
-    actions: [
-      ["observe", "Observe |0〉"],
-      ["x", "Apply X · flip"],
-      ["h", "Apply H · superpose"],
-    ],
-    required: ["x", "h"],
+    title: "Understanding Quantum Errors",
+    tag: "01 / THE BLOCH ARROW",
+    text: "Prepare your own state in the editable noise lab. Compare bit flips, phase flips, and time-dependent decoherence using paired Bloch vectors and Qiskit measurement counts.",
+    task: "Run at least one experiment and answer the three-question knowledge check. This sandbox is separate from the fixed-payload QED missions.",
+    actions: [],
+    required: [],
   },
   {
-    title: "Detecting the glitch",
-    tag: "02 / DETECT",
-    text: "A helper qubit is an alarm. It checks a shared property without reading out all the data. Its measurement is called a syndrome: a clue about an error, not the secret state itself.",
-    task: "Inject a bit flip and watch the syndrome change. Try a phase error too.",
+    title: "Detect, mitigate, or correct?",
+    tag: "02 / THREE DIFFERENT JOBS",
+    text: "Detection uses a helper to flag covered faults and discards those runs. Mitigation spends extra experiments and processing to improve an estimate. Correction encodes information, extracts syndromes, and uses a decoder and recovery to protect logical information.",
+    task: "Explore all three methods, then choose the approach for retained quantum outputs with very few extra qubits.",
     actions: [
-      ["clean", "No error"],
-      ["bit", "Inject X glitch"],
-      ["phase", "Inject Z glitch"],
-    ],
-    required: ["bit"],
-  },
-  {
-    title: "Three different jobs",
-    tag: "03 / UNDERSTAND",
-    text: "Detection sounds an alarm. Post-selection discards flagged runs. Mitigation improves an estimate using calibration or extra experiments. Correction uses encoded information and a recovery operation to repair supported errors.",
-    task: "Explore all three methods. They solve different problems.",
-    actions: [
-      ["detection", "Detect & discard"],
-      ["mitigation", "Mitigate estimate"],
-      ["correction", "Decode repetition code"],
+      ["detection", "Detection filter"],
+      ["mitigation", "Mitigation extrapolation"],
+      ["correction", "Correction decoder"],
     ],
     required: ["detection", "mitigation", "correction"],
   },
   {
-    title: "Low-overhead magic",
-    tag: "04 / PROTECT",
-    text: "A helper can compare a property before and after several gates. This is a check across space and time. Fewer helpers and added gates can reduce cost—but every extra gate can also introduce noise.",
-    task: "Compare a bare circuit with one coherent check. Notice the shots you give up.",
+    title: "The overhead trap",
+    tag: "03 / LOCALIZE YOUR PROTECTION",
+    text: "An opening X can spread through entangling gates. A whole-circuit sandwich may need a large closing Pauli product. Local checks can spend fewer noisy gates, at the cost of covering less of the workload. Modern spacetime methods search for useful localized checks.",
+    task: "Compare a broad sandwich with a localized interval. Read the measured cost and fidelity; neither strategy wins in every circuit or noise model.",
     actions: [
-      ["bare", "Run unprotected"],
-      ["protect", "Add one helper"],
+      ["sandwich", "Boundary sandwich"],
+      ["localized", "Localized spacetime check"],
     ],
-    required: ["bare", "protect"],
+    required: ["sandwich", "localized"],
   },
   {
-    title: "Matching the target",
-    tag: "05 / BUILD",
-    text: "Your target is the quantum state you want. Fidelity measures how close the output is to that state. Matching probabilities alone is not enough: phases matter too.",
-    task: "First apply H to q0, then add CX from q0 to q1 to make a Bell pair.",
+    title: "Close the invariant",
+    tag: "04 / P → P′",
+    text: "Prepare a helper in |+>, apply controlled P, let the fixed workload U run, apply controlled P′, then read the helper in the X basis. A closed loop obeys P′ U = U P. Across S, an opening X becomes Y.",
+    task: "Choose opening X and try closing X. Then choose closing Y and test again. Inject Z into the closed loop to see the syndrome flip.",
     actions: [
-      ["empty", "Empty circuit"],
-      ["h", "1 · Place H"],
-      ["bell", "2 · Add CX"],
+      ["match", "Test invariant"],
+      ["inject", "Inject Z into loop"],
     ],
-    required: ["h", "bell"],
+    required: ["match", "inject"],
   },
   {
-    title: "Final practice run",
-    tag: "06 / LAUNCH",
-    text: "Prepare the signal, add a check, inspect the result. Your mission score rewards fidelity and retained shots, with a penalty for extra depth and two-qubit gates.",
-    task: "Run the prepared |1〉 circuit, then protect it. You are ready to build your own.",
+    title: "Shots have a cost",
+    tag: "05 / KEEP OR DISCARD",
+    text: "A shot is one execution and readout. Keep the all-zero syndrome; discard any nonzero syndrome. A clean syndrome can still hide an undetected error. Fewer retained shots mean more attempts to collect your useful sample.",
+    task: "Compare zero, one, and two helpers. Change the total shot count and inspect N_kept + N_discarded = N, retained fidelity, and expected attempts per kept sample.",
     actions: [
-      ["prepare", "Prepare |1〉"],
-      ["protect", "Protect & run"],
+      ["bare", "No helpers"],
+      ["one", "One helper"],
+      ["two", "Two helpers"],
     ],
-    required: ["prepare", "protect"],
+    required: ["bare", "one", "two"],
   },
-] as const;
+  {
+    title: "The non-Clifford frontier",
+    tag: "06 / THE T BARRIER",
+    text: "Clifford gates send each Pauli to another signed Pauli. T keeps Z unchanged but turns X and Y into combinations. Such a crossing needs more than a simple Pauli closing tap; this game restricts checks to the Pauli family.",
+    task: "Test X through S and T. Then test Z through T. The propagated operator at the T location decides whether a Pauli check can cross.",
+    actions: [
+      ["clifford", "Propagate through S"],
+      ["t", "Propagate through T"],
+    ],
+    required: ["clifford-X", "t-X", "t-Z"],
+  },
+];

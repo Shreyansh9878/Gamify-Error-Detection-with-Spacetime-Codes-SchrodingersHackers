@@ -1,87 +1,93 @@
-# Methods and reproducible results
+# QED methods and reproducible results
 
-## Reference and noise
+## Workload and reference
 
-All game state preparation, gates, noise, state evaluation, and sampled measurements use Qiskit 2.4.1 and Aer 0.17.2. The research adapter uses qiskit-paulice 0.2.1. Gate-column payloads have one to three data qubits; at most two helper qubits are added. Every unused data cell becomes an explicit identity operation so its storage noise is represented. Active helper intervals also include identity operations.
+Every mission payload U is fixed and server-owned. Players choose protection taps, not state-preparation gates. Early missions require a manual closing selection; advanced missions propagate the closing operator with Qiskit Clifford tableaus. These one-to-three-data-qubit examples implement localized two-endpoint coherent-Pauli checks. The actual Paulice adapter supplies the richer spacetime-code research benchmark.
 
-For these small circuits the game computes the pure ideal reference using `Statevector.from_instruction`. It computes noisy states using `AerSimulator(method='density_matrix')`, then saves the complete density matrix before measurement. State fidelity is the pure-target overlap `<ψ|ρ|ψ>` via `state_fidelity`. This captures phase errors that matching output probabilities alone would miss. The Clifford research estimator builds the signed stabilizer group using `Clifford`; T-doped references use statevectors.
+The ideal game state is computed with `Statevector.from_instruction`, including for these small Clifford workloads. The Clifford research estimator uses signed stabilizer generators. Aer density-matrix simulation produces the full noisy data/helper state before measurement. Fidelity is the overlap of the pure ideal target with the retained data density matrix; probability bars alone cannot identify phase errors.
 
-Mission idle channels are bit flip, phase flip, depolarizing, phase damping, and amplitude damping. Their rates are in `backend/levels.py`. Every active one-qubit basis operation has depolarizing parameter 0.002; every two-qubit operation has parameter 0.008. Readout has symmetric confusion 0.005. The sandbox multiplier scales all rates. These are development settings, not organizer-approved hardware parameters. Aer depolarizing parameters are not probabilities of applying a nonidentity Pauli; use the channel definitions rather than interpreting every rate identically.
+A closing Pauli is valid when P′ = U P U†, including its sign. Negative signs require a helper Z correction. Manual multi-wire products are checked as full operators. At each T crossing, I/Z commute while X/Y leave the permitted Pauli family. Distinct individually valid checks also undergo a combined noiseless preservation test to catch interference.
 
-Compilation uses an explicit noisy basis, optimization level zero, and seed 2026, preserving modeled operations. Game measurements use 1024 sampled shots. Exact conditional-state metrics determine the score; sampled frequencies are illustrative and may differ from exact probabilities. Data readout noise affects sampled counts, not premeasurement state fidelity. Ancilla readout confusion affects the reported-zero selection probability and conditional state.
+## Declared noise model
 
-## Coherent checks
+The development channels and parameters are defined in `backend/levels.py`. Missions 1–5 use bit flip, dephasing, or depolarizing examples; the targets and rates follow the redesign's authored progression. Mission 7 uses synthetic one-qubit depolarizing parameter .001, two-qubit parameter .01, and readout confusion .015. This is not calibrated Heron data. Other missions default to .002/.008/.005 gate/readout parameters unless overridden.
 
-An opening Pauli P is controlled by a helper prepared in |+>. Across a payload interval U its closing Pauli is Q = U P U†, including its sign. The closing controlled-Q and helper Hadamard disentangle a valid ideal check. A sign correction is applied to the helper when required. At every intermediate operation the propagated operator must be a signed Pauli. X/Y crossings of T fail this test; I/Z crossings are allowed. Interacting multiple checks receive an additional full noiseless preservation test before any noisy score is accepted.
+Mission 10 uses Aer thermal-relaxation channels with T1=100 μs, T2=80 μs, single-qubit time 50 ns, two-qubit time 300 ns, and idle time 300 ns, composed with the declared active-gate depolarization. Aer depolarizing and phase-damping parameters are channel parameters; they must not all be interpreted as probabilities of one nonidentity Pauli fault.
 
-For a reported-zero syndrome, the engine sums the relevant ancilla diagonal blocks of the complete density matrix, weighted by readout confusion. Its trace is the kept fraction. Dividing that block by its trace gives the retained data density matrix. This avoids the incorrect shortcut of dividing unconditional fidelity by kept fraction.
+Unused data cells and active helper intervals have explicit identity markers for idle noise. Helpers outside their active interval have no additional storage channel in this small model. There is no hardware connectivity or routing calibration. Transpilation uses the declared noisy basis, optimization level zero, and seed 2026.
 
-The noise radar is an analytic single-Pauli anticommutation probe across payload intervals. It is a coverage proxy, not the actual probability that an arbitrary noisy run is detected. For amplitude damping it probes X/Y/Z as an approximation and does not replace the exact channel calculation.
+## Post-selection and shots
 
-## Score and stars
+Let ρ_k be the data block corresponding to true ancilla result k. For reported all-zero syndrome, symmetric readout confusion ε gives weights w_k = (1−ε)^(a−|k|) ε^|k|. The unnormalized retained matrix is σ = Σ_k w_k ρ_k; p_keep = Tr(σ), and ρ_post = σ/p_keep. Both the numerator and selection probability account for readout confusion. Dividing unconditional fidelity by retention is invalid.
 
-Let F be retained fidelity, p the kept fraction, C the radar coverage, A the added two-qubit gates, and D the added depth. The deterministic game score is:
+Game scores use exact F_post and p_keep. Actual Qiskit measurements generate N sampled bitstrings (default 1024). N_kept + N_discarded = N exactly. Any nonzero helper syndrome is discarded. Sampled counts may differ from the exact expectation. Data readout noise affects displayed measurement counts but not premeasurement state fidelity.
 
-```text
-round(1000 × F × sqrt(p) × (0.90 + 0.10 C)
-      / (1 + 0.015 A + 0.005 max(0,D)))
+Expected sampling overhead is 1/p_keep attempts per retained sample. Obtaining K retained samples requires K/p_keep attempts in expectation, rather than a guarantee. Comparing statistical precision additionally requires specifying the same retained observable and its variance. No universal overhead scaling law is asserted for all detection, mitigation, or correction methods.
+
+## Game score
+
+```
+round(1000 × F_post × sqrt(p_keep) × (0.90 + 0.10 C)
+      / (1 + 0.015 A_two + 0.005 max(0, added_depth)))
 ```
 
-The score is capped at 1000. Fidelity, retained shots, and coverage are computed from the circuit; the weights are game-design choices. The score is not the organizers' judging score. “Added operations” includes identity markers; two-qubit overhead is reported separately.
+C is an analytic single-Pauli detection-coverage proxy averaged over idle data cells. The radar also visualizes probe locations after active columns; only idle cells enter C. For non-Pauli relaxation it is explicitly an approximation, not the observed error rate. A_two is the number of added two-qubit operations. Weights are game-design choices applied to physical simulation outputs, not the organizers' judging formula.
 
-Passing requires nominal noise, noiseless target match greater than 0.999, the mission fidelity goal, p at least 0.40, and the minimum check count. A pass earns one star. A second requires F ≥ min(0.97, goal+0.04), p ≥ 0.60. A third requires F ≥ min(0.99, goal+0.08), p ≥ 0.75, and at most six added two-qubit gates. Sandbox runs cannot earn stars.
+A pass requires nominal noise, ideal target match, the level fidelity/retention goals, and its minimum helper count. The original one-to-three-star thresholds remain fidelity/retention/resource based. Noise sandbox runs do not earn stars. Old game scores are isolated by engine and local-storage version.
 
-## Ten mission solutions
+## Reproduced passing strategies
 
-Reproduce all rows with `python -m scripts.benchmark`. The full gates, checks, counts, versions, hashes, and output vectors are saved in `benchmark-results.json`. Values below are rounded; these are feasible examples, not claims of global optimality.
+Run `python -m scripts.benchmark` from the root. The JSON artifact contains the full requests, target probabilities, measurements, hashes, versions, and comparisons. All ten strategies below pass; none is claimed to be globally optimal.
 
-| Mission | Strategy | Bare F | Retained F | Kept | Score |
-|---|---|---:|---:|---:|---:|
-| 1 First light | X | .9014 | .9014 | 1.0000 | 811 |
-| 2 Phase whisper | H | .8760 | .8760 | 1.0000 | 788 |
-| 3 Catch the glitch | X; Z(q0), boundaries 0–4 | .8401 | .9937 | .8293 | 858 |
-| 4 Entangled allies | H0, CX01; Z(q0), 0–5 | .8777 | .9346 | .8607 | 778 |
-| 5 Memory leak | H; X(q0), 1–5 | .9132 | .9849 | .8327 | 843 |
-| 6 Three-body signal | GHZ; Z(q0), 0–6 | .8397 | .9054 | .8506 | 732 |
-| 7 Clifford cartographer | Fixed payload; Z(q0), 0–7 | .8398 | .9262 | .8261 | 739 |
-| 8 A little magic | Fixed +1T; Z(q0), 3–7 | .7358 | .7331 | .8944 | 597 |
-| 9 Narrow passage | Fixed +2T; Z(q0), 3–7 | .8693 | .8620 | .9325 | 727 |
-| 10 Spacetime architect | Fixed +4T; Z(q0), 3–8 | .8661 | .8513 | .9212 | 715 |
+| Mission | Opening → closing interval | Bare fidelity | Retained fidelity | Kept | Sampling overhead | Extra 2Q | Score |
+|---|---|---:|---:|---:|---:|---:|---:|
+| 1 | Z b1 → Z b4 | 0.7958 | 0.9922 | 0.7876 | 1.27× | 2 | 843 |
+| 2 | X b2 → X b5 | 0.9252 | 0.9867 | 0.8537 | 1.17× | 2 | 872 |
+| 3 | IZ b1 → IZ b4 | 0.8642 | 0.8671 | 0.8924 | 1.12× | 2 | 726 |
+| 4 | IZ b1 → IZ b6 | 0.8607 | 0.8607 | 0.8843 | 1.13× | 2 | 716 |
+| 5 | IIZ b1 → IIZ b6 | 0.7554 | 0.7665 | 0.8659 | 1.15× | 2 | 628 |
+| 6 | IIZ b0 → XIY b8 | 0.8704 | 0.9395 | 0.8373 | 1.19× | 3 | 762 |
+| 7 | IIZ b0 → ZXX b8 | 0.8102 | 0.9081 | 0.7944 | 1.26× | 4 | 715 |
+| 8 | IXI b4 → IXI b8 | 0.6011 | 0.6649 | 0.7715 | 1.30× | 2 | 517 |
+| 9 | IIZ b4 → IIZ b8 | 0.7745 | 0.7655 | 0.9056 | 1.10× | 2 | 637 |
+| 10 | IIZ b4 → IIZ b9 | 0.9356 | 0.9280 | 0.9644 | 1.04× | 2 | 796 |
 
-Missions 8–10 deliberately demonstrate that a valid check can hurt fidelity: it adds noisy operations and may cover the wrong error types. The game does not falsely require every detector to improve every channel. Alternative placements and smaller intervals invite replay.
+Notice that a valid check can fail to improve fidelity: added noisy operations and the fault types covered both matter. The T missions do not presume a universal monotonic decline in fidelity with T count.
 
-## Paulice and controlled comparisons
+## Controlled research comparisons
 
-The Research Lab runs the same Clifford backbone with 1–3 repetitions and ordered target lists `[]`, `[0]`, `[1]`, `[0,1]`, `[1,0]`. Paulice uses `cost='gamma'`, `method='windowed'`, and a fixed seed. The requested target count is a budget, not a guarantee: no useful check may be inserted for a short circuit. The report records actual inserted checks.
+Research compares one, two, and three repetitions of the same Clifford backbone, target orders [], [0], [1], [0,1], [1,0], and T counts 0,1,2,4 under a fixed mission's noise model. A short circuit can yield fewer inserted checks than requested. Gamma costs and selected syndrome supports are reported from the actual library per observable setting.
 
-Each nonidentity stabilizer is rotated into a computational-basis measurement, receives Paulice checks, and is sampled. Selection uses `get_postselection_method()` rather than assuming that all-zero ancilla bits always encode the valid syndrome. Signed stabilizer expectations reconstruct a finite-shot fidelity estimate. Different observables can use different checks, so this is not the fidelity of a single common post-selected density matrix. Sampling can produce values outside physical bounds; estimates are not silently clipped.
+Paulice uses `cost='gamma'`, `method='windowed'`, a fixed seed, and a gate/readout selection proxy. Explicit idle markers are removed from its supported-gate input. Each signed stabilizer measurement may receive a different check circuit. Selection uses `get_postselection_method()` with classical-bit mapping. Finite-shot stabilizer expectations reconstruct an observable-specific fidelity estimate; this is not the density matrix of one common retained ensemble, and estimates are not silently clipped.
 
-Paulice's input gate restrictions exclude identity markers, so its research inputs omit idle operations. Its bare and checked estimates share that protocol. The separate `exactReference` field always uses the common original payload, including idle noise, for all T counts. Compare **that field** across T counts; do not mix a Paulice observable estimator with an exact state reference.
+The field `exactReference` instead evaluates the common original payload including its idle noise for every T count. Use it to compare T-family baselines; do not mix this with the Paulice observable-specific estimator.
 
-For three repetitions of mission 7's backbone:
+Three-repetition Clifford comparison:
 
-| Ordered targets | Baseline estimate | Checked estimate | Kept | Actual helpers |
+| Ordered targets | Baseline estimate | Checked estimate | Kept | Helpers |
 |---|---:|---:|---:|---:|
-| none | .9333 | .9287 | 1.0000 | 0 |
-| 0 | .9333 | .9591 | .9488 | 1 |
-| 1 | .9333 | .9603 | .9474 | 1 |
-| 0, 1 | .9333 | .9794 | .9022 | 2 |
-| 1, 0 | .9333 | .9698 | .9062 | 2 |
+| none | 0.8975 | 0.8914 | 1.0000 | 0 |
+| [0] | 0.8975 | 0.9370 | 0.9223 | 1 |
+| [1] | 0.8975 | 0.9501 | 0.9141 | 1 |
+| [0, 1] | 0.8975 | 0.9754 | 0.8585 | 2 |
+| [1, 0] | 0.8975 | 0.9594 | 0.8566 | 2 |
 
-The slight difference between the two no-check estimates is finite-shot sampling of separate circuit executions. The two-helper `[0,1]` strategy has the highest retained estimate in this sampled set, while `[0]` retains more shots. Under the simple comparison utility F√p, `[0]` is about 0.934 and `[0,1]` about 0.930, so the single-check strategy wins that utility despite lower retained fidelity. These differences are small and finite-shot; a statistical claim requires more seeds/shots or uncertainty analysis.
+In this sampled set the largest F√p utility is 0.9083, for target order [1]. This is a finite-shot exploratory comparison, not a statistically significant global optimum.
 
-Exact unchecked reference comparisons under mission 7's single fixed noise model:
+Exact unchecked state fidelities under mission 7's common fixed-slot model:
 
 | Repetitions | 0 T per payload | 1 T | 2 T | 4 T |
 |---|---:|---:|---:|---:|
-| 1 | .8398 | .8463 | .8562 | .8730 |
-| 2 | .7297 | .7274 | .7412 | .7533 |
-| 3 | .6161 | .6192 | .6315 | .6530 |
+| 1 | 0.8102 | 0.8168 | 0.8268 | 0.8439 |
+| 2 | 0.6867 | 0.6822 | 0.6956 | 0.7038 |
+| 3 | 0.5621 | 0.5635 | 0.5739 | 0.5915 |
 
-The T gates replace noisier idle cells in this fixed-slot model. Their presence can therefore improve fidelity, even while restricting valid check paths. Do not attribute these numbers solely to a notion that T gates are intrinsically better or worse. Depth increases reduce fidelity in this tested family; this is evidence about this family and model, not a universal theorem.
+T gates replace idle cells and change the ideal output within this model. A higher fidelity in one T-doped example therefore does not establish that T gates improve a physical device. Connectivity, scheduling, different input states, and calibrated noise could change the comparison.
 
-## Limits and remaining submission work
+## References, scope, and reproducibility
 
-The physical simulation is intentionally small, with synthetic channels and no device connectivity/scheduling calibration. The research helper searches a bounded family rather than proving a global optimum. The introductory repetition-code demo only recovers a logical Z result under at most one X fault; it is not full fault-tolerant quantum error correction. Complete surface-code/qLDPC architectures are background concepts, not simulated here.
+The tutorial correction example is a restricted single-X repetition decoder; the nine-qubit footprint is illustrative rather than a complete QEC simulation. Pauli-only checks are a deliberate resource restriction, not a proof that non-Pauli controlled checks are impossible. See `REDESIGN_IMPLEMENTATION.md` for the design-input corrections and API contracts.
 
-Before competition submission, substitute the organizers' announced noise configuration, regenerate and interpret results, record the walkthrough, and publish the repository under the team's chosen license. The PDF's instructions do not authorize this app to submit or publish on the user's behalf.
+Sources: [Martiel & Javadi-Abhari](https://arxiv.org/abs/2504.15725), [Qiskit Pauli](https://qiskit.qotlabs.org/docs/api/qiskit/qiskit.quantum_info.Pauli), [Paulice spacetime guide](https://qiskit.github.io/qiskit-paulice/guides/low_overhead_error_detection_using_spacetime_codes.html), the provided QFF PDF, and the repository redesign specification.
+
+Benchmark engine: shield-qed-2.0.0. Packages: qiskit 2.5.2, qiskit-aer 0.17.2, qiskit-paulice 0.2.1.

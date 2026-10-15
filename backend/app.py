@@ -7,10 +7,13 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from .levels import LEVELS
-from .models import RunRequest, ResearchRequest, TutorialRequest
-from .engine import evaluate, VERSION
+from .models import RunRequest, ResearchRequest, TutorialRequest, FaultRequest
+from .engine import evaluate, validate_checks, trace_fault, VERSION
 from .research import run_research
 from .tutorial import lesson
+from .noise_lab.models import CompileRequest, LabRunRequest
+from .noise_lab.code_parser import compile_source
+from .noise_lab.simulator import run_lab
 
 app=FastAPI(title='Quantum Shield Stage 1',version=VERSION)
 lock=threading.BoundedSemaphore(1)
@@ -32,7 +35,10 @@ async def bounded_body(request:Request,call_next):
 
 @app.exception_handler(RequestValidationError)
 async def invalid_request(request,exc):
-    return JSONResponse({'error':{'code':'INVALID_REQUEST','message':'Invalid request. Check the circuit bounds, field types, and allowed settings.'}},status_code=422)
+    if not request.url.path.startswith('/api/tutorial/noise-lab/'):
+        return JSONResponse({'error':{'code':'INVALID_REQUEST','message':'Invalid request. Check the circuit bounds, field types, and allowed settings.'}},status_code=422)
+    details = [{'field': '.'.join(str(p) for p in e['loc']), 'message': e['msg']} for e in exc.errors()]
+    return JSONResponse({'error':{'code':'INVALID_REQUEST','message':details[0]['message'] if details else 'Invalid request.', 'details':details}},status_code=422)
 
 def compute(function,*args):
     if os.getenv('SIMULATION_ENABLED','true')!='true':
@@ -66,6 +72,22 @@ def run(request:RunRequest):
 def research(request:ResearchRequest):
     return compute(run_research,request)
 
+@app.post('/api/validate-checks')
+def check_preview(request:RunRequest):
+    return compute(validate_checks,request)
+
+@app.post('/api/trace-fault')
+def fault_trace(request:FaultRequest):
+    return compute(trace_fault,request)
+
 @app.post('/api/tutorial/{step}')
 def tutorial(step:int,request:TutorialRequest):
     return compute(lesson,step,request)
+
+@app.post('/api/tutorial/noise-lab/compile')
+def noise_compile(request:CompileRequest):
+    return compute(compile_source, request)
+
+@app.post('/api/tutorial/noise-lab/run')
+def noise_run(request:LabRunRequest):
+    return compute(run_lab, request)

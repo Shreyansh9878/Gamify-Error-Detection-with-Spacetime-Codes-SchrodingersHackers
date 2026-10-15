@@ -10,13 +10,13 @@ import math
 import time
 import numpy as np
 from qiskit import QuantumCircuit, transpile
-from qiskit.quantum_info import Statevector, DensityMatrix, Operator, Pauli, SparsePauliOp, partial_trace, state_fidelity
+from qiskit.quantum_info import Statevector, DensityMatrix, Operator, Pauli, SparsePauliOp, partial_trace, state_fidelity, Clifford
 from qiskit_aer import AerSimulator
-from qiskit_aer.noise import NoiseModel, pauli_error, depolarizing_error, phase_damping_error, amplitude_damping_error, ReadoutError
+from qiskit_aer.noise import NoiseModel, pauli_error, depolarizing_error, phase_damping_error, amplitude_damping_error, thermal_relaxation_error, ReadoutError
 from .levels import get_level
-from .models import RunRequest, Gate
+from .models import RunRequest, Gate, FaultRequest
 
-VERSION = 'shield-stage1-1.0.0'
+VERSION = 'shield-qed-2.0.0'
 SEED = 2026
 BASIS = ['id','h','x','y','z','s','sdg','sx','sxdg','rz','t','tdg','cx','cy','cz']
 
@@ -81,27 +81,98 @@ def as_pauli(matrix):
         raise ValueError('Invalid check: a T crossing transforms X/Y into a non-Pauli operator. Choose I/Z on that wire or a shorter interval.')
     return decomposition.paulis[0].to_label(), 1 if decomposition.coeffs[0].real > 0 else -1
 
+class CheckPathError(ValueError):
+    def __init__(self, message, detail):
+        super().__init__(message)
+        self.detail = {**detail, 'valid': False, 'error': message}
+
+
+def signed_label(pauli):
+    label = pauli.to_label()
+    return (label[1:], -1) if label.startswith('-') else (label, 1)
+
+
+def closing_label(check, n):
+    taps = check.closingOperators
+    if taps is None and check.closingQubit is not None:
+        from .models import PauliTap
+        taps = [PauliTap(qubit=check.closingQubit, pauli=check.closingPauli)]
+    if taps is None:
+        return None
+    label = ['I'] * n
+    seen = set()
+    for tap in taps:
+        if tap.qubit >= n or tap.qubit in seen:
+            raise ValueError('Closing taps must use distinct wires inside the payload.')
+        seen.add(tap.qubit)
+        label[n-1-tap.qubit] = tap.pauli
+    return ''.join(label)
+
+
 def check_paths(level, gates, checks):
-    layers = columns(level,gates)
     paths = []
+    layers = columns(level, gates)
     for check in checks:
         label = ['I'] * level['qubits']
-        label[level['qubits']-1-check.qubit] = check.pauli
+        label[-1-check.qubit] = check.pauli
         opening = ''.join(label)
-        current = Pauli(opening).to_matrix()
-        trace = {}
-        for column in range(check.start,check.end):
-            # Validate after each operation, including every non-Clifford crossing.
+        current = Pauli(opening)
+        trace, boundaries, crossings = {}, [dict(boundary=check.start, pauli=opening)], []
+        detail = dict(opening=opening, start=check.start, end=check.end,
+                      boundaries=boundaries, tCrossings=crossings)
+        for column in range(check.start, check.end):
             for instruction in layers[column].data:
+                name = instruction.operation.name
+                wires = [layers[column].find_bit(q).index for q in instruction.qubits]
+                if name == 't':
+                    component = signed_label(current)[0][-1-wires[0]]
+                    clean = component in ('I', 'Z')
+                    crossings.append(dict(column=column, qubit=wires[0], component=component, valid=clean))
+                    if not clean:
+                        raise CheckPathError(f'Non-Pauli T barrier at q{wires[0]}, column {column}: {component} becomes a combination of X and Y. Choose I/Z at this crossing or shorten the interval.', detail)
+                    continue
                 unit = QuantumCircuit(level['qubits'])
-                unit.append(instruction.operation, [layers[column].find_bit(q).index for q in instruction.qubits])
-                u = Operator(unit).data
-                current = u @ current @ u.conj().T
-                as_pauli(current)
-            trace[column] = as_pauli(current)[0]
-        closing, sign = as_pauli(current)
-        paths.append(dict(opening=opening, closing=closing, sign=sign, start=check.start,end=check.end,trace=trace))
+                unit.append(instruction.operation, wires)
+                # frame='s' is forward conjugation U P U†, including the sign.
+                current = current.evolve(Clifford(unit), frame='s')
+            trace[column] = signed_label(current)[0]
+            boundaries.append(dict(boundary=column+1, pauli=current.to_label()))
+        closing, sign = signed_label(current)
+        selected = closing_label(check, level['qubits'])
+        detail.update(closing=closing, sign=sign, selectedClosing=selected)
+        if level.get('checkMode') == 'manual' and selected is None:
+            raise CheckPathError('Choose the manual closing Pauli and qubit (or a closing product) for this mission.', detail)
+        if selected is not None and selected != closing:
+            leak = Pauli(selected).compose(Pauli(closing)).to_label()
+            raise CheckPathError(f'Open loop: selected {selected}, expected {closing}. Uncancelled operator {leak}.', {**detail, 'leak': leak})
+        paths.append(dict(**detail, trace=trace, valid=True))
     return paths
+
+
+def validate_checks(request):
+    level = get_level(request.levelId)
+    validate(request, level)
+    details = []
+    paths = []
+    for check in request.checks:
+        try:
+            path = check_paths(level, request.gates, [check])[0]
+            paths.append(path)
+            details.append({k:v for k,v in path.items() if k != 'trace'})
+        except CheckPathError as error:
+            details.append(error.detail)
+        except ValueError as error:
+            details.append(dict(valid=False, error=str(error)))
+    valid = all(d['valid'] for d in details)
+    error = ''
+    if valid and paths:
+        clean = DensityMatrix(Statevector.from_instruction(checked_circuit(level, request.gates, paths)))
+        state, keep, _ = condition(clean, level['qubits'], len(paths), 0)
+        actual = Statevector.from_instruction(payload(level, request.gates))
+        if keep < 1-1e-8 or state_fidelity(actual, state) < 1-1e-8:
+            valid, error = False, 'These overlapping checks interfere. Use disjoint intervals or another Pauli.'
+    return dict(valid=valid, checks=details, error=error, mode=level['checkMode'])
+
 
 def controlled_pauli(qc, ancilla, label, sign=1):
     if sign < 0:
@@ -110,7 +181,7 @@ def controlled_pauli(qc, ancilla, label, sign=1):
         if p != 'I':
             getattr(qc, {'X':'cx','Y':'cy','Z':'cz'}[p])(ancilla,q)
 
-def checked_circuit(level, gates, paths):
+def checked_circuit(level, gates, paths, fault=None):
     n = level['qubits']
     qc = QuantumCircuit(n+len(paths))
     layers = columns(level,gates)
@@ -125,6 +196,8 @@ def checked_circuit(level, gates, paths):
                 controlled_pauli(qc,n+i,p['opening'])
         if boundary < len(layers):
             qc.compose(layers[boundary],qubits=list(range(n)),inplace=True)
+            if fault is not None and fault.faultColumn == boundary:
+                getattr(qc, fault.faultPauli.lower())(fault.faultQubit)
             for i,p in enumerate(paths):
                 if p['start'] <= boundary < p['end']:
                     qc.id(n+i)
@@ -136,16 +209,24 @@ def make_noise(level, scale):
     if p == 0:
         return model
     channel = level['channel']
-    error = {'bitflip':lambda:pauli_error([('X',p),('I',1-p)]),
+    error = {'thermal':lambda:thermal_relaxation_error(level['t1']/scale,level['t2']/scale,level['idleNs']),
+             'bitflip':lambda:pauli_error([('X',p),('I',1-p)]),
              'phase':lambda:pauli_error([('Z',p),('I',1-p)]),
              'dephasing':lambda:phase_damping_error(p),
              'relaxation':lambda:amplitude_damping_error(p),
              'depolarizing':lambda:depolarizing_error(p,1)}[channel]()
     # Idle storage sees the mission noise. Active operations also have gate noise.
     model.add_all_qubit_quantum_error(error,'id')
-    model.add_all_qubit_quantum_error(depolarizing_error(0.002*scale,1),BASIS[1:-3])
-    model.add_all_qubit_quantum_error(depolarizing_error(0.008*scale,2),['cx','cy','cz'])
-    model.add_all_qubit_readout_error(ReadoutError([[1-0.005*scale,0.005*scale],[0.005*scale,1-0.005*scale]]))
+    one = depolarizing_error(level.get('oneQubitNoise', .002)*scale,1)
+    two = depolarizing_error(level.get('twoQubitNoise', .008)*scale,2)
+    if channel == 'thermal':
+        one = one.compose(thermal_relaxation_error(level['t1']/scale,level['t2']/scale,level['singleGateNs']))
+        local = thermal_relaxation_error(level['t1']/scale,level['t2']/scale,level['twoGateNs'])
+        two = two.compose(local.tensor(local))
+    model.add_all_qubit_quantum_error(one,BASIS[1:-3])
+    model.add_all_qubit_quantum_error(two,['cx','cy','cz'])
+    readout = level.get('readoutNoise', .005)*scale
+    model.add_all_qubit_readout_error(ReadoutError([[1-readout,readout],[readout,1-readout]]))
     return model
 
 def density(qc, noise):
@@ -173,6 +254,7 @@ def condition(dm, n, ancillas, readout):
 
 def radar(level,paths):
     heat,covered,total = [],0,0
+    occupied={(q,g['column']) for g in level['target'] for q in g['qubits']}
     errors = ['X'] if level['channel']=='bitflip' else ['Z'] if level['channel'] in ('phase','dephasing') else ['X','Y','Z']
     for q in range(level['qubits']):
         row=[]
@@ -181,8 +263,9 @@ def radar(level,paths):
             for error in errors:
                 found=any(col in path['trace'] and path['trace'][col][-1-q] not in ('I',error) for path in paths)
                 detected += int(found)
-            covered += detected
-            total += len(errors)
+            if (q,col) not in occupied:
+                covered += detected
+                total += len(errors)
             row.append(detected/len(errors))
         heat.append(row)
     return heat,covered/max(1,total)
@@ -191,6 +274,51 @@ def score_metrics(fidelity, retention, coverage, added_two, extra_depth):
     quality = fidelity * math.sqrt(retention)
     efficiency = 1 / (1 + .015*added_two + .005*max(0,extra_depth))
     return min(1000,int(math.floor(1000*quality*efficiency*(.90+.10*coverage)+.5)))
+
+
+def trace_fault(request: FaultRequest):
+    """Inject one ideal Pauli immediately after a payload column, before closure.
+
+    The detector probability is computed from the full coherent Qiskit state,
+    including through T gates. A missed alarm is not necessarily state damage.
+    """
+    level = get_level(request.levelId)
+    validate(request, level)
+    if request.faultQubit >= level['qubits'] or request.faultColumn >= level['slots']:
+        raise ValueError('The fault is outside the payload.')
+    preview = validate_checks(request)
+    if not preview['valid']:
+        raise ValueError(preview['error'] or 'Close each check before testing a fault.')
+    paths = check_paths(level, request.gates, request.checks)
+    circuit = checked_circuit(level, request.gates, paths, fault=request)
+    state = Statevector.from_instruction(circuit)
+    n, a = level['qubits'], len(paths)
+    probs = state.probabilities(qargs=list(range(n, n+a))) if a else np.array([1.])
+    syndromes = {format(i, f'0{max(1,a)}b'): float(p) for i,p in enumerate(probs)}
+    probability = min(1., max(0., 1-float(probs[0])))
+    reduced = partial_trace(state, list(range(n,n+a))) if a else DensityMatrix(state)
+    ideal = Statevector.from_instruction(payload(level, request.gates))
+    fidelity = float(state_fidelity(ideal, reduced))
+    label = ['I'] * n
+    label[-1-request.faultQubit] = request.faultPauli
+    operator = Pauli(''.join(label)).to_matrix()
+    trajectory = []
+
+    def snapshot(boundary):
+        terms = SparsePauliOp.from_operator(Operator(operator)).simplify(atol=1e-8)
+        return dict(boundary=boundary, terms=[dict(pauli=p.to_label(), re=float(c.real), im=float(c.imag)) for p,c in zip(terms.paulis,terms.coeffs)])
+
+    trajectory.append(snapshot(request.faultColumn+1))
+    for col in range(request.faultColumn+1, level['slots']):
+        u = Operator(columns(level, request.gates)[col]).data
+        operator = u @ operator @ u.conj().T
+        trajectory.append(snapshot(col+1))
+    return dict(levelId=level['id'], faultColumn=request.faultColumn, faultQubit=request.faultQubit,
+        faultPauli=request.faultPauli, syndromeProbabilities=syndromes,
+        flagProbability=probability, caught=probability > 1-1e-8,
+        outcome='caught' if probability > 1-1e-8 else 'missed' if probability < 1e-8 else 'probabilistic',
+        outputFidelity=fidelity, outputChanged=fidelity < 1-1e-8, trajectory=trajectory,
+        protocol='Ideal single-fault diagnostic; no background or readout noise.')
 
 def evaluate(request: RunRequest):
     started=time.perf_counter()
@@ -210,7 +338,7 @@ def evaluate(request: RunRequest):
     noise=make_noise(level,request.noiseScale)
     baseline_dm=density(bare,noise)
     dm=density(checked,noise)
-    selected,retention,syndromes=condition(dm,level['qubits'],len(paths),.005*request.noiseScale)
+    selected,retention,syndromes=condition(dm,level['qubits'],len(paths),level.get('readoutNoise', .005)*request.noiseScale)
     fidelity=float(state_fidelity(target,selected))
     baseline=float(state_fidelity(target,baseline_dm))
     heat,coverage=radar(level,paths)
@@ -227,7 +355,7 @@ def evaluate(request: RunRequest):
     sampled.measure_all()
     sim=AerSimulator(noise_model=noise,max_parallel_threads=1)
     measured=transpile(sampled,basis_gates=BASIS,optimization_level=0,seed_transpiler=SEED)
-    counts=sim.run(measured,shots=1024,seed_simulator=SEED).result().get_counts()
+    counts=sim.run(measured,shots=request.shots,seed_simulator=SEED).result().get_counts()
     kept=sum(v for bits,v in counts.items() if int(bits.replace(' ',''),2) >> level['qubits']==0)
     bloch=[]
     for q in range(level['qubits']):
@@ -250,4 +378,5 @@ def evaluate(request: RunRequest):
         ideal=target.probabilities().tolist(),noisy=selected.probabilities().tolist(),
         amplitudes=[dict(re=float(z.real),im=float(z.imag)) for z in target.data],bloch=bloch,syndromes=syndromes,
         heatmap=heat,checkDetails=[dict(opening=p['opening'],closing=('-' if p['sign']<0 else '')+p['closing'],start=p['start'],end=p['end']) for p in paths],
-        feedback=feedback,shots=1024,keptShots=kept,counts=counts,durationMs=round((time.perf_counter()-started)*1000))
+        feedback=feedback,shots=request.shots,keptShots=kept,discardedShots=request.shots-kept,samplingOverhead=1/retention,
+        expectedKeptShots=request.shots*retention,expectedDiscardedShots=request.shots*(1-retention),counts=counts,durationMs=round((time.perf_counter()-started)*1000))

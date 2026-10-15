@@ -1,80 +1,101 @@
-"""Ten authored missions. QFF specifies experiments, not numbered levels."""
+"""Authoritative fixed workloads: players only design spacetime checks.
+
+Rates are synthetic examples, not claimed Heron calibration. Slots use zero-based
+columns and half-open check intervals [start, end).
+"""
 from copy import deepcopy
 
+
 def gate(name, qubits, column):
-    return {'id': f'{name}-{column}-{qubits[0]}', 'name': name, 'qubits': qubits, 'column': column}
+    return dict(id=f'{name}-{column}-{qubits[0]}', name=name, qubits=qubits, column=column)
 
-def level(i, title, subtitle, description, concept, hint, label, n, slots, budget,
-          check_budget, minimum, allowed, channel, noise, goal, target, fixed=False):
-    return dict(id=i, title=title, subtitle=subtitle, description=description,
-                concept=concept, hint=hint, targetLabel=label, qubits=n, slots=slots,
-                gateBudget=budget, checkBudget=check_budget, minChecks=minimum,
-                allowed=allowed, channel=channel, noise=noise, fidelityGoal=goal,
-                retentionGoal=0.40, target=target, starter=deepcopy(target) if fixed else [],
-                fixed=fixed, chapter='FOUNDATIONS' if i <= 3 else 'SPACETIME' if i <= 7 else 'BEYOND CLIFFORD')
 
-BELL = [gate('h',[0],0), gate('cx',[0,1],1)]
-GHZ = BELL + [gate('cx',[1,2],2)]
-BACKBONE = [gate('h',[0],0),gate('h',[1],0),gate('cx',[0,1],1),gate('h',[2],1),gate('cz',[1,2],2)]
+BELL = [gate('h', [0], 0), gate('cx', [0, 1], 1)]
+GHZ = BELL + [gate('cx', [1, 2], 2)]
+BACKBONE = [gate('h', [0], 0), gate('h', [1], 0), gate('cx', [0, 1], 1),
+            gate('h', [2], 1), gate('cz', [1, 2], 2)]
+DEEP = BACKBONE + [gate('s', [0], 3), gate('h', [1], 3),
+                   gate('cx', [1, 2], 4), gate('h', [2], 5), gate('s', [1], 6)]
+
 
 def doped(count):
-    output = deepcopy(BACKBONE)
-    for i in range(count):
-        output.append(gate('t', [i % 3], 3 + i))
-    return output
+    return deepcopy(BACKBONE) + [gate('t', [i % 3], 4 + i) for i in range(count)]
+
+
+def level(i, title, subtitle, description, concept, hint, label, n, slots,
+          budget, minimum, channel, noise, goal, target, default_start=0, **parameters):
+    result = dict(id=i, title=title, subtitle=subtitle, description=description,
+        concept=concept, hint=hint, targetLabel=label, qubits=n, slots=slots,
+        gateBudget=len(target), checkBudget=budget, minChecks=minimum,
+        allowed=sorted({g['name'] for g in target}), channel=channel, noise=noise,
+        fidelityGoal=goal, retentionGoal=.40, target=deepcopy(target), starter=deepcopy(target),
+        fixed=True, checkMode='manual' if i <= 5 else 'assisted', defaultStart=default_start,
+        chapter='FOUNDATIONS' if i <= 5 else 'SPACETIME' if i <= 7 else 'BEYOND CLIFFORD',
+        oneQubitNoise=.002, twoQubitNoise=.008, readoutNoise=.005,
+        noiseLabel='Synthetic development model')
+    result.update(parameters)
+    return result
+
 
 LEVELS = [
- level(1,'First light','Prepare a single qubit',
-       'Turn a quiet zero into a one. The noise radar shows how the environment disturbs your result.',
-       'A gate changes the state. Noise is an unwanted change.',
-       'Choose X, then click any cell on q0. Run the circuit to compare with |1>.',
-       '|1>',1,4,2,0,0,['x','h','z'],'bitflip',0.035,0.84,[gate('x',[0],0)]),
- level(2,'Phase whisper','Find the invisible error',
-       'Prepare a plus state. Phase noise can damage it even when zero and one still look equally likely.',
-       'Probabilities alone do not reveal every quantum error.',
-       'Place H on q0. Compare phase coherence as well as the probability bars.',
-       '|+>',1,4,2,1,0,['h','x','z'],'phase',0.045,0.82,[gate('h',[0],0)]),
- level(3,'Catch the glitch','Your first coherent check',
-       'Prepare |1> and use one helper qubit to flag bit flips during the computation.',
-       'A Z check notices X errors; no alarm does not guarantee a clean shot.',
-       'Place X, add a Z check on q0 from boundary 0 to 4, then run.',
-       '|1>',1,4,2,1,1,['x','h','z'],'bitflip',0.06,0.87,[gate('x',[0],0)]),
- level(4,'Entangled allies','Protect a Bell pair',
-       'Build a Bell pair and protect its shared information with a spacetime check.',
-       'A check can spread across qubits as it passes an entangling gate.',
-       'H on q0, then CX from q0 to q1. A Z check starting on q0 is propagated for you.',
-       '(|00> + |11>)/sqrt(2)',2,5,4,1,1,['h','x','z','cx','cz'],'depolarizing',0.025,0.79,BELL),
- level(5,'Memory leak','Meet decoherence',
-       'Keep a plus state coherent while the environment gradually learns about it.',
-       'Dephasing suppresses off-diagonal coherence without necessarily changing populations.',
-       'Place H. Use an X check beginning after H: boundary 1 to 5.',
-       '|+>',1,5,3,1,1,['h','x','z','s'],'dephasing',0.09,0.86,[gate('h',[0],0)]),
- level(6,'Three-body signal','Build a GHZ state',
-       'Entangle three qubits. Spend no more than two ancillas protecting the signal.',
-       'More checks cost more gates and can introduce errors of their own.',
-       'H(q0), CX(q0,q1), CX(q1,q2). Start with a Z check on q0 across the whole circuit.',
-       '(|000> + |111>)/sqrt(2)',3,6,5,2,1,['h','x','z','s','cx','cz'],'depolarizing',0.018,0.70,GHZ),
- level(7,'Clifford cartographer','Explore the automatic-check lab',
-       'Protect a fixed Clifford payload. Open Research Lab to compare Paulice target order and depth.',
-       'Paulice searches for low-overhead checks; its measurement protocol is reported separately.',
-       'The payload is fixed. Try a Z check on q0, then compare q1. Research Lab is available below.',
-       'Fixed Clifford reference',3,7,5,2,1,['h','x','z','s','sdg','sx','sxdg','cx','cz','rz'],'depolarizing',0.018,0.66,BACKBONE,True),
- level(8,'A little magic','One T gate',
-       'The same Clifford backbone now contains one T gate. Find a valid Pauli path through it.',
-       'At a T crossing, a propagated Pauli must act as I or Z on that qubit.',
-       'Try a Z check on q0 from boundary 3 through 7, across the diagonal tail. Invalid X crossings are rejected.',
-       'Clifford + 1 T reference',3,7,6,2,1,['h','cx','cz','t'],'phase',0.025,0.68,doped(1),True),
- level(9,'Narrow passage','Two T gates',
-       'Two non-Clifford gates constrain your check paths. Compare fidelity and shots kept.',
-       'The valid check space shrinks; T gates do not automatically imply lower fidelity in every model.',
-       'A Z check from boundary 3 to 7 can cross the diagonal tail. Try different opening qubits.',
-       'Clifford + 2 T reference',3,7,7,2,1,['h','cx','cz','t'],'depolarizing',0.016,0.65,doped(2),True),
- level(10,'The spacetime architect','Four T gates · final challenge',
-       'Use everything you learned. Protect a T-doped payload and explain the best fidelity/retention trade-off.',
-       'Low-overhead detection is about useful protection per resource, not the largest number of checks.',
-       'Try Z on q0 from boundary 3 to 8. In Research Lab compare T counts 0, 1, 2, and 4.',
-       'Clifford + 4 T reference',3,8,9,2,1,['h','cx','cz','t'],'relaxation',0.025,0.64,doped(4),True),
+ level(1, 'The single-wire barrier', 'Close your first invariant',
+       'A fixed X payload carries a fragile one. Choose the opening and closing taps that catch bit flips.',
+       'Z and Y checks detect anticommuting X faults. A commuting X check misses them.',
+       'Open Z on q0 at boundary 1 and close Z on q0 at boundary 4.',
+       '|1>', 1, 4, 1, 1, 'bitflip', .08, .87, [gate('x', [0], 0)], 1),
+ level(2, 'Phase interceptor', 'Protect an invisible phase',
+       'H then S prepares a fixed phase-sensitive state. Design a check around its memory interval.',
+       'Z-basis populations can stay unchanged while dephasing destroys coherence.',
+       'Open X on q0 at boundary 2; close X on q0 at boundary 5. Try Y too.',
+       '(|0> + i|1>)/sqrt(2)', 1, 5, 1, 1, 'dephasing', .10, .85,
+       [gate('h', [0], 0), gate('s', [0], 1)], 2),
+ level(3, 'Crossing the bridge', 'Follow a Pauli through CX',
+       'A Bell payload is locked in place. Work out which closing taps complete your chosen interval.',
+       'Across CX, X on its control spreads to both wires; Z on its control stays localized.',
+       'Start after H: Z on q0 from boundary 1 to 4 closes as Z on q0. X needs X on both wires.',
+       'Bell pair', 2, 4, 1, 1, 'depolarizing', .04, .76, BELL, 1),
+ level(4, 'The closed loop puzzle', 'Match every closing component',
+       'The Bell payload now includes S. Match the propagated Pauli product, not just its first wire.',
+       'A valid loop satisfies P\u2032 U = U P as an operator identity; signs need a helper phase correction.',
+       'A Z check on q0 from boundary 1 to 6 closes as Z on q0. Starting at 0 instead spreads Z into Y0 X1.',
+       'S-rotated Bell pair', 2, 6, 1, 1, 'depolarizing', .025, .78,
+       BELL + [gate('s', [0], 2)], 1, readoutNoise=.015),
+ level(5, 'GHZ entangled fortress', 'Balance spread and overhead',
+       'Protect a fixed three-qubit GHZ workload with at most two helpers. Compare localized intervals.',
+       'A Z-type check flags X/Y faults, not commuting Z faults. Each extra check also adds noise.',
+       'Try Z on q0 from boundary 1 to 6, closing Z on q0. Compare one helper with two staggered checks.',
+       'GHZ state', 3, 6, 2, 1, 'depolarizing', .03, .67, GHZ, 1),
+ level(6, 'Deep Clifford highway', 'Assisted closing unlocked',
+       'Qiskit propagates the closing Pauli automatically. Search for low-weight paths through a deeper workload.',
+       'Clifford tableaus map signed Paulis to signed Paulis efficiently; spread costs entangling gates.',
+       'Start with Z on q0 over the whole circuit, then shorten the interval and compare overhead.',
+       'Deep Clifford reference', 3, 8, 2, 1, 'depolarizing', .02, .62, DEEP),
+ level(7, 'The Paulice automaton', 'Compare target order and resources',
+       'Design checks around a fixed Clifford workload, then explore Paulice\u2019s automatic choices in Research Lab.',
+       'Paulice uses a richer localized-check search. Its observable-specific benchmark has a separate metric.',
+       'Try Z on q0 from 0 to 8. In Research Lab compare targets 0,1 with 1,0 at three repetitions.',
+       'Clifford benchmark', 3, 8, 2, 1, 'depolarizing', .018, .63, BACKBONE,
+       oneQubitNoise=.001, twoQubitNoise=.01, readoutNoise=.015,
+       noiseLabel='Synthetic gate/readout example; not calibrated Heron data'),
+ level(8, 'A little magic', 'One T gate: find a commuting path',
+       'A fixed T on q0 at column 4 tests your propagated Pauli. Green paths commute; red paths need a non-Pauli closure.',
+       'At the crossing itself, I/Z commute with T; X/Y become non-Pauli combinations.',
+       'Open Z on q0 from boundary 4 to 8. Try X at the same location and inspect the T barrier.',
+       'Clifford + 1 T', 3, 8, 2, 1, 'phase', .035, .60, doped(1), 4),
+ level(9, 'Narrow passage', 'Two T gates: localize your check',
+       'Find diagonal-tail checks or close before the T gates at columns 4 and 5.',
+       'The Pauli at each crossing matters; an opening Z can rotate into X earlier in the payload.',
+       'Try Z on q0 from 4 to 8, or a shorter interval ending at 4.',
+       'Clifford + 2 T', 3, 8, 2, 1, 'depolarizing', .025, .61, doped(2), 4),
+ level(10, 'The master spacetime architect', 'Four T gates: optimize throughput',
+       'Protect the four-T workload under a declared thermal relaxation model. Compare fidelity, shots, and added cost.',
+       'No valid Pauli detector catches every fault. A missed fault need not damage this particular input state.',
+       'Try one Z helper on q0 from 4 to 9; compare with two valid helpers and inspect the retained fraction.',
+       'Clifford + 4 T', 3, 9, 2, 1, 'thermal', .001, .85, doped(4), 4,
+       t1=100000., t2=80000., singleGateNs=50., twoGateNs=300., idleNs=300.,
+       noiseLabel='Synthetic thermal model: T1=100 us, T2=80 us')
 ]
+
 
 def get_level(identifier):
     if not 1 <= identifier <= len(LEVELS):

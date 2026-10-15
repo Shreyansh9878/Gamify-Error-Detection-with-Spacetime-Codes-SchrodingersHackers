@@ -1,0 +1,102 @@
+{
+  "noise-bit-flip": {
+    "generator": "QuantumCircuit.draw(\"mpl\")",
+    "operations": {
+      "x": 1,
+      "measure": 1
+    },
+    "qubits": 1
+  },
+  "noise-phase-flip": {
+    "generator": "QuantumCircuit.draw(\"mpl\")",
+    "operations": {
+      "h": 1,
+      "z": 1,
+      "measure": 1
+    },
+    "qubits": 1
+  },
+  "noise-decoherence": {
+    "generator": "QuantumCircuit.draw(\"mpl\")",
+    "operations": {
+      "x": 1,
+      "quantum_channel": 1,
+      "measure": 1
+    },
+    "qubits": 1
+  },
+  "school-2": {
+    "generator": "QuantumCircuit.draw(\"mpl\")",
+    "operations": {
+      "h": 2,
+      "cz": 2,
+      "x": 1,
+      "measure": 1
+    },
+    "qubits": 2
+  },
+  "school-3": {
+    "generator": "QuantumCircuit.draw(\"mpl\")",
+    "operations": {
+      "h": 2,
+      "cx": 1,
+      "s": 1,
+      "cy": 1,
+      "measure": 1
+    },
+    "qubits": 2
+  },
+  "school-3-fault": {
+    "generator": "QuantumCircuit.draw(\"mpl\")",
+    "operations": {
+      "h": 2,
+      "cx": 1,
+      "s": 1,
+      "x": 1,
+      "cy": 1,
+      "measure": 1
+    },
+    "qubits": 2
+  },
+  "school-4": {
+    "generator": "QuantumCircuit.draw(\"mpl\")",
+    "operations": {
+      "h": 3,
+      "cx": 3,
+      "cz": 1,
+      "measure": 1
+    },
+    "qubits": 3
+  },
+  "school-5": {
+    "generator": "QuantumCircuit.draw(\"mpl\")",
+    "operations": {
+      "h": 2,
+      "cz": 2,
+      "t": 1,
+      "measure": 1
+    },
+    "qubits": 2
+  },
+  "school-6": {
+    "generator": "QuantumCircuit.draw(\"mpl\")",
+    "operations": {
+      "x": 1,
+      "cx": 1,
+      "quantum_channel": 1,
+      "h": 1,
+      "s": 1
+    },
+    "qubits": 3
+  },
+  "clifford": {
+    "generator": "QuantumCircuit.draw(\"mpl\")",
+    "operations": {
+      "h": 2,
+      "x": 2,
+      "sdg": 1,
+      "s": 1
+    },
+    "qubits": 2
+  }
+}

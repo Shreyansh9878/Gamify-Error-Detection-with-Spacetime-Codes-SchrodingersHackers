@@ -5,10 +5,10 @@ from ..noise_lab.models import StrictModel
 
 class HardwareNoise(StrictModel):
     enabled: bool = True
-    bitFlip: float = Field(default=.025, ge=0, le=.3)
-    phaseFlip: float = Field(default=.01, ge=0, le=.3)
-    depolarizing: float = Field(default=0, ge=0, le=.3)
-    relaxationTimeUs: float = Field(default=0, ge=0, le=20)
+    bitFlip: float = Field(default=.025, ge=0, le=1)
+    phaseFlip: float = Field(default=.01, ge=0, le=1)
+    depolarizing: float = Field(default=0, ge=0, le=1)
+    relaxationTimeUs: float = Field(default=0, ge=0, le=120)
     t1Us: float = Field(default=100, ge=20, le=200)
     t2Us: float = Field(default=80, gt=0, le=400)
 
@@ -20,9 +20,10 @@ class HardwareNoise(StrictModel):
 
 class Operation(StrictModel):
     id: str = Field(min_length=1, max_length=64)
-    name: Literal['h','x','y','z','s','sdg','t','tdg','cx','cy','cz','m','bit_flip','phase_flip','decoherence']
+    name: Literal['h','x','y','z','s','sdg','t','tdg','rx','ry','rz','cx','cy','cz','m','bit_flip','phase_flip','decoherence']
     qubits: list[int] = Field(min_length=1, max_length=7)
     column: int = Field(ge=0, le=23)
+    angleRadians: float | None = Field(default=None,ge=-6.283185307179586,le=6.283185307179586)
     timeUs: float = Field(default=30, ge=0, le=200)
     t1Us: float = Field(default=100, ge=20, le=200)
     t2Us: float = Field(default=80, gt=0, le=400)
@@ -32,14 +33,14 @@ class Operation(StrictModel):
         if len(set(self.qubits)) != len(self.qubits): raise ValueError('Gate endpoints must be distinct.')
         if self.name != 'decoherence' and len(self.qubits) != (2 if self.name in ('cx','cy','cz') else 1):
             raise ValueError('Controlled gates need control and target; ordinary gates need one wire.')
+        if (self.name in ('rx','ry','rz')) != (self.angleRadians is not None):raise ValueError('Only RX/RY/RZ require an angle in radians.')
         if min(self.qubits)<0 or self.t2Us>2*self.t1Us: raise ValueError('Invalid wire or relaxation constants.')
         return self
 
 
 def fixed_payload(lesson):
     rows = {3:[('s',[0],2)], 4:[('h',[0],3),('cx',[0,1],4)],
-            5:[('t',[0],2)], 6:[('h',[0],4),('h',[2],4),('cx',[0,1],5),
-                                ('s',[1],6),('s',[2],6),('cx',[0,1],7),('cx',[0,1],8)]}[lesson]
+            5:[('t',[0],2)], 6:[('x',[0],4),('cx',[0,1],5),('h',[2],6),('s',[1],7)]}[lesson]
     return [Operation(id=f'locked-{i}',name=name,qubits=qs,column=c) for i,(name,qs,c) in enumerate(rows)]
 
 
@@ -76,7 +77,7 @@ class Draft(StrictModel):
                 occupied.add((q,g.column))
                 if g.name=='m': measured[q]=g.column
             if self.lesson==6 and g in self.operations:
-                if not (len(g.qubits)==2 and g.name in ('cx','cy','cz') and g.qubits[0]>=3 and g.qubits[1]<3) and not (len(g.qubits)==1 and g.qubits[0]>=3 and g.name in ('h','x','y','z','m')):
+                if not (len(g.qubits)==2 and g.name in ('cx','cy','cz') and g.qubits[0]>=3 and g.qubits[1]<3) and not (len(g.qubits)==1 and g.qubits[0]>=3 and g.name in ('h','x','y','z','s','sdg','rx','ry','rz','m')):
                     raise ValueError('The payload is locked. Add ancilla controls, readout, and ancilla-to-data CP gates around it.')
                 if 4<=g.column<=8: raise ValueError('Keep capstone checks outside the locked workload.')
         if sum(g.name in ('t','tdg') for g in ops)>6: raise ValueError('Use at most six T gates in this bounded sandbox.')

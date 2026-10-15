@@ -83,9 +83,8 @@ export async function completeAdvancedSchools(page: Page) {
     0,
   );
   await drop(page, "Drag H", "c0@a0");
-  await cp(page, "CZ", 1, "a0", "q1");
-  await cp(page, "CZ", 9, "a0", "q0");
-  await cp(page, "CZ", 10, "a0", "q1");
+  await cp(page, "CX", 1, "a0", "q1");
+  await cp(page, "CY", 9, "a0", "q1");
   await drop(page, "Drag H", "c11@a0");
   await drop(page, "Drag M", "c12@a0");
   await runCheck(page);

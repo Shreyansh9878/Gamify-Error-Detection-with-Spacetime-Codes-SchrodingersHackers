@@ -17,7 +17,7 @@ import {
   STORAGE_KEY,
   type Progress,
 } from "@/lib/progress";
-import type { Level, Result } from "@/lib/types";
+import type { MissionLevel as Level, Outcome } from "@/lib/missions/contracts";
 import { Tutorial } from "./Tutorial";
 import { Mission } from "./Mission";
 export function Game() {
@@ -38,7 +38,21 @@ export function Game() {
   }
   useEffect(() => {
     try {
-      const saved = parseProgress(localStorage.getItem(STORAGE_KEY));
+      let saved = parseProgress(localStorage.getItem(STORAGE_KEY));
+      if (saved.missionVersion !== 1) {
+        if (Object.keys(saved.best).length)
+          try {
+            localStorage.setItem(
+              "quantum-shield.archived-missions-v2",
+              JSON.stringify(saved.best),
+            );
+          } catch {
+            setStorageError(
+              "Previous mission scores could not be archived; tutorial progress is retained.",
+            );
+          }
+        saved = { ...saved, best: {}, missionVersion: 1 };
+      }
       setProgress(saved);
       if (saved.tutorial === "new") setScreen("tutorial");
     } catch {
@@ -70,8 +84,21 @@ export function Game() {
     setProgress((p) => ({ ...p, tutorial: status }));
     setScreen("map");
   }
-  function win(r: Result) {
-    setProgress((p) => recordBest(p, r.levelId, r.score, r.stars));
+  function win(r: Outcome) {
+    setProgress((p) =>
+      recordBest(
+        p,
+        r.levelId,
+        Math.round(r.combinedScore * 1000),
+        r.passed
+          ? r.combinedScore >= r.target + 0.05
+            ? 3
+            : r.combinedScore >= r.target + 0.025
+              ? 2
+              : 1
+          : 0,
+      ),
+    );
   }
   return (
     <div className="app-shell">
@@ -332,9 +359,9 @@ export function Game() {
                   <h3>Small checks. Big questions.</h3>
                   <p>
                     These ten authored missions translate the advanced-track
-                    experiments into a learning journey. Explore automatic
-                    Paulice checks, target ordering, circuit depth, and
-                    non-Clifford T gates in each mission’s Research Lab.
+                    experiments into a learning journey. Explore automatic Pauli
+                    checks, localized protection, and non-Clifford T gates in
+                    the shared circuit workspace.
                   </p>
                   <a
                     href="https://arxiv.org/abs/2504.15725"

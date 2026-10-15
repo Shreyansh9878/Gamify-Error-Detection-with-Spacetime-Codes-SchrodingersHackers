@@ -1,0 +1,3 @@
+# Offline asset generation only; these are not serverless runtime dependencies.
+matplotlib>=3.10,<4
+pylatexenc>=2.10,<3

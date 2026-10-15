@@ -14,6 +14,8 @@ import {
 import { titles, theory } from "@/lib/timeline/content";
 import { useWorkbench, useLocalProgress } from "@/lib/learning/useWorkbench";
 import { LabFrame, LabFeedback, CodeEditor, NativeCode } from "./LabFrame";
+import { CircuitFigure } from "./CircuitFigure";
+import { McqOption } from "./McqOption";
 import { LabTheory } from "./LabTheory";
 import { HardwareNoiseControls } from "./HardwareNoiseControls";
 import { TimelineCanvas } from "../circuit-workspace/TimelineCanvas";
@@ -72,7 +74,7 @@ function TimelineSession({
     "Keep the current lesson and mode; change them using the workspace controls.",
   );
   const work = useWorkbench(
-    `quantum-shield.timeline.${number}.${mode}.v2`,
+    `quantum-shield.timeline.${number}.${mode}.${number === 6 ? "v3" : "v2"}`,
     initialDraft(number, mode),
     schema,
     draftCode,
@@ -80,7 +82,7 @@ function TimelineSession({
     "draft",
   );
   const progress = useLocalProgress(
-    `quantum-shield.timeline.${number}.evidence.v2`,
+    `quantum-shield.timeline.${number}.evidence.${number === 6 ? "v3" : "v2"}`,
     evidenceSchema,
     { version: 2 as const, guided: false, answers: {}, reviewed: false },
   );
@@ -91,7 +93,8 @@ function TimelineSession({
     [reveal, setReveal] = useState<Reveal | null>(null),
     [revealing, setRevealing] = useState(false),
     [revealError, setRevealError] = useState(""),
-    [retry, setRetry] = useState(0);
+    [retry, setRetry] = useState(0),
+    [showHint, setShowHint] = useState(false);
   const d = work.model,
     key = JSON.stringify(d),
     stale = work.dirty || accepted !== key;
@@ -172,7 +175,7 @@ function TimelineSession({
       !result ||
       stale ||
       !result.validation.valid ||
-      result.score < 0.65
+      result.score < (result.qualificationThreshold ?? 0.6)
     ) {
       setRevealing(false);
       return;
@@ -259,6 +262,27 @@ function TimelineSession({
           number={number}
           title={titles[number]}
           source={theory[number]}
+          aside={
+            number === 6 ? (
+              <div className="capstone-hint">
+                <b>Focus on the highlighted CX block</b>
+                <p>
+                  q1 relaxes most strongly just after CX(q0,q1). Short checks
+                  are cheaper.
+                </p>
+                <button onClick={() => setShowHint((v) => !v)}>
+                  {showHint ? "Hide hint" : "Show hint"}
+                </button>
+                {showHint && (
+                  <p>
+                    Use H(a0), then CX(a0,q1) before the workload. X1 passes
+                    CNOT and becomes Y1 through S, so close with CY(a0,q1), then
+                    H(a0) and M(a0). Leave a1 unused first.
+                  </p>
+                )}
+              </div>
+            ) : undefined
+          }
           examples={
             <>
               <p>
@@ -267,15 +291,19 @@ function TimelineSession({
                 around the workload. Locked workload gates cannot be moved or
                 deleted.
               </p>
-              <pre className="nw-formula">
-                {number === 3
-                  ? "a0: H ─ CX ───── CY ─ H ─ M\nq0: ─── X ─ S ─ Y ────────"
-                  : number === 4
-                    ? "opening Z0 → H → X0 → CX → X0 X1\nclosing: CX(a0,q0) then CX(a0,q1)"
-                    : number === 5
-                      ? "a0: H ─ CZ ───── CZ ─ H ─ M\nq0: ─── Z ─ T ─ Z ────────"
-                      : "Fps × Skeep ≥ 0.65\nTry H(a0), CZ(a0,q1), locked U,\nCZ(a0,q0), CZ(a0,q1), H(a0), M(a0)."}
-              </pre>
+              <CircuitFigure
+                name={`school-${number}`}
+                caption={
+                  number === 3
+                    ? "S-gate CPC: H, controlled X, S, controlled Y, H, then syndrome measurement."
+                    : number === 4
+                      ? "A Z opening evolves through H and CNOT into a two-wire X closing product."
+                      : number === 5
+                        ? "Z checks close across T; X/Y checks require non-Pauli transport."
+                        : "Short three-qubit workload with a high-noise CX interaction on q0–q1."
+                }
+              />
+
               <p>
                 Test deterministic X/Z faults separately from probabilistic
                 hardware channels. Neither a quiet syndrome nor a matching
@@ -290,20 +318,19 @@ function TimelineSession({
                   <fieldset key={q.id}>
                     <legend>{q.text}</legend>
                     {q.options.map((o) => (
-                      <label className="ql-answer" key={o}>
-                        <input
-                          type="radio"
-                          name={q.id}
-                          checked={progress.value.answers[q.id] === o}
-                          onChange={() =>
-                            progress.setValue((p) => ({
-                              ...p,
-                              answers: { ...p.answers, [q.id]: o },
-                            }))
-                          }
-                        />
+                      <McqOption
+                        key={o}
+                        name={q.id}
+                        checked={progress.value.answers[q.id] === o}
+                        onChange={() =>
+                          progress.setValue((p) => ({
+                            ...p,
+                            answers: { ...p.answers, [q.id]: o },
+                          }))
+                        }
+                      >
                         {o}
-                      </label>
+                      </McqOption>
                     ))}
                     {progress.value.answers[q.id] && (
                       <p role="status">
@@ -558,9 +585,20 @@ function TimelineSession({
                 </p>
                 <p>
                   Combined score <b>{result.score.toFixed(5)}</b>{" "}
-                  {number === 6 ? "/ target 0.65" : ""}
+                  {number === 6
+                    ? `/ target ${result.qualificationThreshold?.toFixed(3) ?? "0.600"}`
+                    : ""}
                 </p>
               </div>
+              {number === 6 && (
+                <p>
+                  Unchecked score: {result.baselineScore.toFixed(5)}.
+                  Qualification needs max(0.60, unchecked score + 0.01).{" "}
+                  {result.qualificationThreshold! > 1
+                    ? "These noise settings leave no qualification headroom; reset the guided circuit to restore the calibrated lesson."
+                    : ""}
+                </p>
+              )}
               <ShotHistogram
                 kept={result.keptShots}
                 discarded={result.discardedShots}

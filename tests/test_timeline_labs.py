@@ -117,9 +117,9 @@ def test_hardware_protection_uses_noisy_helpers_and_true_output_types(technique)
 
 
 def test_qualification_rechecks_and_certificate_is_keyed_by_hardware(monkeypatch):
-    noise=HardwareNoise(bitFlip=.006,phaseFlip=.002)
+    noise=HardwareNoise(bitFlip=.001,phaseFlip=.001)
     reference=service.comparison(json.dumps(noise.model_dump(),sort_keys=True))
-    assert reference['candidates']==63 and reference['best']['score']>=.65
+    assert reference['candidates']==63 and reference['best']['score']>=.60
     d=Draft.model_validate(reference['best']['draft']);assert service.validation(d)['valid']
     calls=[]
     monkeypatch.setattr(service,'paulice_search',lambda key:calls.append(key) or {'available':True,'message':'test research adapter'})

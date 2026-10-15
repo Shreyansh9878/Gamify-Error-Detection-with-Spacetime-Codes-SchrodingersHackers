@@ -16,7 +16,10 @@ from .models import Draft, Request, Operation, fixed_payload, CompileRequest
 
 CP=('cx','cy','cz')
 FAULTS=('bit_flip','phase_flip','decoherence')
-PROTOCOL='timeline-hardware-layers-v1'
+PROTOCOL='timeline-hardware-layers-v2-hotspot'
+CAPSTONE_GOAL=.60
+HOTSPOT={'channel':'decoherence','timeUs':70.,'t1Us':100.,'t2Us':200.}
+CHECK_STRENGTH=.02
 
 
 def operations(d):
@@ -40,7 +43,7 @@ def payload_bounds(d,ops):
 def circuit(ops,n):
     qc=QuantumCircuit(n)
     for g in ops:
-        if g.name not in FAULTS+('m',): getattr(qc,g.name)(*g.qubits)
+        if g.name not in FAULTS+('m',): getattr(qc,g.name)(*(([g.angleRadians] if g.angleRadians is not None else [])+g.qubits))
     return qc
 
 
@@ -67,12 +70,19 @@ def validation(d):
                  g.name not in FAULTS+('m',) and all(q<n for q in g.qubits)]
         uqc=circuit(between,n);u=Operator(uqc).data
         expected=u@p@u.conj().T
+        transported_step=p.copy();unsupported=[]
+        for gate in between:
+            gate_u=Operator(circuit([gate],n)).data
+            transported_step=gate_u@transported_step@gate_u.conj().T
+            if len(SparsePauliOp.from_operator(Operator(transported_step),atol=1e-8))!=1:
+                unsupported.append(gate.name.upper())
+        rotation_info=(' Axis-aligned rotations commute at any angle; other rotations keep a Pauli only at multiples of π/2.' if any(g.name in ('rx','ry','rz') for g in between) else '')
         expansion=SparsePauliOp.from_operator(Operator(expected),atol=1e-9)
         terms=[(str(label),complex(coef)) for label,coef in expansion.to_list() if abs(coef)>1e-8]
         def text(matrix):
             return ' + '.join(f'{complex(v).real:+.3g}{complex(v).imag:+.3g}i {s}' if abs(complex(v).imag)>1e-8 else f'{complex(v).real:+.3g} {s}' for s,v in SparsePauliOp.from_operator(Operator(matrix)).to_list())
         # Exercise the Qiskit tableau for Clifford transport, including signed Paulis.
-        if not any(g.name in ('t','tdg') for g in between) and len(SparsePauliOp.from_operator(Operator(p)))==1:
+        if not any(g.name in ('t','tdg','rx','ry','rz') for g in between) and len(SparsePauliOp.from_operator(Operator(p)))==1:
             label=SparsePauliOp.from_operator(Operator(p)).paulis[0]
             transported=label.evolve(Clifford(uqc),frame='s').to_matrix()
             coefficient=SparsePauliOp.from_operator(Operator(p)).coeffs[0]
@@ -82,11 +92,14 @@ def validation(d):
         last_close=max(g.column for g in closing)
         final_h=[g.column for g in ops if g.name=='h' and g.qubits==[wire] and g.column>last_close]
         measured=any(g.name=='m' and g.qubits==[wire] and final_h and g.column>max(final_h) for g in ops)
-        entry.update(opening=text(p),expected=text(expected),closing=text(c.conj().T),nonPauli=len(terms)!=1,
-                     valid=bool(match and h_before and measured))
+        compensation=(-1)**sum(g.name=='z' and g.qubits==[wire] and bool(final_h) and last_close<g.column<max(final_h) for g in ops)
+        match=np.allclose(compensation*c@expected,np.eye(2**n),atol=1e-8)
+        entry.update(opening=text(p),expected=text(expected),closing=text(compensation*c.conj().T),nonPauli=bool(unsupported) or len(terms)!=1,
+                     valid=bool(match and h_before and measured and not unsupported))
         entry['message']=('Closed operator identity and complete H / CP / CP / H / M shell.' if entry['valid'] else
-                          'Non-Pauli transport: X/Y across T generally becomes a coherent Pauli sum.' if len(terms)!=1 else
+                          'Non-Pauli transport at '+', '.join(dict.fromkeys(unsupported))+': the check becomes a coherent Pauli sum; a Pauli-only closure is unsupported.' if unsupported or len(terms)!=1 else
                           'Closing product or sign does not match U P U†.' if not match else 'Operator matches; add the initial H and terminal H then M on this ancilla.')
+        entry['message']+=rotation_info
         loops.append(entry)
     # A green local loop alone cannot certify interacting or overlapping ancilla circuits.
     clean=[g for g in ops if g.name not in FAULTS+('m',)]
@@ -122,7 +135,13 @@ def schedule(d,noise=True):
                     for q in g.qubits:items.append(instruction('noise',[q],'Authored waiting channel',noise={'channel':'decoherence','timeUs':g.timeUs,'t1Us':g.t1Us,'t2Us':g.t2Us},column=g.column))
                 else:items.append(instruction('x' if g.name=='bit_flip' else 'z',g.qubits,'Injected test fault',column=g.column))
                 quantum=True
-            else:items.append(instruction(g.name,g.qubits,'Authored gate',column=g.column));quantum=True
+            else:
+                items.append(instruction(g.name,g.qubits,'Authored gate',column=g.column,**({'angleRadians':g.angleRadians} if g.angleRadians is not None else {})));quantum=True
+                if noise and d.lesson==6 and d.hardware.enabled:
+                    if g.name=='cx' and g.qubits==[0,1] and g.column==5:
+                        items.append(instruction('noise',[1],'High-noise CX region: q1 relaxation',noise=HOTSPOT,column=g.column))
+                    elif g.name in CP and any(q>=d.dataQubits for q in g.qubits):
+                        items.append(instruction('noise',g.qubits,'Controlled-check interaction overhead',noise={'channel':'depolarizing','strength':CHECK_STRENGTH,'numQubits':2},column=g.column))
         if noise and quantum:items.extend(hardware_items(d.hardware,[q for q in range(width) if q not in measured]))
     return items
 
@@ -140,7 +159,7 @@ def measured_state(items,width):
 def evaluate(d,shots=1024,seed=2026,visuals=True):
     n=d.dataQubits;k=d.ancillas;width=n+k;ops=operations(d)
     data=[g for g in ops if all(q<n for q in g.qubits) and g.name not in FAULTS]
-    ideal_items=[instruction('measure' if g.name=='m' else g.name,g.qubits,'Ideal data workload') for g in data]
+    ideal_items=[instruction('measure' if g.name=='m' else g.name,g.qubits,'Ideal data workload',**({'angleRadians':g.angleRadians} if g.angleRadians is not None else {})) for g in data]
     ideal=measured_state(ideal_items,n)
     # The baseline has only data operations and their own occupied layers.
     temp=d.model_copy(update={'operations':[g for g in ops if all(q<n for q in g.qubits)],'mode':'sandbox','ancillas':1})
@@ -153,7 +172,9 @@ def evaluate(d,shots=1024,seed=2026,visuals=True):
     r=max(0.,min(1.,float(np.trace(accepted).real)))
     retained=partial_trace(DensityMatrix(accepted/r),list(range(n,width))) if r>1e-12 else None
     f=min(1.,max(0.,float(state_fidelity(ideal,retained)))) if retained is not None else None
-    metrics={'fidelity':f,'retention':r,'score':(f or 0)*r,'samplingOverhead':1/r if r>1e-12 else None}
+    baseline_fidelity=min(1.,max(0.,float(state_fidelity(ideal,baseline))))
+    threshold=max(CAPSTONE_GOAL,baseline_fidelity+.01) if d.lesson==6 else None
+    metrics={'baselineScore':baseline_fidelity,'qualificationThreshold':threshold,'fidelity':f,'retention':r,'score':(f or 0)*r,'samplingOverhead':1/r if r>1e-12 else None}
     if not visuals:return metrics
     sampled=joint.copy();sampled.seed(seed);raw=sampled.sample_counts(shots)
     all_counts={format(i,f'0{n}b'):0 for i in range(2**n)};kept_counts=all_counts.copy();syndromes={};kept=0
@@ -187,10 +208,12 @@ def native_code(d,shots=1024,seed=2026):
         elif name=='noise':
             v=i['noise'];kind=v['channel']
             if kind in ('bit_flip','phase_flip'):expr=f"pauli_error([('{ 'X' if kind=='bit_flip' else 'Z'}',{v['probability']}),('I',{1-v['probability']})])"
-            elif kind=='depolarizing':expr=f"depolarizing_error({v['strength']})"
+            elif kind=='depolarizing':expr=f"depolarizing_error({v['strength']},{v.get('numQubits',1)})"
             else:expr=f"thermal_relaxation_error({v['t1Us']},{v['t2Us']},{v['timeUs']})"
             lines.append(f'qc.append({expr}.to_instruction(), {q})')
-        else:lines.append(f'qc.{name}({", ".join(map(str,q))})')
+        else:
+            args=([i['angleRadians']] if 'angleRadians' in i else [])+q
+            lines.append(f'qc.{name}({", ".join(map(str,args))})')
     lines += [f'qc.measure(range({d.dataQubits}), range({d.dataQubits}))','sim = AerSimulator(method="density_matrix")',f'print(sim.run(transpile(qc, sim), shots={shots}, seed_simulator={seed}).result().get_counts())']
     return '\n'.join(lines)+'\n'
 
@@ -212,8 +235,10 @@ def compile_source(request):
                 values['hardware']={k:literal(v) for k,v in keys.items()}
             else:
                 if set(keys)-{'at','time_us','t1_us','t2_us'}:raise SourceError('Use at=column and waiting-time parameters only.',node)
-                qs=[integer(a,pi) for a in args]
-                ops.append(Operation(id=f'code-{len(ops)}',name=name,qubits=qs,column=integer(keys['at'],pi) if 'at' in keys else len(ops),
+                rotation=name in ('rx','ry','rz')
+                if rotation and len(args)!=2:raise SourceError('Use qc.rx(theta, wire, at=column), likewise ry/rz.',node)
+                qs=[integer(a,pi) for a in (args[1:] if rotation else args)]
+                ops.append(Operation(id=f'code-{len(ops)}',name=name,qubits=qs,column=integer(keys['at'],pi) if 'at' in keys else len(ops),**({'angleRadians':float(number(args[0],pi))} if rotation else {}),
                                      **{{'time_us':'timeUs','t1_us':'t1Us','t2_us':'t2Us'}[k]:float(number(v,pi)) for k,v in keys.items() if k!='at'}))
         draft=Draft(**values,operations=ops)
         return {'draft':draft.model_dump(),'diagnostics':[]}
@@ -262,8 +287,8 @@ def paulice_search(noise_json):
 
 def reveal(request):
     d=request.draft;player=run(request)
-    if d.lesson!=6 or not player['validation']['valid'] or player['score']<.65:
-        raise ValueError('First run a complete valid check with exact Fps × retention ≥ 0.65.')
+    if d.lesson!=6 or not player['validation']['valid'] or player['score']<player['qualificationThreshold']:
+        raise ValueError('First run a complete valid check with exact Fps × retention above both 0.60 and the unchecked baseline + 0.01.')
     key=json.dumps(d.hardware.model_dump(),sort_keys=True)
     try:research=paulice_search(key)
     except Exception as error:research={'available':False,'message':f'Paulice search failed ({type(error).__name__}). Retry; qualification remains valid.'}

@@ -4,6 +4,7 @@ const schema = z.object({
   tutorial: z.enum(["new", "complete", "skipped"]),
   step: z.number().int().min(0).max(5),
   sound: z.boolean(),
+  missionVersion: z.literal(1).optional(),
   best: z.record(
     z.string(),
     z.object({

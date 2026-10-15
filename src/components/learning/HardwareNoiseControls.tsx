@@ -30,10 +30,10 @@ export function HardwareNoiseControls({
       </p>
       {(
         [
-          ["bitFlip", "Bit-flip probability", 0.3, 0.001],
-          ["phaseFlip", "Phase-flip probability", 0.3, 0.001],
-          ["depolarizing", "Depolarizing strength", 0.3, 0.001],
-          ["relaxationTimeUs", "Relaxation time per layer (μs)", 20, 1],
+          ["bitFlip", "Bit-flip probability", 1, 0.001],
+          ["phaseFlip", "Phase-flip probability", 1, 0.001],
+          ["depolarizing", "Depolarizing strength", 1, 0.001],
+          ["relaxationTimeUs", "Relaxation time per layer (μs)", 120, 1],
         ] as const
       ).map(([key, label, max, step]) => (
         <label key={key}>

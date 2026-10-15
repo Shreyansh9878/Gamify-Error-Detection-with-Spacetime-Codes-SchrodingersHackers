@@ -16,6 +16,9 @@ export const operationSchema = z
       "sdg",
       "t",
       "tdg",
+      "rx",
+      "ry",
+      "rz",
       "cx",
       "cy",
       "cz",
@@ -26,6 +29,11 @@ export const operationSchema = z
     ]),
     qubits: z.array(z.number().int().min(0).max(6)).min(1).max(7),
     column: z.number().int().min(0).max(23),
+    angleRadians: z
+      .number()
+      .min(-2 * Math.PI)
+      .max(2 * Math.PI)
+      .optional(),
     timeUs: z.number().min(0).max(200).optional(),
     t1Us: z.number().min(20).max(200).optional(),
     t2Us: z.number().positive().max(400).optional(),
@@ -62,6 +70,11 @@ export const draftSchema = z
           g.qubits.length !== (["cx", "cy", "cz"].includes(g.name) ? 2 : 1))
       )
         fail("Controlled gates require distinct control and target.");
+      if (
+        ["rx", "ry", "rz"].includes(g.name) !==
+        (g.angleRadians !== undefined)
+      )
+        fail("Only RX/RY/RZ require an angle in radians.");
       if (g.column >= d.columns) fail("Gate is outside the timeline.");
       if (g.name === "decoherence" && (g.t2Us ?? 80) > 2 * (g.t1Us ?? 100))
         fail("T2 must be at most 2T1.");
@@ -99,7 +112,9 @@ export const draftSchema = z
           !(
             g.qubits[0] >= 3 &&
             ((g.qubits.length === 1 &&
-              ["h", "x", "y", "z", "m"].includes(g.name)) ||
+              ["h", "x", "y", "z", "s", "sdg", "rx", "ry", "rz", "m"].includes(
+                g.name,
+              )) ||
               (g.qubits.length === 2 &&
                 ["cx", "cy", "cz"].includes(g.name) &&
                 g.qubits[1] < 3))
@@ -120,13 +135,10 @@ export function fixedPayload(lesson: number): Operation[] {
     ],
     5: [["t", [0], 2]],
     6: [
-      ["h", [0], 4],
-      ["h", [2], 4],
+      ["x", [0], 4],
       ["cx", [0, 1], 5],
-      ["s", [1], 6],
-      ["s", [2], 6],
-      ["cx", [0, 1], 7],
-      ["cx", [0, 1], 8],
+      ["h", [2], 6],
+      ["s", [1], 7],
     ],
   };
   return rows[lesson].map(([name, qubits, column], i) => ({
@@ -151,7 +163,7 @@ export function initialDraft(
     operations: [],
     hardware: {
       ...initialHardware,
-      ...(lesson === 6 ? { bitFlip: 0.006, phaseFlip: 0.002 } : {}),
+      ...(lesson === 6 ? { bitFlip: 0.001, phaseFlip: 0.001 } : {}),
       enabled: lesson === 6,
     },
   };
@@ -159,6 +171,7 @@ export function initialDraft(
 export function draftCode(d: Draft) {
   const args = (g: Operation) =>
     [
+      ...(g.angleRadians !== undefined ? [String(g.angleRadians)] : []),
       ...g.qubits.map(String),
       `at=${g.column}`,
       ...(g.name === "decoherence"
@@ -199,6 +212,8 @@ export interface Validation {
   wholeCircuitIdentity: boolean;
 }
 export interface Result {
+  baselineScore: number;
+  qualificationThreshold: number | null;
   validation: Validation;
   fidelity: number | null;
   retention: number;

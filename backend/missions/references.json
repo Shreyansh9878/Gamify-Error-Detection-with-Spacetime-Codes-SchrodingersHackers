@@ -1,0 +1,2902 @@
+{
+  "protocol": "main-missions-exact-v1",
+  "score": "F_ps * S_keep; exact density-matrix expectation",
+  "levels": [
+    {
+      "id": 1,
+      "qubits": 3,
+      "ancillas": 1,
+      "tCount": 0,
+      "baseline": 0.4657970221087031,
+      "everywhere": 0.4230723226485485,
+      "reasonable": 0.6822037568628656,
+      "optimal": 0.6822846541719368,
+      "target": 0.6,
+      "spread": 0.0,
+      "baselineDraft": {
+        "version": 1,
+        "levelId": 1,
+        "bands": {
+          "0": 4,
+          "8": 8
+        },
+        "operations": []
+      },
+      "everywhereDraft": {
+        "version": 1,
+        "levelId": 1,
+        "bands": {
+          "0": 8,
+          "8": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g4",
+            "name": "cy",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 8,
+            "slot": 0
+          },
+          {
+            "id": "g5",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 8,
+            "slot": 1
+          },
+          {
+            "id": "g6",
+            "name": "z",
+            "qubits": [
+              3
+            ],
+            "boundary": 8,
+            "slot": 5
+          },
+          {
+            "id": "g7",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 8,
+            "slot": 6
+          },
+          {
+            "id": "g8",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 8,
+            "slot": 7
+          }
+        ]
+      },
+      "reasonableDraft": {
+        "version": 1,
+        "levelId": 1,
+        "bands": {
+          "0": 8,
+          "8": 8,
+          "2": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 1
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 7
+          }
+        ]
+      },
+      "optimalDraft": {
+        "version": 1,
+        "levelId": 1,
+        "bands": {
+          "0": 4,
+          "8": 8,
+          "1": 8,
+          "2": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 1,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 1
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 7
+          }
+        ]
+      },
+      "optimizer": {
+        "broadest": {
+          "label": "XYZ",
+          "cost": 9
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "id": 2,
+      "qubits": 3,
+      "ancillas": 1,
+      "tCount": 0,
+      "baseline": 0.45607968858389336,
+      "everywhere": 0.4127278811507968,
+      "reasonable": 0.6756953856618347,
+      "optimal": 0.6757753780991016,
+      "target": 0.6,
+      "spread": 0.0,
+      "baselineDraft": {
+        "version": 1,
+        "levelId": 2,
+        "bands": {
+          "0": 4,
+          "10": 8
+        },
+        "operations": []
+      },
+      "everywhereDraft": {
+        "version": 1,
+        "levelId": 2,
+        "bands": {
+          "0": 8,
+          "10": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g4",
+            "name": "cy",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 10,
+            "slot": 0
+          },
+          {
+            "id": "g5",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 10,
+            "slot": 1
+          },
+          {
+            "id": "g6",
+            "name": "z",
+            "qubits": [
+              3
+            ],
+            "boundary": 10,
+            "slot": 5
+          },
+          {
+            "id": "g7",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 10,
+            "slot": 6
+          },
+          {
+            "id": "g8",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 10,
+            "slot": 7
+          }
+        ]
+      },
+      "reasonableDraft": {
+        "version": 1,
+        "levelId": 2,
+        "bands": {
+          "0": 8,
+          "10": 8,
+          "2": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 1
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 7
+          }
+        ]
+      },
+      "optimalDraft": {
+        "version": 1,
+        "levelId": 2,
+        "bands": {
+          "0": 4,
+          "10": 8,
+          "1": 8,
+          "2": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 1,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 1
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 7
+          }
+        ]
+      },
+      "optimizer": {
+        "broadest": {
+          "label": "XXY",
+          "cost": 10
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "id": 3,
+      "qubits": 3,
+      "ancillas": 2,
+      "tCount": 0,
+      "baseline": 0.44538431537240514,
+      "everywhere": 0.34506238018093494,
+      "reasonable": 0.6688692985197592,
+      "optimal": 0.6689482387276895,
+      "target": 0.59,
+      "spread": 0.0,
+      "baselineDraft": {
+        "version": 1,
+        "levelId": 3,
+        "bands": {
+          "0": 4,
+          "13": 8
+        },
+        "operations": []
+      },
+      "everywhereDraft": {
+        "version": 1,
+        "levelId": 3,
+        "bands": {
+          "0": 8,
+          "13": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g4",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 13,
+            "slot": 1
+          },
+          {
+            "id": "g5",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 13,
+            "slot": 2
+          },
+          {
+            "id": "g6",
+            "name": "cy",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 13,
+            "slot": 0
+          },
+          {
+            "id": "g7",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 13,
+            "slot": 6
+          },
+          {
+            "id": "g8",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 13,
+            "slot": 7
+          },
+          {
+            "id": "g9",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g10",
+            "name": "cx",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g11",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g12",
+            "name": "cx",
+            "qubits": [
+              4,
+              2
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g13",
+            "name": "cx",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 13,
+            "slot": 0
+          },
+          {
+            "id": "g14",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 13,
+            "slot": 1
+          },
+          {
+            "id": "g15",
+            "name": "cy",
+            "qubits": [
+              4,
+              2
+            ],
+            "boundary": 13,
+            "slot": 2
+          },
+          {
+            "id": "g16",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 13,
+            "slot": 6
+          },
+          {
+            "id": "g17",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 13,
+            "slot": 7
+          }
+        ]
+      },
+      "reasonableDraft": {
+        "version": 1,
+        "levelId": 3,
+        "bands": {
+          "0": 4,
+          "13": 8,
+          "1": 8,
+          "3": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 1,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 3,
+            "slot": 1
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 7
+          }
+        ]
+      },
+      "optimalDraft": {
+        "version": 1,
+        "levelId": 3,
+        "bands": {
+          "0": 4,
+          "13": 8,
+          "2": 8,
+          "3": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 3,
+            "slot": 1
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 7
+          }
+        ]
+      },
+      "optimizer": {
+        "broadest": {
+          "label": "XXX",
+          "cost": 11
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "id": 4,
+      "qubits": 3,
+      "ancillas": 2,
+      "tCount": 0,
+      "baseline": 0.43606514091253495,
+      "everywhere": 0.3412543220271263,
+      "reasonable": 0.6626825906463827,
+      "optimal": 0.6627606479476318,
+      "target": 0.59,
+      "spread": 0.0,
+      "baselineDraft": {
+        "version": 1,
+        "levelId": 4,
+        "bands": {
+          "0": 4,
+          "15": 8
+        },
+        "operations": []
+      },
+      "everywhereDraft": {
+        "version": 1,
+        "levelId": 4,
+        "bands": {
+          "0": 8,
+          "15": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g4",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 15,
+            "slot": 6
+          },
+          {
+            "id": "g5",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 15,
+            "slot": 7
+          },
+          {
+            "id": "g6",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g7",
+            "name": "cx",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g8",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g9",
+            "name": "cx",
+            "qubits": [
+              4,
+              2
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g10",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 15,
+            "slot": 6
+          },
+          {
+            "id": "g11",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 15,
+            "slot": 7
+          }
+        ]
+      },
+      "reasonableDraft": {
+        "version": 1,
+        "levelId": 4,
+        "bands": {
+          "0": 4,
+          "15": 8,
+          "1": 8,
+          "3": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 1,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 7
+          }
+        ]
+      },
+      "optimalDraft": {
+        "version": 1,
+        "levelId": 4,
+        "bands": {
+          "0": 4,
+          "15": 8,
+          "2": 8,
+          "3": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 7
+          }
+        ]
+      },
+      "optimizer": {
+        "broadest": {
+          "label": "XXX",
+          "cost": 12
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "id": 5,
+      "qubits": 3,
+      "ancillas": 2,
+      "tCount": 0,
+      "baseline": 0.42566318162399575,
+      "everywhere": 0.3295531059313744,
+      "reasonable": 0.6547254338943934,
+      "optimal": 0.6548024073733857,
+      "target": 0.58,
+      "spread": 0.0,
+      "baselineDraft": {
+        "version": 1,
+        "levelId": 5,
+        "bands": {
+          "0": 4,
+          "18": 8
+        },
+        "operations": []
+      },
+      "everywhereDraft": {
+        "version": 1,
+        "levelId": 5,
+        "bands": {
+          "0": 8,
+          "18": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g4",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 18,
+            "slot": 6
+          },
+          {
+            "id": "g5",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 18,
+            "slot": 7
+          },
+          {
+            "id": "g6",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g7",
+            "name": "cx",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g8",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g9",
+            "name": "cx",
+            "qubits": [
+              4,
+              2
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g10",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 18,
+            "slot": 6
+          },
+          {
+            "id": "g11",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 18,
+            "slot": 7
+          }
+        ]
+      },
+      "reasonableDraft": {
+        "version": 1,
+        "levelId": 5,
+        "bands": {
+          "0": 4,
+          "18": 8,
+          "2": 8,
+          "4": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 7
+          }
+        ]
+      },
+      "optimalDraft": {
+        "version": 1,
+        "levelId": 5,
+        "bands": {
+          "0": 4,
+          "18": 8,
+          "3": 8,
+          "4": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 3,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 7
+          }
+        ]
+      },
+      "optimizer": {
+        "broadest": {
+          "label": "XXX",
+          "cost": 13
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "id": 6,
+      "qubits": 3,
+      "ancillas": 2,
+      "tCount": 0,
+      "baseline": 0.4164469264663487,
+      "everywhere": 0.33351720712906224,
+      "reasonable": 0.6483142863158633,
+      "optimal": 0.6483903423830081,
+      "target": 0.58,
+      "spread": 0.0,
+      "baselineDraft": {
+        "version": 1,
+        "levelId": 6,
+        "bands": {
+          "0": 4,
+          "20": 8
+        },
+        "operations": []
+      },
+      "everywhereDraft": {
+        "version": 1,
+        "levelId": 6,
+        "bands": {
+          "0": 8,
+          "20": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g4",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 20,
+            "slot": 6
+          },
+          {
+            "id": "g5",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 20,
+            "slot": 7
+          },
+          {
+            "id": "g6",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g7",
+            "name": "cx",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g8",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g9",
+            "name": "cx",
+            "qubits": [
+              4,
+              2
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g10",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 20,
+            "slot": 6
+          },
+          {
+            "id": "g11",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 20,
+            "slot": 7
+          }
+        ]
+      },
+      "reasonableDraft": {
+        "version": 1,
+        "levelId": 6,
+        "bands": {
+          "0": 4,
+          "20": 8,
+          "2": 8,
+          "4": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 7
+          }
+        ]
+      },
+      "optimalDraft": {
+        "version": 1,
+        "levelId": 6,
+        "bands": {
+          "0": 4,
+          "20": 8,
+          "3": 8,
+          "4": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 3,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 7
+          }
+        ]
+      },
+      "optimizer": {
+        "broadest": {
+          "label": "XXZ",
+          "cost": 14
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "id": 7,
+      "qubits": 3,
+      "ancillas": 3,
+      "tCount": 0,
+      "baseline": 0.40713266626681266,
+      "everywhere": 0.29117400936944055,
+      "reasonable": 0.6415555521224775,
+      "optimal": 0.6416306645102202,
+      "target": 0.58,
+      "spread": 0.0,
+      "baselineDraft": {
+        "version": 1,
+        "levelId": 7,
+        "bands": {
+          "0": 4,
+          "23": 8
+        },
+        "operations": []
+      },
+      "everywhereDraft": {
+        "version": 1,
+        "levelId": 7,
+        "bands": {
+          "0": 8,
+          "23": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g4",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 23,
+            "slot": 6
+          },
+          {
+            "id": "g5",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 23,
+            "slot": 7
+          },
+          {
+            "id": "g6",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g7",
+            "name": "cx",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g8",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g9",
+            "name": "cx",
+            "qubits": [
+              4,
+              2
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g10",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 23,
+            "slot": 6
+          },
+          {
+            "id": "g11",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 23,
+            "slot": 7
+          },
+          {
+            "id": "g12",
+            "name": "h",
+            "qubits": [
+              5
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g13",
+            "name": "cx",
+            "qubits": [
+              5,
+              0
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g14",
+            "name": "cx",
+            "qubits": [
+              5,
+              1
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g15",
+            "name": "cx",
+            "qubits": [
+              5,
+              2
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g16",
+            "name": "h",
+            "qubits": [
+              5
+            ],
+            "boundary": 23,
+            "slot": 6
+          },
+          {
+            "id": "g17",
+            "name": "m",
+            "qubits": [
+              5
+            ],
+            "boundary": 23,
+            "slot": 7
+          }
+        ]
+      },
+      "reasonableDraft": {
+        "version": 1,
+        "levelId": 7,
+        "bands": {
+          "0": 4,
+          "23": 8,
+          "3": 8,
+          "5": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 3,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 5,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 5,
+            "slot": 7
+          }
+        ]
+      },
+      "optimalDraft": {
+        "version": 1,
+        "levelId": 7,
+        "bands": {
+          "0": 4,
+          "23": 8,
+          "4": 8,
+          "5": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 4,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 5,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 5,
+            "slot": 7
+          }
+        ]
+      },
+      "optimizer": {
+        "broadest": {
+          "label": "XXY",
+          "cost": 15
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "id": 8,
+      "qubits": 4,
+      "ancillas": 3,
+      "tCount": 1,
+      "baseline": 0.3931640199652508,
+      "everywhere": 0.22882222557707804,
+      "reasonable": 0.6257797239211101,
+      "optimal": 0.6260723308000473,
+      "target": 0.56,
+      "spread": 0.0,
+      "baselineDraft": {
+        "version": 1,
+        "levelId": 8,
+        "bands": {
+          "0": 4,
+          "30": 8
+        },
+        "operations": []
+      },
+      "everywhereDraft": {
+        "version": 1,
+        "levelId": 8,
+        "bands": {
+          "0": 8,
+          "30": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cy",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              4,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g4",
+            "name": "cy",
+            "qubits": [
+              4,
+              3
+            ],
+            "boundary": 0,
+            "slot": 4
+          },
+          {
+            "id": "g5",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 30,
+            "slot": 6
+          },
+          {
+            "id": "g6",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 30,
+            "slot": 7
+          },
+          {
+            "id": "g7",
+            "name": "h",
+            "qubits": [
+              5
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g8",
+            "name": "cy",
+            "qubits": [
+              5,
+              0
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g9",
+            "name": "cx",
+            "qubits": [
+              5,
+              1
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g10",
+            "name": "cx",
+            "qubits": [
+              5,
+              2
+            ],
+            "boundary": 0,
+            "slot": 4
+          },
+          {
+            "id": "g11",
+            "name": "cy",
+            "qubits": [
+              5,
+              3
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g12",
+            "name": "h",
+            "qubits": [
+              5
+            ],
+            "boundary": 30,
+            "slot": 6
+          },
+          {
+            "id": "g13",
+            "name": "m",
+            "qubits": [
+              5
+            ],
+            "boundary": 30,
+            "slot": 7
+          },
+          {
+            "id": "g14",
+            "name": "h",
+            "qubits": [
+              6
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g15",
+            "name": "cy",
+            "qubits": [
+              6,
+              0
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g16",
+            "name": "cx",
+            "qubits": [
+              6,
+              1
+            ],
+            "boundary": 0,
+            "slot": 4
+          },
+          {
+            "id": "g17",
+            "name": "cx",
+            "qubits": [
+              6,
+              2
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g18",
+            "name": "cy",
+            "qubits": [
+              6,
+              3
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g19",
+            "name": "h",
+            "qubits": [
+              6
+            ],
+            "boundary": 30,
+            "slot": 6
+          },
+          {
+            "id": "g20",
+            "name": "m",
+            "qubits": [
+              6
+            ],
+            "boundary": 30,
+            "slot": 7
+          }
+        ]
+      },
+      "reasonableDraft": {
+        "version": 1,
+        "levelId": 8,
+        "bands": {
+          "0": 4,
+          "30": 8,
+          "3": 8,
+          "8": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 3,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 3,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 8,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 8,
+            "slot": 7
+          }
+        ]
+      },
+      "optimalDraft": {
+        "version": 1,
+        "levelId": 8,
+        "bands": {
+          "0": 4,
+          "30": 8,
+          "4": 8,
+          "5": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 4,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 4,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 5,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 5,
+            "slot": 7
+          }
+        ]
+      },
+      "optimizer": {
+        "broadest": {
+          "label": "XXXZ",
+          "cost": 19
+        },
+        "candidateCount": 891,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "id": 9,
+      "qubits": 4,
+      "ancillas": 3,
+      "tCount": 3,
+      "baseline": 0.38328329004454553,
+      "everywhere": 0.22211739866323854,
+      "reasonable": 0.6170658429520691,
+      "optimal": 0.6173538896609545,
+      "target": 0.56,
+      "spread": 0.0,
+      "baselineDraft": {
+        "version": 1,
+        "levelId": 9,
+        "bands": {
+          "0": 4,
+          "35": 8
+        },
+        "operations": []
+      },
+      "everywhereDraft": {
+        "version": 1,
+        "levelId": 9,
+        "bands": {
+          "0": 8,
+          "35": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cy",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              4,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g4",
+            "name": "cy",
+            "qubits": [
+              4,
+              3
+            ],
+            "boundary": 0,
+            "slot": 4
+          },
+          {
+            "id": "g5",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 35,
+            "slot": 6
+          },
+          {
+            "id": "g6",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 35,
+            "slot": 7
+          },
+          {
+            "id": "g7",
+            "name": "h",
+            "qubits": [
+              5
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g8",
+            "name": "cy",
+            "qubits": [
+              5,
+              0
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g9",
+            "name": "cx",
+            "qubits": [
+              5,
+              1
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g10",
+            "name": "cx",
+            "qubits": [
+              5,
+              2
+            ],
+            "boundary": 0,
+            "slot": 4
+          },
+          {
+            "id": "g11",
+            "name": "cy",
+            "qubits": [
+              5,
+              3
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g12",
+            "name": "h",
+            "qubits": [
+              5
+            ],
+            "boundary": 35,
+            "slot": 6
+          },
+          {
+            "id": "g13",
+            "name": "m",
+            "qubits": [
+              5
+            ],
+            "boundary": 35,
+            "slot": 7
+          },
+          {
+            "id": "g14",
+            "name": "h",
+            "qubits": [
+              6
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g15",
+            "name": "cy",
+            "qubits": [
+              6,
+              0
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g16",
+            "name": "cx",
+            "qubits": [
+              6,
+              1
+            ],
+            "boundary": 0,
+            "slot": 4
+          },
+          {
+            "id": "g17",
+            "name": "cx",
+            "qubits": [
+              6,
+              2
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g18",
+            "name": "cy",
+            "qubits": [
+              6,
+              3
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g19",
+            "name": "h",
+            "qubits": [
+              6
+            ],
+            "boundary": 35,
+            "slot": 6
+          },
+          {
+            "id": "g20",
+            "name": "m",
+            "qubits": [
+              6
+            ],
+            "boundary": 35,
+            "slot": 7
+          }
+        ]
+      },
+      "reasonableDraft": {
+        "version": 1,
+        "levelId": 9,
+        "bands": {
+          "0": 4,
+          "35": 8,
+          "4": 8,
+          "9": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 4,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 4,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 9,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 9,
+            "slot": 7
+          }
+        ]
+      },
+      "optimalDraft": {
+        "version": 1,
+        "levelId": 9,
+        "bands": {
+          "0": 4,
+          "35": 8,
+          "5": 8,
+          "6": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 5,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 5,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 6,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 6,
+            "slot": 7
+          }
+        ]
+      },
+      "optimizer": {
+        "broadest": {
+          "label": "YXXY",
+          "cost": 20
+        },
+        "candidateCount": 699,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "id": 10,
+      "qubits": 4,
+      "ancillas": 3,
+      "tCount": 5,
+      "baseline": 0.3741744020759493,
+      "everywhere": 0.2363421583759983,
+      "reasonable": 0.6094393922744642,
+      "optimal": 0.6097232874294931,
+      "target": 0.55,
+      "spread": 0.0,
+      "baselineDraft": {
+        "version": 1,
+        "levelId": 10,
+        "bands": {
+          "0": 4,
+          "39": 8
+        },
+        "operations": []
+      },
+      "everywhereDraft": {
+        "version": 1,
+        "levelId": 10,
+        "bands": {
+          "0": 8,
+          "39": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cy",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              4,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g4",
+            "name": "cz",
+            "qubits": [
+              4,
+              3
+            ],
+            "boundary": 0,
+            "slot": 4
+          },
+          {
+            "id": "g5",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 39,
+            "slot": 6
+          },
+          {
+            "id": "g6",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 39,
+            "slot": 7
+          },
+          {
+            "id": "g7",
+            "name": "h",
+            "qubits": [
+              5
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g8",
+            "name": "cy",
+            "qubits": [
+              5,
+              0
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g9",
+            "name": "cx",
+            "qubits": [
+              5,
+              1
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g10",
+            "name": "cx",
+            "qubits": [
+              5,
+              2
+            ],
+            "boundary": 0,
+            "slot": 4
+          },
+          {
+            "id": "g11",
+            "name": "cz",
+            "qubits": [
+              5,
+              3
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g12",
+            "name": "h",
+            "qubits": [
+              5
+            ],
+            "boundary": 39,
+            "slot": 6
+          },
+          {
+            "id": "g13",
+            "name": "m",
+            "qubits": [
+              5
+            ],
+            "boundary": 39,
+            "slot": 7
+          },
+          {
+            "id": "g14",
+            "name": "h",
+            "qubits": [
+              6
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g15",
+            "name": "cy",
+            "qubits": [
+              6,
+              0
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g16",
+            "name": "cx",
+            "qubits": [
+              6,
+              1
+            ],
+            "boundary": 0,
+            "slot": 4
+          },
+          {
+            "id": "g17",
+            "name": "cx",
+            "qubits": [
+              6,
+              2
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g18",
+            "name": "cz",
+            "qubits": [
+              6,
+              3
+            ],
+            "boundary": 0,
+            "slot": 2
+          },
+          {
+            "id": "g19",
+            "name": "h",
+            "qubits": [
+              6
+            ],
+            "boundary": 39,
+            "slot": 6
+          },
+          {
+            "id": "g20",
+            "name": "m",
+            "qubits": [
+              6
+            ],
+            "boundary": 39,
+            "slot": 7
+          }
+        ]
+      },
+      "reasonableDraft": {
+        "version": 1,
+        "levelId": 10,
+        "bands": {
+          "0": 4,
+          "39": 8,
+          "4": 8,
+          "9": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 4,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 4,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 9,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 9,
+            "slot": 7
+          }
+        ]
+      },
+      "optimalDraft": {
+        "version": 1,
+        "levelId": 10,
+        "bands": {
+          "0": 4,
+          "39": 8,
+          "5": 8,
+          "6": 8
+        },
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 5,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 5,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 6,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 6,
+            "slot": 7
+          }
+        ]
+      },
+      "optimizer": {
+        "broadest": {
+          "label": "ZIXY",
+          "cost": 19
+        },
+        "candidateCount": 651,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    }
+  ],
+  "packages": {
+    "qiskit": "2.5.2",
+    "qiskit-aer": "0.17.2",
+    "qiskit-paulice": "0.2.1",
+    "numpy": "2.2.6"
+  }
+}

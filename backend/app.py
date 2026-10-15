@@ -27,6 +27,8 @@ from .learning.visualization import component_page, experiment_context
 from .noise_lab.models import StrictModel
 from pydantic import Field
 from .timeline_lab import models as timeline_models, service as timeline_service
+from .missions import models as mission_models, service as mission_service
+from .missions.levels import get_level as get_mission
 
 app=FastAPI(title='Quantum Shield Stage 1',version=VERSION)
 lock=threading.BoundedSemaphore(1)
@@ -75,7 +77,19 @@ def health():
 
 @app.get('/api/levels')
 def levels():
-    return LEVELS
+    return [get_mission(i) for i in range(1,11)]
+
+@app.post('/api/missions/validate')
+def mission_validate(request:mission_models.Request):
+    return compute(mission_service.validate,request.draft)
+
+@app.post('/api/missions/run')
+def mission_run(request:mission_models.Request):
+    return compute(mission_service.run,request.draft)
+
+@app.post('/api/missions/compile')
+def mission_compile(request:mission_models.CompileRequest):
+    return compute(mission_service.compile_source,request)
 
 @app.post('/api/run-circuit')
 def run(request:RunRequest):

@@ -13,9 +13,17 @@ The ancilla starts in |0〉. Drag H onto it to create |+〉. Then drag a control
 
 After the data computation U, apply the closing controlled Pauli, H on the same ancilla, and M. A noiseless closed check returns syndrome zero for every possible data input when P′ U = U P. The closing operator is P′ = U P U†. A wrong closure can produce false alarms, but a mismatch does not guarantee syndrome one on every input or every shot.
 
+![Guided S-gate check without faults](/tutorial-circuits/school-3.png)
+
 ### Guided S circuit
 
 The canvas has seven slots in time. Put H on a0 in the first slot, CX(a0,q0) in the second, and leave the locked S in the third. The fourth is an optional fault location. Put CY(a0,q0) in the fifth, H(a0) in the sixth, and M(a0) in the seventh. This implements S X S† = Y. Swap the closing operator and inspect the red connector and syndrome counts.
+
+Allowed fixed-slot assembly: slot 1 accepts H on a0; slot 2 accepts an opening CX, CY or CZ from a0 to q0; slot 3 is the locked S. Slot 4 is the optional X/Z error location. Slot 5 accepts the closing CX, CY or CZ; slot 6 accepts H on a0; slot 7 accepts M on a0. Keep gates in time order.
+
+**Task:** first run the X → S → Y check without an error and observe syndrome 0. Then drag Bit Flip (X error) into slot 4, immediately after S, and run again. The syndrome becomes 1: X anticommutes with the evolved check Y. A Z error also anticommutes with Y and is detected. A Y error commutes and goes undetected; in the sandbox, place ordinary Y at that location to explore it.
+
+![The same S-gate CPC with a bit flip after S](/tutorial-circuits/school-3-fault.png)
 
 ### Faults and filtering
 
@@ -32,6 +40,8 @@ Localized spacetime checks protect selected fault locations using short operator
 
 A two-qubit gate can turn a single-wire operator into a product. Across a CNOT with q0 as control and q1 as target, X0 becomes X0 X1. Z1 becomes Z0 Z1. X1 and Z0 each remain on their original wire. The product is essential: closing only half of a spread check does not implement the intended operator identity.
 
+![Two-qubit H and CNOT check with a closing X product](/tutorial-circuits/school-4.png)
+
 ### The guided workload includes H then CX
 
 The locked computation is H(q0) followed by CX(q0,q1). Therefore opening Z0 first becomes X0 across H, then X0 X1 across CNOT. Opening X0 instead becomes Z0 across H and remains Z0 across CNOT. Follow the entire workload, not only the CNOT.
@@ -45,11 +55,23 @@ A red connector may mean an incorrect operator, a missing sign, an incomplete H/
 ### Experiment with a blank circuit
 
 The sandbox has no preset gates. Choose the data register (1–5) and helper register (1–2). Build the computation and shell using ordinary H, S, X, Y, Z, CX, CY, CZ and M. Controlled gates can connect data or ancilla wires; the full-circuit test catches unsupported or disturbing helper interactions. Optional X/Z faults and waiting channels reveal coverage. A multi-wire state is shown on a QSphere, including mixed-state populations rather than invented amplitudes.`,
-  5: `### The non-Clifford frontier
+  5: `### What makes a gate Clifford?
+
+The gates H, S, Sdg, X, Y, Z, CX, CY and CZ are Clifford gates. They map every Pauli product to another signed Pauli product under conjugation: P′ = U P U†. For example, H exchanges X and Z; S sends X to Y, while Sdg sends X to −Y. Composing Clifford gates keeps this property, so Clifford circuits form a group that preserves the Pauli group under conjugation.
+
+![Clifford conjugation examples: H X H = Z and S X Sdg = Y](/tutorial-circuits/clifford.png)
+
+For stabilizer inputs and Pauli measurements, Clifford circuits can be simulated efficiently on a classical computer (Gottesman–Knill). Those ingredients alone therefore do not provide a quantum computational advantage. Non-stabilizer inputs or other resources change that conclusion.
+
+### The non-Clifford frontier
 
 Clifford gates map Pauli products to signed Pauli products. T is different. Its matrix is diag(1, exp(iπ/4)). Conjugating X gives (X+Y)/√2, while conjugating Y gives (Y−X)/√2. These are coherent sums; choosing either X or Y as a closing Pauli does not reproduce the sum.
 
-Z commutes cleanly: T Z T† = Z. A check supported only by Z at that T location can stay within a Pauli implementation. A T elsewhere on an identity factor does not prove the rest of the check is compatible. Transport depends on the operator actually arriving at each gate. Some larger T circuits can recombine into a Pauli at the endpoint, so the simulator evaluates the full operator rather than declaring every T crossing impossible.
+Tdg is the inverse of T. Tdg X T = (X−Y)/√2 and Tdg Y T = (X+Y)/√2. Both T and Tdg pass only Z/I factors through a Pauli-only check.
+
+Z commutes cleanly: T Z T† = Z. A check supported only by Z at that T location can stay within a Pauli implementation. A T elsewhere on an identity factor does not prove the rest of the check is compatible. Transport depends on the operator actually arriving at each gate. Larger circuits can recombine into a Pauli at the endpoint, but this teaching validator flags any intermediate non-Pauli transport rather than accepting an unsupported Pauli-only path.
+
+![Z-commuting CPC around a T gate](/tutorial-circuits/school-5.png)
 
 ### Assemble the seven-slot circuit
 
@@ -62,15 +84,17 @@ Switch to Sandbox for a completely empty circuit. Choose 1–5 data wires and 1�
 An operator mismatch does not force syndrome one on every run. Input-dependent cancellation can hide a bad check in one histogram; the state-independent identity test prevents that from masquerading as a correct design.`,
   6: `### Build the shell and pay its cost
 
-The three-data-qubit Clifford workload is locked. Two helpers are available, but every H, controlled Pauli and M must be placed by you. You decide how many factors to use and where to place them outside the fixed workload. An unused helper can remain in zero. At least one complete valid check is required to qualify.
+The short locked workload is X(q0), CX(q0,q1), H(q2), S(q1). The q0–q1 CX region is highlighted because q1 experiences a 70 μs relaxation interval there (T1=100 μs, T2=200 μs), in addition to low background hardware noise. Each extra controlled check interaction also incurs 0.02 two-wire depolarization. These explicit costs make short, focused checks preferable. Two helpers are available, but every H, controlled Pauli and M must be placed by you. You decide how many factors to use and where to place them outside the fixed workload. An unused helper can remain in zero. At least one complete valid check is required to qualify.
 
 The hardware controls below the canvas apply independent bit flips, phase flips, depolarization and relaxation to all live wires after every occupied quantum layer. The probabilities are per layer. Blank slots do not introduce extra simulated duration, and measured wires no longer receive channels. This is a transparent teaching model, not a calibration of a particular processor. Check gates and helper wires are noisy too.
+
+![Four-gate capstone workload; the CX interaction is the noise hotspot](/tutorial-circuits/school-6.png)
 
 ### Fidelity is different from useful yield
 
 Post-selection retains only runs whose measured helper bits are all zero. Fidelity Fps compares the full retained data state with the noiseless target. Retention Skeep is the exact probability of retaining a run. The finite histogram estimates it as N_kept/N.
 
-The exact combined score is Fps × Skeep. Qualification requires a complete valid check and score ≥ 0.65. If no shots can survive, retained fidelity is undefined, score is zero, and sampling overhead diverges. There is no hidden minimum fidelity requirement. A green check need not improve the score: more noise exposure and discarded shots can outweigh cleaner accepted data.
+The exact combined score is Fps × Skeep. Qualification requires a complete valid check and score ≥ max(0.60, the current unchecked score + 0.01). The default threshold is 0.60. This keeps qualification above the unchecked result even when you change the noise sliders; some extreme settings can leave no passing strategy. Reset restores the calibrated lesson. If no shots can survive, retained fidelity is undefined, score is zero, and sampling overhead diverges. There is no hidden minimum fidelity requirement. A green check need not improve the score: more noise exposure and discarded shots can outweigh cleaner accepted data.
 
 ### A reproducible reference, with a stated scope
 

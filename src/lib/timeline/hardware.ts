@@ -2,10 +2,10 @@ import { z } from "zod";
 export const hardwareSchema = z
   .object({
     enabled: z.boolean(),
-    bitFlip: z.number().min(0).max(0.3),
-    phaseFlip: z.number().min(0).max(0.3),
-    depolarizing: z.number().min(0).max(0.3),
-    relaxationTimeUs: z.number().min(0).max(20),
+    bitFlip: z.number().min(0).max(1),
+    phaseFlip: z.number().min(0).max(1),
+    depolarizing: z.number().min(0).max(1),
+    relaxationTimeUs: z.number().min(0).max(120),
     t1Us: z.number().min(20).max(200),
     t2Us: z.number().positive().max(400),
   })

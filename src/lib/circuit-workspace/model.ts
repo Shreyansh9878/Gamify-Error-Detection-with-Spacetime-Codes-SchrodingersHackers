@@ -32,10 +32,11 @@ export type Node = {
   owner: "player" | "generated-method" | "fixed-fixture";
   kind: "gate" | "noise" | "check";
   name?: string;
+  angleRadians?: number;
   part?: number;
   checkId?: string;
   detail?: string;
-  tone?: "valid" | "invalid";
+  tone?: "valid" | "invalid" | "hotspot";
 };
 export type Tool = {
   id: string;
@@ -59,6 +60,7 @@ export type PaletteConfig = {
   sign: 1 | -1;
 };
 export type CanvasModel = {
+  compactChecks?: boolean;
   inactiveZones?: number[];
   legendNote?: string;
   wires: Wire[];

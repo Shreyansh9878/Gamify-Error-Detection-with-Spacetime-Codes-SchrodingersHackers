@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Trash2, Lock } from "lucide-react";
+import { AngleInspector } from "./AngleInspector";
 import type {
   CanvasModel,
   CanvasActions,
@@ -35,6 +36,7 @@ export function UnifiedCircuitCanvas({
   disabled = false,
   onError,
   onSelect,
+  onEditAngle,
 }: {
   model: CanvasModel;
   tools: Tool[];
@@ -42,7 +44,16 @@ export function UnifiedCircuitCanvas({
   disabled?: boolean;
   onError: (message: string) => void;
   onSelect?: (id: string) => void;
+  onEditAngle?: (id: string, angle: number) => void;
 }) {
+  const [inspected, setInspected] = useState<string | null>(null);
+  const suppressClick = useRef(false);
+  const inspectedNode = model.nodes.find(
+    (n) =>
+      n.id === inspected &&
+      n.owner === "player" &&
+      ["rx", "ry", "rz"].includes(n.name || ""),
+  );
   const [config, setConfig] = useState(initial),
     [carry, setCarry] = useState<Carry | null>(null),
     [hover, setHover] = useState(""),
@@ -190,6 +201,7 @@ export function UnifiedCircuitCanvas({
   }
   function pointerDown(e: React.PointerEvent, item: Carry) {
     if (disabled || e.button !== 0) return;
+    suppressClick.current = false;
     e.currentTarget.setPointerCapture(e.pointerId);
     const touch = e.pointerType === "touch";
     last.current = { x: e.clientX, y: e.clientY };
@@ -205,6 +217,7 @@ export function UnifiedCircuitCanvas({
     if (touch)
       hold.current = setTimeout(() => {
         if (gesture.current && !gesture.current.cancelled) {
+          suppressClick.current = true;
           lift(item);
           setGhost({ x: e.clientX, y: e.clientY });
         }
@@ -259,12 +272,15 @@ export function UnifiedCircuitCanvas({
       );
     }
   }
-  const width = 82 + model.columns.length * 74,
-    height = 42 + model.wires.length * 66;
+  const rowHeight = model.compactChecks ? 38 : 66,
+    center = 42 + rowHeight / 2,
+    arch = center - Math.min(23, rowHeight / 2 - 4),
+    width = 82 + model.columns.length * 74,
+    height = 42 + model.wires.length * rowHeight;
   return (
     <section
       ref={root}
-      className={`unified-circuit ${carry ? "uc-carrying" : ""}`}
+      className={`unified-circuit ${carry ? "uc-carrying" : ""} ${model.compactChecks ? "uc-compact" : ""}`}
       aria-label="Unified circuit workspace"
       onKeyDown={onRootKey}
       onPointerMove={(e) => {
@@ -278,7 +294,10 @@ export function UnifiedCircuitCanvas({
           if (scroll.current) scroll.current.scrollLeft -= e.movementX;
           return;
         }
-        if (!g.touch && !carrying.current && distance > 5) lift(g.item);
+        if (!g.touch && !carrying.current && distance > 5) {
+          suppressClick.current = true;
+          lift(g.item);
+        }
         if (carrying.current) {
           setGhost({ x: e.clientX, y: e.clientY });
           setHover(targetAt(e.clientX, e.clientY));
@@ -515,7 +534,7 @@ export function UnifiedCircuitCanvas({
             <div
               className="uc-wire-line"
               key={w.id}
-              style={{ top: 42 + q * 66, width }}
+              style={{ top: 42 + q * rowHeight, width }}
             >
               <span className="uc-wire-label">
                 {w.label}
@@ -596,11 +615,42 @@ export function UnifiedCircuitCanvas({
                           className={`uc-node ${node.owner !== "player" ? "uc-locked" : "uc-draggable"} ${node.kind === "noise" ? "uc-error" : ""} ${node.tone ? `uc-node-${node.tone}` : ""} ${node.name === "t" || node.name === "tdg" ? "al-t-gate" : ""}`}
                           disabled={disabled}
                           aria-label={`${node.owner !== "player" ? "Locked" : "Drag"} ${node.label} on ${w.label} ${col.label}`}
-                          title={node.detail || node.label}
+                          title={
+                            node.detail ||
+                            (node.angleRadians !== undefined
+                              ? `${node.label}: θ = ${node.angleRadians} radians`
+                              : node.label)
+                          }
                           {...(node.owner === "player"
                             ? draggableProps({ node, wire: w.id, config })
                             : {})}
                           onFocus={() => onSelect?.(node.id)}
+                          onClick={() => {
+                            if (suppressClick.current) {
+                              suppressClick.current = false;
+                              return;
+                            }
+                            if (
+                              onEditAngle &&
+                              node.owner === "player" &&
+                              ["rx", "ry", "rz"].includes(node.name || "")
+                            )
+                              setInspected(node.id);
+                          }}
+                          onKeyDown={(e) => {
+                            if (
+                              e.key === "Enter" &&
+                              !carrying.current &&
+                              onEditAngle &&
+                              node.owner === "player" &&
+                              ["rx", "ry", "rz"].includes(node.name || "")
+                            ) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setInspected(node.id);
+                            } else if (node.owner === "player")
+                              keyboard(e, { node, wire: w.id, config });
+                          }}
                         >
                           {node.wires.length === 2 &&
                           ["cx", "cy", "cz"].includes(node.name || "")
@@ -617,6 +667,11 @@ export function UnifiedCircuitCanvas({
                                   : node.label
                               : node.label}
                           {node.owner !== "player" && <Lock size={10} />}
+                          {node.angleRadians !== undefined && (
+                            <small className="uc-angle-value">
+                              θ {node.angleRadians.toFixed(2)}
+                            </small>
+                          )}
                         </button>
                       ))}
                     </div>
@@ -643,8 +698,8 @@ export function UnifiedCircuitCanvas({
                     key={n.id}
                     x1={82 + c * 74 + 37}
                     x2={82 + c * 74 + 37}
-                    y1={75 + Math.min(...ys) * 66}
-                    y2={75 + Math.max(...ys) * 66}
+                    y1={center + Math.min(...ys) * rowHeight}
+                    y2={center + Math.max(...ys) * rowHeight}
                     stroke="#7de0c6"
                     strokeWidth="2"
                   />
@@ -659,7 +714,7 @@ export function UnifiedCircuitCanvas({
                 <g key={c.id}>
                   <title>{c.message}</title>
                   <path
-                    d={`M${82 + a * 74 + 37} ${75 + row * 66} V${52 + row * 66} H${82 + b * 74 + 37} V${75 + row * 66}`}
+                    d={`M${82 + a * 74 + 37} ${center + row * rowHeight} V${arch + row * rowHeight} H${82 + b * 74 + 37} V${center + row * rowHeight}`}
                     fill="none"
                     stroke={
                       c.valid === null
@@ -695,20 +750,31 @@ export function UnifiedCircuitCanvas({
           <Trash2 size={22} /> Delete — drop here
         </button>
       </footer>
-      {model.checks?.map((c) => (
-        <p
-          key={c.id}
-          className={
-            c.valid === null
-              ? "uc-incomplete"
-              : c.valid
-                ? "uc-valid"
-                : "uc-invalid"
-          }
-        >
-          {c.valid === null ? "◌" : c.valid ? "✓" : "✕"} {c.message}
-        </p>
-      ))}
+      {inspectedNode && onEditAngle && (
+        <AngleInspector
+          key={inspectedNode.id}
+          name={inspectedNode.name!}
+          angle={inspectedNode.angleRadians ?? Math.PI / 2}
+          disabled={disabled}
+          onApply={(angle) => onEditAngle(inspectedNode.id, angle)}
+          onClose={() => setInspected(null)}
+        />
+      )}
+      {!model.compactChecks &&
+        model.checks?.map((c) => (
+          <p
+            key={c.id}
+            className={
+              c.valid === null
+                ? "uc-incomplete"
+                : c.valid
+                  ? "uc-valid"
+                  : "uc-invalid"
+            }
+          >
+            {c.valid === null ? "◌" : c.valid ? "✓" : "✕"} {c.message}
+          </p>
+        ))}
       <p className="sr-only" aria-live="polite">
         {announce}
       </p>

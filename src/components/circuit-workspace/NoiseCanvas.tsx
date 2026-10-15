@@ -42,6 +42,17 @@ export function NoiseCanvas({
       onError={onError}
       disabled={disabled}
       onSelect={onSelect}
+      onEditAngle={(id, angleRadians) =>
+        onChange(
+          {
+            ...circuit,
+            operations: circuit.operations.map((g) =>
+              g.id === id ? { ...g, angleRadians } : g,
+            ),
+          },
+          id,
+        )
+      }
       actions={{
         place(tool, target, config, secondWire) {
           if (target.wire.kind !== "data")

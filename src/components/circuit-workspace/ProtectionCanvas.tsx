@@ -44,6 +44,7 @@ export function ProtectionCanvas({
     nodes: c.operations.map((g) => ({
       id: g.id,
       name: g.name,
+      angleRadians: g.angleRadians,
       label: g.name.toUpperCase(),
       wires: g.qubits.map((q) => `q${q}`),
       column: `base${g.column}`,
@@ -57,6 +58,14 @@ export function ProtectionCanvas({
       tools={tools}
       disabled={disabled}
       onError={onError}
+      onEditAngle={(id, angleRadians) =>
+        onChange({
+          ...c,
+          operations: c.operations.map((g) =>
+            g.id === id ? { ...g, angleRadians } : g,
+          ),
+        })
+      }
       actions={{
         place(tool, target, config, second) {
           const name = tool.name as Gate["name"];

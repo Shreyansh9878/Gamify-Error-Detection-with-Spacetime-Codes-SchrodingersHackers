@@ -23,6 +23,20 @@ export function MarkdownLesson({ source }: { source: string }) {
       i++;
       continue;
     }
+    const picture = line.match(
+      /^!\[([^\]]+)\]\((\/tutorial-circuits\/[a-z0-9-]+\.png)\)$/,
+    );
+    if (picture) {
+      nodes.push(
+        <figure className="tutorial-circuit-figure" key={i}>
+          <img src={picture[2]} alt={picture[1]} loading="lazy" />
+          <figcaption>{picture[1]}</figcaption>
+        </figure>,
+      );
+      i++;
+      continue;
+    }
+    if(line.startsWith('![')){nodes.push(<p key={i}>{line}</p>);i++;continue;}
     if (line.startsWith("```")) {
       i++;
       const code = [];
@@ -91,7 +105,7 @@ export function MarkdownLesson({ source }: { source: string }) {
     while (
       i < lines.length &&
       lines[i].trim() &&
-      !/^(#|```|\||- )/.test(lines[i])
+      !/^(#|```|\||- |!\[)/.test(lines[i])
     )
       paragraph.push(lines[i++]);
     nodes.push(<p key={i}>{inline(paragraph.join(" "))}</p>);
@@ -105,6 +119,7 @@ export function LabTheory({
   examples,
   checklist,
   knowledge,
+  aside,
 }: {
   number: number;
   title: string;
@@ -112,6 +127,7 @@ export function LabTheory({
   examples: ReactNode;
   checklist: ReactNode;
   knowledge?: ReactNode;
+  aside?: ReactNode;
 }) {
   const [tab, setTab] = useState("Description");
   return (
@@ -139,6 +155,7 @@ export function LabTheory({
         ))}
       </nav>
       <div className="nw-article" hidden={tab !== "Description"}>
+        {aside}
         <MarkdownLesson source={source} />
       </div>
       <div className="nw-article" hidden={tab !== "Examples"}>

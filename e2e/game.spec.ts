@@ -78,58 +78,29 @@ test("tutorial, manual invariant, fault injection, scored mission, and persisten
     .first()
     .click();
   await completeAdvancedSchools(page);
-  await page
-    .getByRole("button", { name: /01 FOUNDATIONS The single-wire barrier/ })
-    .click();
+  await page.getByRole("button", { name: /01 MANUAL First contact/ }).click();
+  await labPane(page, "Experiment");
   await expect(
-    page.getByRole("img", { name: "Locked q0 time 0: X", exact: true }),
+    page.getByRole("button", { name: "Insert columns", exact: true }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Clear circuit", exact: true }),
-  ).toHaveCount(0);
-  await page.getByRole("button", { name: "Add helper", exact: true }).click();
+  await page.getByRole("button", { name: "Run mission", exact: true }).click();
+  await labPane(page, "Results");
+  await expect(page.getByText("FAIL", { exact: true })).toBeVisible();
   await page
-    .getByLabel("Helper 1 closing Pauli", { exact: true })
-    .selectOption("X");
-  await expect(page.getByText(/Open loop: selected/)).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Run circuit", exact: true }),
-  ).toBeDisabled();
-  await page
-    .getByLabel("Helper 1 closing Pauli", { exact: true })
-    .selectOption("Z");
-  await expect(
-    page.getByText("✓ Invariant closed", { exact: true }),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Inject Test Fault", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Inject X after q0 column 2", exact: true })
-    .click();
-  await expect(
-    page.getByRole("heading", { name: "Caught · syndrome ≠ 0" }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Run circuit", exact: true }).click();
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await page
-    .getByRole("button", { name: "Return to missions", exact: true })
+    .getByRole("button", { name: "Mission control", exact: true })
     .click();
   await page.reload();
   await expect(
-    page.getByRole("button", {
-      name: /01 FOUNDATIONS The single-wire barrier/,
-    }),
-  ).toContainText("Personal best");
+    page.getByRole("button", { name: /01 MANUAL First contact/ }),
+  ).toBeEnabled();
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
 });
-test("skip unlocks all missions and T crossings are inspected", async ({
-  page,
-}) => {
+
+test("skip unlocks every main mission", async ({ page }) => {
   await page.goto("/");
   await page
     .getByRole("button", {
@@ -138,18 +109,16 @@ test("skip unlocks all missions and T crossings are inspected", async ({
     })
     .click();
   await expect(
-    page.getByRole("button", { name: /10 BEYOND CLIFFORD/ }),
+    page.getByRole("button", { name: /10 ASSISTED The final invariant/ }),
   ).toBeEnabled();
-  await page.getByRole("button", { name: /08 BEYOND CLIFFORD/ }).click();
-  await page.getByRole("button", { name: "Add helper", exact: true }).click();
   await page
-    .getByLabel("Helper 1 opening Pauli", { exact: true })
-    .selectOption("X");
-  await expect(page.getByText(/Non-Pauli T barrier at/)).toBeVisible();
-  await page
-    .getByLabel("Helper 1 opening Pauli", { exact: true })
-    .selectOption("Z");
+    .getByRole("button", { name: /08 ASSISTED Golden crossing/ })
+    .click();
+  await labPane(page, "Experiment");
   await expect(
-    page.getByText("✓ Invariant closed", { exact: true }),
-  ).toBeVisible();
+    page.getByRole("button", { name: "Run mission", exact: true }),
+  ).toBeEnabled();
+  await expect(
+    page.getByRole("button", { name: "Add helper", exact: true }),
+  ).toHaveCount(0);
 });

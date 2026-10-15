@@ -270,7 +270,7 @@ test("capstone hardware changes invalidate telemetry and there are no spatial er
   page,
 }) => {
   await open(page, 5);
-  await expect(page.locator(".uc-node")).toHaveCount(10);
+  await expect(page.locator(".uc-node")).toHaveCount(5);
   await expect(
     page.getByRole("button", { name: "Drag Decoherence · wait", exact: true }),
   ).toHaveCount(0);
@@ -278,9 +278,8 @@ test("capstone hardware changes invalidate telemetry and there are no spatial er
     page.getByRole("button", { name: "Drag Ancilla H", exact: true }),
   ).toHaveCount(0);
   await drop(page, "Drag H", "c0@a0");
-  await cp(page, "CZ", 1, "a0", "q1");
-  await cp(page, "CZ", 9, "a0", "q0");
-  await cp(page, "CZ", 10, "a0", "q1");
+  await cp(page, "CX", 1, "a0", "q1");
+  await cp(page, "CY", 9, "a0", "q1");
   await drop(page, "Drag H", "c11@a0");
   await drop(page, "Drag M", "c12@a0");
   await runAdvanced(page);

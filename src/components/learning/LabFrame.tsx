@@ -133,6 +133,7 @@ export function CodeEditor({
   busy,
   onApply,
   wrapper,
+  label = "Tutorial circuit code",
 }: {
   source: string;
   dirty: boolean;
@@ -141,6 +142,7 @@ export function CodeEditor({
   busy: boolean;
   onApply: () => void;
   wrapper: string;
+  label?: string;
 }) {
   return (
     <div className="nw-code">
@@ -157,7 +159,7 @@ export function CodeEditor({
         below.
       </p>
       <textarea
-        aria-label="Tutorial circuit code"
+        aria-label={label}
         spellCheck={false}
         value={source}
         maxLength={8192}

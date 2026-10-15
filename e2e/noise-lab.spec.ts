@@ -295,7 +295,7 @@ test("keyboard placement, safe combinations, stale requests and independent prog
     .click();
   await expect(
     page.getByRole("button", {
-      name: /10 BEYOND CLIFFORD The master spacetime architect/,
+      name: /10 ASSISTED The final invariant/,
     }),
   ).toBeEnabled();
 });
@@ -349,5 +349,10 @@ test("existing skip and best scores survive a corrupt lab draft; reduced-motion 
     JSON.parse(localStorage.getItem("quantum-shield-qed-v2")!),
   );
   expect(saved.tutorial).toBe("skipped");
-  expect(saved.best[1]).toEqual({ score: 900, stars: 3 });
+  expect(saved.best).toEqual({});
+  expect(
+    await page.evaluate(() =>
+      JSON.parse(localStorage.getItem("quantum-shield.archived-missions-v2")!),
+    ),
+  ).toEqual({ "1": { score: 900, stars: 3 } });
 });

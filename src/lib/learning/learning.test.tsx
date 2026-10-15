@@ -12,8 +12,8 @@ import { checkCode, protectionCode } from "./code-generation";
 import { checkExamples, protectionExamples, checkQuestion } from "./examples";
 import { MarkdownLesson } from "@/components/learning/LabTheory";
 import { protectionTheory, checkTheory } from "./content";
-import { CheckCanvas } from "@/components/circuit-workspace/CheckCanvas";
-import type { AdvancedDraft } from "@/lib/advanced-learning/contracts";
+import { TimelineCanvas } from "@/components/circuit-workspace/TimelineCanvas";
+import { initialDraft } from "@/lib/timeline/contracts";
 import { CircuitPreview } from "@/components/learning/CircuitPreview";
 const python =
   process.env.PYTHON ||
@@ -66,13 +66,20 @@ describe("new learning lab contracts and presentation", () => {
   });
   it("renders individual physical assembly actions and read-only generated checks", () => {
     const html = renderToStaticMarkup(
-      <CheckCanvas draft={guidedInitial as unknown as AdvancedDraft} validation={null} lesson={3} onChange={()=>{}} disabled={false} onError={()=>{}}/>,
+      <TimelineCanvas
+        draft={initialDraft(3, "guided")}
+        validation={null}
+        onChange={() => {}}
+        disabled={false}
+        onError={() => {}}
+      />,
     );
     for (const label of [
-      "Drag Ancilla H",
-      "Drag Final H",
-      "Drag Syndrome M",
-      "Drag Opening P",
+      "Drag H",
+      "Drag M",
+      "Drag CX",
+      "Drag CY",
+      "Drag CZ",
       "Delete — drop here",
     ])
       expect(html).toContain(label);

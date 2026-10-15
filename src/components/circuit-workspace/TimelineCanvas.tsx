@@ -38,7 +38,11 @@ export function TimelineCanvas({
     "y",
     "z",
     "s",
-    ...(d.lesson === 5 ? ["t"] : []),
+    "sdg",
+    "rx",
+    "ry",
+    "rz",
+    ...(d.lesson === 5 ? ["t", "tdg"] : []),
     "cx",
     "cy",
     "cz",
@@ -67,6 +71,7 @@ export function TimelineCanvas({
     nodes: [...d.operations, ...locked].map((g) => ({
       id: g.id,
       name: g.name,
+      angleRadians: g.angleRadians,
       label:
         g.name === "m"
           ? "M"
@@ -83,14 +88,21 @@ export function TimelineCanvas({
       kind: ["bit_flip", "phase_flip", "decoherence"].includes(g.name)
         ? "noise"
         : "gate",
-      tone:
-        g.name === "t" && validation?.checks.length
-          ? validation.checks.some((c) => c.nonPauli)
-            ? "invalid"
-            : validation.valid
-              ? "valid"
-              : undefined
+      detail:
+        d.lesson === 6 && g.id === "locked-1"
+          ? "High-noise CX region: q1 relaxes for 70 μs after this interaction (T1=100 μs, T2=200 μs)."
           : undefined,
+      tone:
+        d.lesson === 6 && g.id === "locked-1"
+          ? "hotspot"
+          : ["t", "tdg", "rx", "ry", "rz"].includes(g.name) &&
+              validation?.checks.length
+            ? validation.checks.some((c) => c.nonPauli)
+              ? "invalid"
+              : validation.valid
+                ? "valid"
+                : undefined
+            : undefined,
     })),
     checks: validation?.checks.map((c) => ({
       id: `a${c.ancilla}`,
@@ -107,6 +119,14 @@ export function TimelineCanvas({
       tools={tools}
       disabled={disabled}
       onError={onError}
+      onEditAngle={(id, angleRadians) =>
+        onChange({
+          ...d,
+          operations: d.operations.map((g) =>
+            g.id === id ? { ...g, angleRadians } : g,
+          ),
+        })
+      }
       actions={{
         place(tool, target, config, second) {
           const name = tool.name as Operation["name"];
@@ -121,6 +141,9 @@ export function TimelineCanvas({
             name,
             qubits,
             column: target.boundary,
+            ...(["rx", "ry", "rz"].includes(name)
+              ? { angleRadians: config.angleRadians }
+              : {}),
             ...(name === "decoherence"
               ? { timeUs: config.timeUs, t1Us: config.t1Us, t2Us: config.t2Us }
               : {}),

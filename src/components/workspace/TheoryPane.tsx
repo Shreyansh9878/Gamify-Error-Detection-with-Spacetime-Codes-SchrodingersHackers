@@ -1,6 +1,7 @@
 "use client";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { examples, Example, sections } from "@/lib/flight-school-1/content";
+import { CircuitFigure } from "../learning/CircuitFigure";
 import { BlochSphere } from "../flight-school-1/ComparisonTelemetry";
 
 function Illustration({
@@ -134,6 +135,10 @@ export function TheoryPane({
             ))}
             {["bit-flip", "phase-flip", "decoherence"].includes(s.id) && (
               <>
+                <CircuitFigure
+                  name={`noise-${s.id}`}
+                  caption={`Qiskit circuit: ${s.id.replace("-", " ")} experiment`}
+                />
                 <Illustration
                   kind={s.id as "bit-flip" | "phase-flip" | "decoherence"}
                 />

@@ -127,6 +127,7 @@ export function noiseModel(c: Circuit): CanvasModel {
           owner: "player" as const,
           kind: o.role === "error" ? ("noise" as const) : ("gate" as const),
           name: o.name,
+          angleRadians: o.angleRadians,
           part: q,
         })),
       )

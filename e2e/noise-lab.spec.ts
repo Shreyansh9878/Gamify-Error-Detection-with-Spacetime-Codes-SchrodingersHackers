@@ -1,4 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
+import { drop } from "./learning-helpers";
 async function pane(page: Page, name: string) {
   await page.locator(".noise-workspace").waitFor();
   const button = page
@@ -93,10 +94,12 @@ test("three error models, basis comparisons, source editing, history, resize and
     await page.setViewportSize(viewport);
   }
   await preset(page, "One relaxes");
-  await page.getByLabel("Elapsed waiting time", { exact: true }).fill("150");
+  await drop(page, "Drag Wait 100 on q0 Column 1", "trash");
+  await page.locator(".uc-palette-settings summary").click();
   await page
-    .getByRole("button", { name: "Apply block changes", exact: true })
-    .click();
+    .getByLabel("Palette elapsed waiting time", { exact: true })
+    .fill("150");
+  await drop(page, "Drag Decoherence · wait", "g1@q0");
   await run(page);
   await expect(page.getByText(/excited population decreased/)).toBeVisible();
   await page.screenshot({
@@ -112,7 +115,7 @@ test("three error models, basis comparisons, source editing, history, resize and
   await run(page);
   await page.getByLabel("View qubit", { exact: true }).selectOption("1");
   await page.getByLabel("Joint outcomes", { exact: true }).check();
-  await expect(page.getByRole("table")).toBeVisible();
+  await expect(page.getByRole("table").last()).toBeVisible();
   await pane(page, "Experiment");
   await code.fill(source + "import os\n");
   let runs = 0;
@@ -239,74 +242,28 @@ test("keyboard placement, safe combinations, stale requests and independent prog
   await page
     .getByLabel("Number of data qubits", { exact: true })
     .selectOption("5");
-  await page.getByRole("button", { name: "H", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Place h on q0 column 0", exact: true })
-    .press("Enter");
-  if (test.info().project.name === "desktop") {
-    await page.getByRole("button", { name: "H", exact: true }).dragTo(
-      page.getByRole("button", {
-        name: "Place h on q0 column 4",
-        exact: true,
-      }),
-    );
-    await expect(
-      page.getByRole("button", {
-        name: "Select H on q0 column 4",
-        exact: true,
-      }),
-    ).toBeVisible();
-  }
-  await page
-    .getByRole("button", { name: "Bit flip · X error", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Place bit_flip on q0 column 1", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Phase flip · Z error", exact: true })
-    .click();
-  await page
-    .getByRole("button", {
-      name: "Place phase_flip on q0 column 2",
-      exact: true,
-    })
-    .click();
-  await expect(page.getByText(/Replace the existing bit flip/)).toBeVisible();
-  await page
-    .getByRole("button", { name: "Confirm undoable change", exact: true })
-    .click();
+  await drop(page, "Drag H", "g0@q0");
+  await expect(
+    page.getByRole("button", { name: "Drag H on q0 Column 0", exact: true }),
+  ).toBeAttached();
+  await drop(page, "Drag Bit flip · X error", "g1@q0");
+  await drop(page, "Drag Phase flip · Z error", "g2@q0");
+  await drop(page, "Drag X error on q0 Column 1", "trash");
   await expect(
     page.getByRole("button", {
-      name: "Select X error on q0 column 1",
+      name: "Drag X error on q0 Column 1",
       exact: true,
     }),
   ).toHaveCount(0);
   await page
-    .getByLabel("Single error · Combine Errors", { exact: true })
-    .check();
-  await page
-    .getByRole("button", {
-      name: "Place phase_flip on q0 column 3",
+    .getByRole("button", { name: "Undo circuit edit", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", {
+      name: "Drag X error on q0 Column 1",
       exact: true,
-    })
-    .click();
-  await page
-    .getByLabel("Combined experiment · up to 8 ordered errors", { exact: true })
-    .click();
-  await expect(page.getByText(/Remove extra error blocks/)).toBeVisible();
-  await page
-    .getByRole("button", { name: "Delete selected block", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Select Z error on q0 column 2", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Delete selected block", exact: true })
-    .click();
-  await page
-    .getByLabel("Combined experiment · up to 8 ordered errors", { exact: true })
-    .uncheck();
+    }),
+  ).toBeAttached();
   await page.route("**/api/tutorial/noise-lab/run", async (route) => {
     await new Promise((r) => setTimeout(r, 400));
     await route.continue();

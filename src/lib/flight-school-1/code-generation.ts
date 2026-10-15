@@ -9,7 +9,7 @@ import {
 function args(o: Operation) {
   const values: string[] = [];
   if (o.angleRadians !== undefined) values.push(String(o.angleRadians));
-  values.push(...o.qubits.map(String));
+  values.push(...(o.name==="decoherence"&&o.qubits.length>1?[`[${o.qubits.join(", ")}]`]:o.qubits.map(String)));
   if (o.name === "decoherence")
     values.push(`time_us=${o.timeUs}`, `t1_us=${o.t1Us}`, `t2_us=${o.t2Us}`);
   values.push(`at=${o.column}`);
@@ -46,9 +46,7 @@ export function nativeQiskit(
         last = o.column;
       }
       if (o.name === "decoherence")
-        lines.push(
-          `${name}.append(thermal_relaxation_error(${o.t1Us}, ${o.t2Us}, ${o.timeUs}, excited_state_population=0).to_instruction(), [${o.qubits[0]}])  # all times in microseconds`,
-        );
+        for(const q of o.qubits)lines.push(`${name}.append(thermal_relaxation_error(${o.t1Us}, ${o.t2Us}, ${o.timeUs}, excited_state_population=0).to_instruction(), [${q}])  # independent local channel, times in microseconds`);
       else
         lines.push(
           `${name}.${o.name === "bit_flip" ? "x" : o.name === "phase_flip" ? "z" : o.name}(${[...(o.angleRadians !== undefined ? [String(o.angleRadians)] : []), ...o.qubits.map(String)].join(", ")})${o.role === "error" ? "  # injected error" : ""}`,

@@ -105,6 +105,8 @@ describe("QED workspace rendering", () => {
   it("retains six modules with invariant and T-crossing tasks", () => {
     expect(lessons).toHaveLength(6);
     expect(lessons[3].required).toContain("match");
-    expect(lessons[5].required).toContain("t-Z");
+    expect(lessons[4].required).toContain("t-Z");
+    expect(lessons[3].required).toEqual(["match", "recap-B", "product-C"]);
+    expect(lessons[5].required).toEqual(["score-065", "benchmark-review"]);
   });
 });

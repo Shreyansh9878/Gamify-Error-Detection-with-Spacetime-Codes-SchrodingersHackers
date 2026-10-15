@@ -1,7 +1,17 @@
+import { completeAdvancedSchools } from "./unified-helpers";
 import { test, expect } from "@playwright/test";
+import {
+  pane as labPane,
+  drop,
+  runProtection,
+  buildGuided,
+  runCheck,
+  passCheckQuiz,
+} from "./learning-helpers";
 test("tutorial, manual invariant, fault injection, scored mission, and persistence", async ({
   page,
 }) => {
+  test.setTimeout(120000);
   await page.goto("/");
   await expect(
     page.getByRole("heading", { name: "Understanding Quantum Errors" }),
@@ -46,51 +56,24 @@ test("tutorial, manual invariant, fault injection, scored mission, and persisten
   await page
     .getByRole("button", { name: "Continue to Flight School 2 →", exact: true })
     .click();
-  for (const name of [
-    "Detection filter",
-    "Mitigation extrapolation",
-    "Correction decoder",
-  ])
+  for (const name of ["Correction", "Detection", "Mitigation"]) {
+    await labPane(page, "Experiment");
     await page.getByRole("button", { name, exact: true }).click();
-  await page.getByRole("button", { name: "QED", exact: true }).click();
-  await page.getByRole("button", { name: "Continue", exact: true }).click();
-  for (const name of ["Boundary sandwich", "Localized spacetime check"])
-    await page.getByRole("button", { name, exact: true }).click();
-  await page.getByRole("button", { name: "Continue", exact: true }).click();
+    await runProtection(page);
+  }
+  await labPane(page, "Theory");
   await page
-    .getByRole("button", { name: "Test invariant", exact: true })
+    .getByRole("button", { name: "Continue to Flight School 3 →", exact: true })
     .click();
-  await expect(
-    page.getByText("✕ Open loop / non-Pauli closure", { exact: true }),
-  ).toBeVisible();
+  await buildGuided(page);
+  await drop(page, "Drag Phase flip · Z error", "fault3@q0");
+  await runCheck(page);
+  await passCheckQuiz(page);
   await page
-    .getByLabel("Tutorial closing Pauli", { exact: true })
-    .selectOption("Y");
-  await page
-    .getByRole("button", { name: "Test invariant", exact: true })
+    .getByRole("button", { name: "Continue to Flight School 4 →", exact: true })
+    .first()
     .click();
-  await page
-    .getByRole("button", { name: "Inject Z into loop", exact: true })
-    .click();
-  await page.getByRole("button", { name: "Continue", exact: true }).click();
-  for (const name of ["No helpers", "One helper", "Two helpers"])
-    await page.getByRole("button", { name, exact: true }).click();
-  await page.getByRole("button", { name: "Continue", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Propagate through S", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Propagate through T", exact: true })
-    .click();
-  await page
-    .getByLabel("Tutorial opening Pauli", { exact: true })
-    .selectOption("Z");
-  await page
-    .getByRole("button", { name: "Propagate through T", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Unlock missions", exact: true })
-    .click();
+  await completeAdvancedSchools(page);
   await page
     .getByRole("button", { name: /01 FOUNDATIONS The single-wire barrier/ })
     .click();

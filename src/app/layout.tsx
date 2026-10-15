@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./noise-lab.css";
+import "./learning-labs.css";
 export const metadata: Metadata = {
   title: "Quantum Shield — Spacetime Code Defender",
   description:

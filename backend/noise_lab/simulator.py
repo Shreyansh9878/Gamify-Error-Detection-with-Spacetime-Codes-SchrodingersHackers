@@ -7,13 +7,16 @@ from qiskit import QuantumCircuit
 from qiskit.quantum_info import DensityMatrix, Pauli, partial_trace, purity, state_fidelity
 from qiskit_aer.noise import thermal_relaxation_error
 from .models import Circuit, LabRunRequest, ordered
+from ..learning.visualization import state_visualization
 
 VERSION = 'noise-lab-1.0.0'
 
 
 def apply(state, op, n):
     if op.name == 'decoherence':
-        return state.evolve(thermal_relaxation_error(op.t1Us, op.t2Us, op.timeUs, excited_state_population=0).to_quantumchannel(), qargs=op.qubits)
+        for q in op.qubits:
+            state=state.evolve(thermal_relaxation_error(op.t1Us, op.t2Us, op.timeUs, excited_state_population=0).to_quantumchannel(),qargs=[q])
+        return state
     circuit = QuantumCircuit(n)
     method = {'bit_flip': 'x', 'phase_flip': 'z'}.get(op.name, op.name)
     args = ([op.angleRadians] if op.name in ('rx','ry','rz') else []) + op.qubits
@@ -52,7 +55,7 @@ def describe(state, n, basis, shots, seed):
         marginals.append({'qubit':q,
             'probabilities':[sum(v for key,v in probabilities.items() if key[-1-q] == str(b)) for b in (0,1)],
             'counts':[sum(v for key,v in counts.items() if key[-1-q] == str(b)) for b in (0,1)]})
-    return {'qubits':locals_, 'globalPurity':float(np.real(purity(state))), 'probabilities':probabilities, 'counts':counts, 'marginals':marginals}
+    return {'qubits':locals_, 'globalPurity':float(np.real(purity(state))), 'probabilities':probabilities, 'counts':counts, 'marginals':marginals,'visualization':state_visualization(state,n)}
 
 
 def explain(before, after, fidelity, request):

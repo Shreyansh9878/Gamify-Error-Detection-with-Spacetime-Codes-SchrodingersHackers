@@ -1,3 +1,4 @@
+import type { StateVisualization } from "../state-visualization/contracts";
 import { z } from "zod";
 
 export const names = [
@@ -21,7 +22,7 @@ export const operationSchema = z
     id: z.string().min(1).max(64),
     role: z.enum(["prepare", "error"]),
     name: z.enum(names),
-    qubits: z.array(z.number().int().min(0).max(4)).min(1).max(2),
+    qubits: z.array(z.number().int().min(0).max(4)).min(1).max(5),
     column: z.number().int().min(0).max(15),
     angleRadians: z
       .number()
@@ -60,7 +61,7 @@ export const circuitSchema = z
       if (isError(o.name) !== (o.role === "error"))
         fail("Block role does not match its name.");
       if (
-        o.qubits.length !== (o.name === "cx" ? 2 : 1) ||
+        (o.name !== "decoherence" && o.qubits.length !== (o.name === "cx" ? 2 : 1)) ||
         new Set(o.qubits).size !== o.qubits.length
       )
         fail(
@@ -102,6 +103,7 @@ export const emptyCircuit: Circuit = {
 export type ComparisonMode = "selected_error" | "final";
 export type Basis = "Z" | "X";
 export interface LabState {
+  visualization?: StateVisualization;
   qubits: { qubit: number; bloch: [number, number, number]; purity: number }[];
   globalPurity: number;
   probabilities: Record<string, number>;

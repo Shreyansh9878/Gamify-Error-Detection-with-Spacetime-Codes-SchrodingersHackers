@@ -12,7 +12,7 @@ class Operation(StrictModel):
     role: Literal['prepare', 'error']
     name: Literal['h', 'x', 'y', 'z', 's', 'sdg', 'rx', 'ry', 'rz', 'cx',
                   'bit_flip', 'phase_flip', 'decoherence']
-    qubits: list[int] = Field(min_length=1, max_length=2)
+    qubits: list[int] = Field(min_length=1, max_length=5)
     column: int = Field(ge=0, le=15)
     angleRadians: float | None = Field(default=None, ge=-2*pi, le=2*pi)
     timeUs: float | None = Field(default=None, ge=0, le=200)
@@ -24,7 +24,7 @@ class Operation(StrictModel):
         error = self.name in ('bit_flip', 'phase_flip', 'decoherence')
         if error != (self.role == 'error'):
             raise ValueError('Operation name does not match its preparation/error role.')
-        if len(self.qubits) != (2 if self.name == 'cx' else 1) or len(set(self.qubits)) != len(self.qubits):
+        if (self.name != 'decoherence' and len(self.qubits) != (2 if self.name == 'cx' else 1)) or len(set(self.qubits)) != len(self.qubits):
             raise ValueError('CX needs distinct control and target; other blocks need one qubit.')
         if self.name in ('rx', 'ry', 'rz'):
             if self.angleRadians is None:

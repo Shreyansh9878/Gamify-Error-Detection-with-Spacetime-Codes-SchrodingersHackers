@@ -90,7 +90,10 @@ def parse(request: CompileRequest):
             keywords[kw.arg] = kw.value
         column = integer(keywords['at'], pi_allowed) if 'at' in keywords else max((op.column for op in operations), default=-1)+1
         rotation = name in ('rx','ry','rz')
-        qubits = [integer(arg, pi_allowed) for arg in (call.args[1:] if rotation else call.args)]
+        if name=='decoherence' and isinstance(call.args[0],(ast.List,ast.Tuple)):
+            qubits=[integer(arg,pi_allowed) for arg in call.args[0].elts]
+        else:
+            qubits = [integer(arg, pi_allowed) for arg in (call.args[1:] if rotation else call.args)]
         values = dict(id=f'code-{len(operations)}', role='error' if name in ('bit_flip','phase_flip','decoherence') else 'prepare', name=name, qubits=qubits, column=column)
         if rotation: values['angleRadians'] = float(number(call.args[0], pi_allowed))
         if name == 'decoherence':

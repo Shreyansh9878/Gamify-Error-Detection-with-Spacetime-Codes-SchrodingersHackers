@@ -1,0 +1,2484 @@
+{
+  "artifactVersion": 1,
+  "fixtureVersion": "graduation-fixture-v1",
+  "noiseVersion": "graduation-noise-v1",
+  "schedulerVersion": "graduation-schedule-v1",
+  "catalogueVersion": "graduation-catalogue-v1",
+  "metricVersion": "fidelity-yield-v2",
+  "manifestHash": "e7761541c96aa2dd5b00ebf82a1e6fbb92a644af68fa49537381c8feb3c8bad5",
+  "catalogueHash": "52d69c7057c4759023e1dae7f182a807843205646dd5c6ffc062981ebe60235e",
+  "payloadHash": "4d9c17a88473b8242a6a6264a3390d5bcf84d16a2419ae20e28c32b1742da360",
+  "noiseHash": "0f7d207f8a598024204240342a208cce832a840a39754db4c7b498a96606d99a",
+  "engineVersions": {
+    "qiskit": "2.5.2",
+    "qiskit-aer": "0.17.2"
+  },
+  "tolerance": 1e-10,
+  "structuralCandidateCount": 1297,
+  "validCandidateCount": 1201,
+  "evaluatedCandidateCount": 1201,
+  "enumerationComplete": true,
+  "qualityFloor": 0.9,
+  "tieBreakPolicy": "score within 1e-10, fewer taps, helpers, logical depth, canonical hash",
+  "bestNonempty": {
+    "id": "f097099423af85607607a211a613a31d9299264f7109c2957df455d90f0a6411",
+    "canonicalStrategy": {
+      "schemaVersion": 1,
+      "rails": [
+        {
+          "ancilla": 0,
+          "active": true,
+          "startBoundary": 2,
+          "endBoundary": 6,
+          "openingTaps": [
+            {
+              "qubit": 1,
+              "pauli": "Z"
+            }
+          ],
+          "closingTaps": [
+            {
+              "qubit": 1,
+              "pauli": "Z"
+            }
+          ],
+          "closingSign": 1
+        },
+        {
+          "ancilla": 1,
+          "active": false
+        }
+      ]
+    },
+    "fidelity": 0.9816597285784632,
+    "retention": 0.7970074999999986,
+    "score": 0.7823901661249981,
+    "resources": {
+      "peakQubits": 4,
+      "addedQubits": 1,
+      "oneQubitGates": 6,
+      "twoQubitGates": 5,
+      "depth": 11,
+      "noiseLocations": 5,
+      "methodShots": 1024,
+      "baselineShots": 1024,
+      "reusedBaselineShots": 0,
+      "totalComparisonShots": 2048
+    }
+  },
+  "nonemptyTiedBestIds": [
+    "f097099423af85607607a211a613a31d9299264f7109c2957df455d90f0a6411"
+  ],
+  "bestQualityEligible": {
+    "id": "f097099423af85607607a211a613a31d9299264f7109c2957df455d90f0a6411",
+    "canonicalStrategy": {
+      "schemaVersion": 1,
+      "rails": [
+        {
+          "ancilla": 0,
+          "active": true,
+          "startBoundary": 2,
+          "endBoundary": 6,
+          "openingTaps": [
+            {
+              "qubit": 1,
+              "pauli": "Z"
+            }
+          ],
+          "closingTaps": [
+            {
+              "qubit": 1,
+              "pauli": "Z"
+            }
+          ],
+          "closingSign": 1
+        },
+        {
+          "ancilla": 1,
+          "active": false
+        }
+      ]
+    },
+    "fidelity": 0.9816597285784632,
+    "retention": 0.7970074999999986,
+    "score": 0.7823901661249981,
+    "resources": {
+      "peakQubits": 4,
+      "addedQubits": 1,
+      "oneQubitGates": 6,
+      "twoQubitGates": 5,
+      "depth": 11,
+      "noiseLocations": 5,
+      "methodShots": 1024,
+      "baselineShots": 1024,
+      "reusedBaselineShots": 0,
+      "totalComparisonShots": 2048
+    }
+  },
+  "bestUnconstrained": {
+    "id": "b740b56cae823b3470c108d8dd272c50f680f0fde83f219ce68d083f35671e57",
+    "canonicalStrategy": {
+      "schemaVersion": 1,
+      "rails": [
+        {
+          "ancilla": 0,
+          "active": false
+        },
+        {
+          "ancilla": 1,
+          "active": false
+        }
+      ]
+    },
+    "fidelity": 0.7880399999999996,
+    "retention": 0.9999999999999998,
+    "score": 0.7880399999999994,
+    "resources": {
+      "peakQubits": 3,
+      "addedQubits": 0,
+      "oneQubitGates": 4,
+      "twoQubitGates": 3,
+      "depth": 6,
+      "noiseLocations": 3,
+      "methodShots": 1024,
+      "baselineShots": 1024,
+      "reusedBaselineShots": 0,
+      "totalComparisonShots": 2048
+    }
+  },
+  "tiedBestIds": [
+    "f097099423af85607607a211a613a31d9299264f7109c2957df455d90f0a6411"
+  ],
+  "paretoPoints": [
+    {
+      "id": "b740b56cae823b3470c108d8dd272c50f680f0fde83f219ce68d083f35671e57",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": false
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.7880399999999996,
+      "retention": 0.9999999999999998,
+      "score": 0.7880399999999994,
+      "resources": {
+        "peakQubits": 3,
+        "addedQubits": 0,
+        "oneQubitGates": 4,
+        "twoQubitGates": 3,
+        "depth": 6,
+        "noiseLocations": 3,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "b14d20c98458109ed0e93962729b71ba627876613ed11a37d960b7bd083b6043",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.7938448962922747,
+      "retention": 0.9851122499999982,
+      "score": 0.782026331937498,
+      "resources": {
+        "peakQubits": 4,
+        "addedQubits": 1,
+        "oneQubitGates": 6,
+        "twoQubitGates": 5,
+        "depth": 10,
+        "noiseLocations": 5,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "24f8fbba87671d8c21e72ad60f83e9be0e165bf218362f87fe55847de54e38de",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.7938448962922748,
+      "retention": 0.9851122499999981,
+      "score": 0.782026331937498,
+      "resources": {
+        "peakQubits": 4,
+        "addedQubits": 1,
+        "oneQubitGates": 6,
+        "twoQubitGates": 5,
+        "depth": 12,
+        "noiseLocations": 5,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "83f3e5eaf5938032c578761373da7cdca64dcd4c93c5c289e45201fb3dff4df5",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.7900051256871563,
+      "retention": 0.9900623749999982,
+      "score": 0.7821543509999981,
+      "resources": {
+        "peakQubits": 4,
+        "addedQubits": 1,
+        "oneQubitGates": 6,
+        "twoQubitGates": 5,
+        "depth": 10,
+        "noiseLocations": 5,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "b38dd9ad46b7b3c8a24649f3935db3db452cd5da91b87e70369295fbd2f4ae0e",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.7900051256871563,
+      "retention": 0.9900623749999982,
+      "score": 0.7821543509999981,
+      "resources": {
+        "peakQubits": 4,
+        "addedQubits": 1,
+        "oneQubitGates": 6,
+        "twoQubitGates": 5,
+        "depth": 10,
+        "noiseLocations": 5,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "91d4fb1c03766cc84da00a9ea780e371a67653ca608ce81277cf3e0e73441eec",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 4,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.7900051256871561,
+      "retention": 0.9900623749999986,
+      "score": 0.7821543509999982,
+      "resources": {
+        "peakQubits": 4,
+        "addedQubits": 1,
+        "oneQubitGates": 6,
+        "twoQubitGates": 5,
+        "depth": 9,
+        "noiseLocations": 5,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "8760404ac7ec0e730236dcec57bfcd5033b40752be6d232ef127a54da1fddbb3",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 4,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.7900051256871561,
+      "retention": 0.9900623749999986,
+      "score": 0.7821543509999982,
+      "resources": {
+        "peakQubits": 4,
+        "addedQubits": 1,
+        "oneQubitGates": 6,
+        "twoQubitGates": 5,
+        "depth": 9,
+        "noiseLocations": 5,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "8793c6b08547796d172d2aa7cfb6ddd1ca38d164d0af195da22781588f248fc8",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "X"
+              },
+              {
+                "qubit": 1,
+                "pauli": "Z"
+              }
+            ],
+            "closingSign": -1
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.9868611182589069,
+      "retention": 0.7896120132499984,
+      "score": 0.7792373943865603,
+      "resources": {
+        "peakQubits": 4,
+        "addedQubits": 1,
+        "oneQubitGates": 7,
+        "twoQubitGates": 6,
+        "depth": 14,
+        "noiseLocations": 6,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "f097099423af85607607a211a613a31d9299264f7109c2957df455d90f0a6411",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Z"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.9816597285784632,
+      "retention": 0.7970074999999986,
+      "score": 0.7823901661249981,
+      "resources": {
+        "peakQubits": 4,
+        "addedQubits": 1,
+        "oneQubitGates": 6,
+        "twoQubitGates": 5,
+        "depth": 11,
+        "noiseLocations": 5,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "69bffa0bef04d4258617aaf5abcc2da1fd27c2e97b1c31295b241254098b28d0",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.7900051256871562,
+      "retention": 0.9900623749999984,
+      "score": 0.7821543509999981,
+      "resources": {
+        "peakQubits": 4,
+        "addedQubits": 1,
+        "oneQubitGates": 6,
+        "twoQubitGates": 5,
+        "depth": 9,
+        "noiseLocations": 5,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "af52480fdc6f1899a2b567abfd7933b7f50f898a49e7b07bd97fb662b73b4d22",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": -1
+          },
+          {
+            "ancilla": 1,
+            "active": false
+          }
+        ]
+      },
+      "fidelity": 0.7900051256871562,
+      "retention": 0.9900623749999984,
+      "score": 0.7821543509999981,
+      "resources": {
+        "peakQubits": 4,
+        "addedQubits": 1,
+        "oneQubitGates": 7,
+        "twoQubitGates": 5,
+        "depth": 10,
+        "noiseLocations": 5,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "381e4cfa51e19fdcaaf90514217153d652d96343b48ec4d6dea1edc9e0dfa293",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "4b786cff7375c1c4d56c7946b9ccaea9f28ac2f54f5ce4a1223a5ef981807ed2",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "3d339048cc49cdd251fdbfb81139369c939ffd6bd169d4dadc29fb014ea91e2d",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 4,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781514,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319671,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "431be4cbe5b80f5e7b14a1bab5b8c7ceed50c2bb390643fe71fece827609ea8b",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 4,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781514,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319671,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "246c31aeafd46b7227eeede8d6a00681396c438c9408fb27cb7639d4f7778c77",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "Z"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.9881165501108764,
+      "retention": 0.7851418515918723,
+      "score": 0.7758116577426266,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 13,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "c3ec7feb2907f5cbf9a0daf8453fb0033d5675e7836281abef6a141a9934e7a2",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "14cd0673a3419562c79dd6d8cc6f7cb33e285bc24904616b6850f05462720453",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": -1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 9,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "3291e9852e7863bf14d9cb9650e630e40630dd30281ed9c70fc87d71c53b71a0",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765906,
+      "score": 0.7761855973319673,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "be42061ec87b08e622879c131e471c26e17f9e9d8883b599019a30d3e3c647b4",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765906,
+      "score": 0.7761855973319673,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "b32daadb0c90537af5674f08decb33e8ca7060097ce28fa60b36a5632f20b16f",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 4,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781514,
+      "retention": 0.9753225738765906,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "b1f49013f7dfa9337f374fff1b4f37016d051dd81041f22555f4b8be9e51c8e8",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 4,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781514,
+      "retention": 0.9753225738765906,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "057712ddee131361714a29bfbf01fa4d0bbdfb2a27318085cef16cc596d3f361",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "Z"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.9890294922952801,
+      "retention": 0.7839290709668726,
+      "score": 0.7753289710538767,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 14,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "af4cafe50198c21621f2c8e6c387882e09c6eba992da8684b1d1833d20b46cc8",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "cd9268238394146a4b242c27590bdf97f95dfbc5b987bee525bc6ee58c472946",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": -1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 9,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "3745085b5d50dda5207f62c7f03cc17b514b62897db3546201da4d5cbb8b0fdd",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "84abc2bc7708bf7234e9343b74802c3a53d139575fa82edbda545ae3cc8f7942",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781517,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319673,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "48787dadc74b17c3fb725c36b905f25646f7af385358eb775ebdde9ecfa499c9",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "0c7873675cbb50534aa034e3bdc97d5dacb118fc865289d519cd10816dd4d16c",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781517,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319673,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "48409d07beaca6cef394d05ff8f0d183d1ddad27947ffb57a7275a3c00e5681c",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 4,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "ed3c564b57752b17a6ff157d49535cd492c478c416fdca2b9a99432ef1e20930",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 4,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "cf4f530010004eeefc64e79211f8ba687e8b3da7fafff2b946a287ca890ab772",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 4,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "9cff0984c04b256ab91db611d0683ce5628344edaab72e1c597d51388c9da273",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 4,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "221a90d01cc4ce9555193fe294cae4378947875ee58ef86e0b64279693cf548c",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "Z"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.9881165501108764,
+      "retention": 0.7851418515918723,
+      "score": 0.7758116577426266,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 13,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "2ba07a54354eae155cf19077a3d1270ad5015801422191116700f97bf9004936",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "Z"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.9890294922952804,
+      "retention": 0.7839290709668725,
+      "score": 0.7753289710538767,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 14,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "e28ce804f3f1402794a6caa05c7e6d5f0bc8297d3a593d527df8d3d281ee7aa2",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Z"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.9907601818854269,
+      "retention": 0.7836605266856224,
+      "score": 0.7764196459554766,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 15,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "13749b5469bf8f7c75a8ec269733d60b3478a933a8998c578398ed2406c3f0a6",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Z"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Z"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 0,
+                "pauli": "Z"
+              },
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": -1
+          }
+        ]
+      },
+      "fidelity": 0.9913424083535113,
+      "retention": 0.7800292641081377,
+      "score": 0.7732760892671783,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 9,
+        "twoQubitGates": 8,
+        "depth": 17,
+        "noiseLocations": 8,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "d537938e2258e9e423a6cb5644597818b735b85648cc248e940906408bef27e6",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "1f93cad2c34f417e9baf9020e424389186ddec4d8545948d5f75898a05f9c72b",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 8,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "6494620fe1932fef1d9b644068a2e01adc7e1cb8e1fa23e36b017f9bb650cb9e",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": -1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 4,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 9,
+        "twoQubitGates": 7,
+        "depth": 10,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    },
+    {
+      "id": "4256e99582569226c51b9e9ee421bdab65f370388092c91f0285690eb9b3b674",
+      "canonicalStrategy": {
+        "schemaVersion": 1,
+        "rails": [
+          {
+            "ancilla": 0,
+            "active": true,
+            "startBoundary": 2,
+            "endBoundary": 6,
+            "openingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "Y"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 2,
+                "pauli": "X"
+              }
+            ],
+            "closingSign": -1
+          },
+          {
+            "ancilla": 1,
+            "active": true,
+            "startBoundary": 1,
+            "endBoundary": 7,
+            "openingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "X"
+              }
+            ],
+            "closingTaps": [
+              {
+                "qubit": 1,
+                "pauli": "Y"
+              }
+            ],
+            "closingSign": 1
+          }
+        ]
+      },
+      "fidelity": 0.7958244975781515,
+      "retention": 0.9753225738765905,
+      "score": 0.7761855973319672,
+      "resources": {
+        "peakQubits": 5,
+        "addedQubits": 2,
+        "oneQubitGates": 9,
+        "twoQubitGates": 7,
+        "depth": 12,
+        "noiseLocations": 7,
+        "methodShots": 1024,
+        "baselineShots": 1024,
+        "reusedBaselineShots": 0,
+        "totalComparisonShots": 2048
+      }
+    }
+  ],
+  "generatedAt": "2026-10-15T13:00:17.290072+00:00"
+}

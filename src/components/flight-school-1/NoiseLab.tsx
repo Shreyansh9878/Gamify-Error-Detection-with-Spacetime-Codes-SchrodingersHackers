@@ -12,7 +12,6 @@ import {
 import { api } from "@/lib/api";
 import {
   Basis,
-  BlockName,
   Circuit,
   ComparisonMode,
   CONTENT_VERSION,
@@ -21,12 +20,9 @@ import {
   draftSchema,
   emptyCircuit,
   LabResult,
-  Operation,
   PROGRESS_KEY,
   progressSchema,
-  block,
   circuitSchema,
-  isError,
 } from "@/lib/flight-school-1/contracts";
 import { Example } from "@/lib/flight-school-1/content";
 import {
@@ -35,8 +31,8 @@ import {
 } from "@/lib/flight-school-1/code-generation";
 import { LearningWorkspace, MobilePane } from "../workspace/LearningWorkspace";
 import { TheoryPane } from "../workspace/TheoryPane";
-import { PreparationCanvas } from "./PreparationCanvas";
-import { ErrorBlockInspector } from "./ErrorBlockInspector";
+import { NoiseCanvas } from "../circuit-workspace/NoiseCanvas";
+
 import { TutorialCodeEditor } from "./TutorialCodeEditor";
 import { ComparisonTelemetry } from "./ComparisonTelemetry";
 import { NoiseKnowledgeCheck } from "./NoiseKnowledgeCheck";
@@ -46,11 +42,15 @@ export function NoiseLab({
   onSkip,
   onBack,
   unlocked = false,
+  onLesson,
+  previous = 0,
 }: {
   onContinue: () => void;
   onSkip: () => void;
   onBack: () => void;
   unlocked?: boolean;
+  onLesson?: (n: number) => void;
+  previous?: number;
 }) {
   const [circuit, setCircuit] = useState<Circuit>(emptyCircuit),
     [selected, setSelected] = useState<string | null>(null),
@@ -268,43 +268,6 @@ export function NoiseLab({
     setError("");
     invalidate();
   }
-  function place(name: BlockName, q: number, column: number) {
-    const op = block(name, q, column, `block-${crypto.randomUUID()}`);
-    const errors = circuit.operations.filter((o) => o.role === "error");
-    if (isError(name) && !circuit.combineErrors && errors.length) {
-      const next = {
-        ...circuit,
-        operations: [
-          ...circuit.operations.filter((o) => o.id !== errors[0].id),
-          op,
-        ],
-      };
-      setPending({
-        message: `Replace the existing ${errors[0].name.replaceAll("_", " ")} with ${name.replaceAll("_", " ")} at q${q}, column ${column}? This is one undoable edit.`,
-        draft: next,
-        selection: op.id,
-      });
-      return;
-    }
-    if (
-      applyDraft(
-        { ...circuit, operations: [...circuit.operations, op] },
-        op.id,
-      ) &&
-      op.role === "error"
-    )
-      setMode("selected_error");
-  }
-  function remove() {
-    if (selectedOp)
-      applyDraft(
-        {
-          ...circuit,
-          operations: circuit.operations.filter((o) => o.id !== selectedOp.id),
-        },
-        null,
-      );
-  }
   function resize(n: number) {
     const affected = circuit.operations.filter((o) =>
       o.qubits.some((q) => q >= n),
@@ -451,14 +414,26 @@ export function NoiseLab({
           <select
             aria-label="Flight school lesson"
             value="1"
-            onChange={(e) => {
-              if (e.target.value === "2") onContinue();
-            }}
+            onChange={(e) =>
+              onLesson ? onLesson(+e.target.value - 1) : onContinue()
+            }
           >
-            <option value="1">01 · Quantum errors</option>
-            <option value="2" disabled={!complete && !unlocked}>
-              02 · Detection, mitigation, correction
-            </option>
+            {[
+              "Quantum errors",
+              "Detection, mitigation, correction",
+              "Coherent Pauli checks",
+              "Multi-Qubit Pauli Propagation",
+              "The T-Gate Barrier",
+              "Trade-Off Optimization",
+            ].map((label, i) => (
+              <option
+                key={i}
+                value={i + 1}
+                disabled={!unlocked && i > Math.max(previous, complete ? 1 : 0)}
+              >
+                {String(i + 1).padStart(2, "0")} · {label}
+              </option>
+            ))}
           </select>
           <span className="nw-engine">
             {result ? "● Engine connected" : "○ Ready to experiment"}
@@ -481,17 +456,7 @@ export function NoiseLab({
         <TheoryPane tab={theory} onTab={setTheory} onLoad={load} quiz={quiz} />
       }
       experiment={
-        <div
-          onKeyDown={(e) => {
-            const target = e.target as HTMLElement;
-            if (["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName))
-              return;
-            if (e.key === "Delete" || e.key === "Backspace") {
-              e.preventDefault();
-              remove();
-            }
-          }}
-        >
+        <div>
           <div className="nw-experiment-toolbar">
             <div className="nw-editor-tabs">
               {(["Visual circuit", "Code"] as const).map((t) => (
@@ -548,10 +513,10 @@ export function NoiseLab({
               <p>
                 Read the theory or load an example. Prepare with gates, insert a
                 distinct error block, then Run. Compare the same state in Z and
-                X measurement. Select blocks to inspect; drag or use palette +
-                cell. Sliders commit with Apply block changes. Finish with the
-                three-question knowledge check. On desktop, drag or use arrow
-                keys on pane dividers.
+                X measurement. Configure parameters in the palette, then drag
+                gates or noise onto the timeline. Drag a placed block to Delete
+                to remove it. Finish with the three-question knowledge check. On
+                desktop, drag or use arrow keys on pane dividers.
               </p>
             </div>
           )}
@@ -614,60 +579,19 @@ export function NoiseLab({
                 Editable sandbox · fixed mission payloads stay protected
               </span>
             </div>
-            <PreparationCanvas
+            <NoiseCanvas
               circuit={circuit}
-              selected={selected}
               disabled={dirty || busy}
+              onChange={applyDraft}
+              onError={setError}
               onSelect={(id) => {
-                setSelected(id);
                 const o = circuit.operations.find((o) => o.id === id);
+                setSelected(o?.id || null);
                 if (o?.role === "error")
                   setting(() => setMode("selected_error"));
                 else if (mode === "selected_error")
                   setting(() => setMode("final"));
               }}
-              onPlace={place}
-              onMove={(o, q, col) =>
-                applyDraft({
-                  ...circuit,
-                  operations: circuit.operations.map((v) =>
-                    v.id === o.id
-                      ? {
-                          ...v,
-                          qubits: o.name === "cx" ? [q, o.qubits[1]] : [q],
-                          column: col,
-                        }
-                      : v,
-                  ),
-                })
-              }
-              onCombine={(b) => {
-                if (
-                  !b &&
-                  circuit.operations.filter((o) => o.role === "error").length >
-                    1
-                ) {
-                  setError(
-                    "Remove extra error blocks before leaving Combine Errors mode. No blocks were discarded.",
-                  );
-                  return;
-                }
-                applyDraft({ ...circuit, combineErrors: b });
-              }}
-            />
-            <ErrorBlockInspector
-              operation={selectedOp}
-              qubits={circuit.qubits}
-              disabled={dirty || busy}
-              onUpdate={(o) =>
-                applyDraft({
-                  ...circuit,
-                  operations: circuit.operations.map((v) =>
-                    v.id === o.id ? o : v,
-                  ),
-                })
-              }
-              onDelete={remove}
             />
           </div>
           <div hidden={editor !== "Code"}>

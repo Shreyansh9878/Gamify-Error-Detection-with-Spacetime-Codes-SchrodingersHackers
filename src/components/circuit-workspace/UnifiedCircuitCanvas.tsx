@@ -153,12 +153,11 @@ export function UnifiedCircuitCanvas({
         if (!target) throw new Error("Drop on a circuit slot or the Dustbin.");
         if (item.endpoint && pending) {
           if (
-            target.wire.kind !== "data" ||
             target.key !== pending.target.key ||
             target.wire.id === pending.target.wire.id
           )
             throw new Error(
-              "Drag the second endpoint to a different data wire in the same column.",
+              "Drag the second endpoint to a different wire in the same column.",
             );
           actions.place(
             pending.tool,
@@ -168,12 +167,9 @@ export function UnifiedCircuitCanvas({
           );
           setPending(null);
         } else if (item.tool?.twoWire) {
-          if (
-            target.wire.kind !== "data" ||
-            !["prep", "payload"].includes(target.stage)
-          )
+          if (!["prep", "payload"].includes(target.stage))
             throw new Error(
-              "Start a two-wire gate on an editable data gate slot.",
+              "Start a two-wire gate on an editable circuit slot.",
             );
           setPending({ tool: item.tool, target, config: item.config });
           setAnnounce(
@@ -336,173 +332,170 @@ export function UnifiedCircuitCanvas({
             </button>
           )}
         </div>
-        <details className="uc-palette-settings">
-          <summary>
-            Palette parameters & noise scope · configure before dragging
-          </summary>
-          <div className="nw-inspector-fields">
-            {tools.some((t) => ["rx", "ry", "rz"].includes(t.name || "")) && (
-              <>
-                <label>
-                  Rotation angle (rad)
-                  <input
-                    aria-label="Palette rotation angle"
-                    type="number"
-                    step="any"
-                    min={-2 * Math.PI}
-                    max={2 * Math.PI}
-                    value={config.angleRadians}
-                    onChange={(e) =>
-                      setConfig({ ...config, angleRadians: +e.target.value })
-                    }
-                  />
-                </label>
-              </>
-            )}
-            {tools.some((t) => ["P", "Pprime", "check"].includes(t.id)) && (
-              <>
-                <label>
-                  Pauli for P / P′
-                  <select
-                    aria-label="Palette check Pauli"
-                    value={config.pauli}
-                    onChange={(e) =>
-                      setConfig({
-                        ...config,
-                        pauli: e.target.value as "X" | "Y" | "Z",
-                      })
-                    }
-                  >
-                    <option>X</option>
-                    <option>Y</option>
-                    <option>Z</option>
-                  </select>
-                </label>
-                <label>
-                  Closing sign
-                  <select
-                    aria-label="Palette closing sign"
-                    value={config.sign}
-                    onChange={(e) =>
-                      setConfig({ ...config, sign: +e.target.value as 1 | -1 })
-                    }
-                  >
-                    <option value="1">+ no compensation</option>
-                    <option value="-1">− add ancilla Z</option>
-                  </select>
-                </label>
-                <label>
-                  Check rail
-                  <select
-                    aria-label="Palette check rail"
-                    value={config.ancilla}
-                    onChange={(e) =>
-                      setConfig({ ...config, ancilla: +e.target.value })
-                    }
-                  >
-                    <option value="0">a0</option>
-                    <option value="1">a1</option>
-                  </select>
-                </label>
-              </>
-            )}
-            <label>
-              Wait scope
-              <select
-                aria-label="Decoherence scope"
-                value={config.scope}
-                onChange={(e) =>
-                  setConfig({
-                    ...config,
-                    scope: e.target.value as PaletteConfig["scope"],
-                  })
-                }
-              >
-                <option value="wire">Dropped wire</option>
-                <option value="selected">Selected wires</option>
-                <option value="all">All eligible wires</option>
-              </select>
-            </label>
-            <label>
-              Elapsed t · {config.timeUs} μs
-              <input
-                aria-label="Palette elapsed waiting time"
-                type="range"
-                min="0"
-                max="200"
-                value={config.timeUs}
-                onChange={(e) =>
-                  setConfig({ ...config, timeUs: +e.target.value })
-                }
-              />
-            </label>
-            <label>
-              T1 μs
-              <input
-                aria-label="Palette T1"
-                type="number"
-                min="20"
-                max="200"
-                value={config.t1Us}
-                onChange={(e) =>
-                  setConfig({ ...config, t1Us: +e.target.value })
-                }
-              />
-            </label>
-            <label>
-              T2 μs
-              <input
-                aria-label="Palette T2"
-                type="number"
-                min=".01"
-                max="400"
-                step="any"
-                value={config.t2Us}
-                onChange={(e) =>
-                  setConfig({ ...config, t2Us: +e.target.value })
-                }
-              />
-            </label>
-          </div>
-          {config.scope === "selected" && (
-            <fieldset>
-              <legend>Independent wait targets</legend>
-              {model.wires.map((w) => (
-                <label key={w.id}>
-                  <input
-                    type="checkbox"
-                    checked={config.targets.includes(w.id)}
-                    onChange={(e) =>
-                      setConfig({
-                        ...config,
-                        targets: e.target.checked
-                          ? [...config.targets, w.id]
-                          : config.targets.filter((id) => id !== w.id),
-                      })
-                    }
-                  />
-                  {w.label}
-                </label>
-              ))}
-            </fieldset>
-          )}
-        </details>
-      </div>
-      <div className="uc-zones" aria-label="Circuit zones">
-        <span>1 State Prep</span>
-        <span
-          className={model.inactiveZones?.includes(2) ? "uc-zone-inactive" : ""}
-        >
-          2 CPC Opening · H, CP
-          {model.inactiveZones?.includes(2) ? " (inactive)" : ""}
-        </span>
-        <span>3 Payload / local checks</span>
-        <span
-          className={model.inactiveZones?.includes(4) ? "uc-zone-inactive" : ""}
-        >
-          4 CPC Closing & Readout
-          {model.inactiveZones?.includes(4) ? " (inactive)" : ""}
-        </span>
+        {tools.some(
+          (t) =>
+            t.kind === "noise" || ["rx", "ry", "rz"].includes(t.name || ""),
+        ) && (
+          <details className="uc-palette-settings">
+            <summary>
+              Palette parameters & noise scope · configure before dragging
+            </summary>
+            <div className="nw-inspector-fields">
+              {tools.some((t) => ["rx", "ry", "rz"].includes(t.name || "")) && (
+                <>
+                  <label>
+                    Rotation angle (rad)
+                    <input
+                      aria-label="Palette rotation angle"
+                      type="number"
+                      step="any"
+                      min={-2 * Math.PI}
+                      max={2 * Math.PI}
+                      value={config.angleRadians}
+                      onChange={(e) =>
+                        setConfig({ ...config, angleRadians: +e.target.value })
+                      }
+                    />
+                  </label>
+                </>
+              )}
+              {tools.some((t) => ["P", "Pprime", "check"].includes(t.id)) && (
+                <>
+                  <label>
+                    Pauli for P / P′
+                    <select
+                      aria-label="Palette check Pauli"
+                      value={config.pauli}
+                      onChange={(e) =>
+                        setConfig({
+                          ...config,
+                          pauli: e.target.value as "X" | "Y" | "Z",
+                        })
+                      }
+                    >
+                      <option>X</option>
+                      <option>Y</option>
+                      <option>Z</option>
+                    </select>
+                  </label>
+                  <label>
+                    Closing sign
+                    <select
+                      aria-label="Palette closing sign"
+                      value={config.sign}
+                      onChange={(e) =>
+                        setConfig({
+                          ...config,
+                          sign: +e.target.value as 1 | -1,
+                        })
+                      }
+                    >
+                      <option value="1">+ no compensation</option>
+                      <option value="-1">− add ancilla Z</option>
+                    </select>
+                  </label>
+                  <label>
+                    Check rail
+                    <select
+                      aria-label="Palette check rail"
+                      value={config.ancilla}
+                      onChange={(e) =>
+                        setConfig({ ...config, ancilla: +e.target.value })
+                      }
+                    >
+                      <option value="0">a0</option>
+                      <option value="1">a1</option>
+                    </select>
+                  </label>
+                </>
+              )}
+              {tools.some((t) => t.kind === "noise") && (
+                <>
+                  <label>
+                    Wait scope
+                    <select
+                      aria-label="Decoherence scope"
+                      value={config.scope}
+                      onChange={(e) =>
+                        setConfig({
+                          ...config,
+                          scope: e.target.value as PaletteConfig["scope"],
+                        })
+                      }
+                    >
+                      <option value="wire">Dropped wire</option>
+                      <option value="selected">Selected wires</option>
+                      <option value="all">All eligible wires</option>
+                    </select>
+                  </label>
+                  <label>
+                    Elapsed t · {config.timeUs} μs
+                    <input
+                      aria-label="Palette elapsed waiting time"
+                      type="range"
+                      min="0"
+                      max="200"
+                      value={config.timeUs}
+                      onChange={(e) =>
+                        setConfig({ ...config, timeUs: +e.target.value })
+                      }
+                    />
+                  </label>
+                  <label>
+                    T1 μs
+                    <input
+                      aria-label="Palette T1"
+                      type="number"
+                      min="20"
+                      max="200"
+                      value={config.t1Us}
+                      onChange={(e) =>
+                        setConfig({ ...config, t1Us: +e.target.value })
+                      }
+                    />
+                  </label>
+                  <label>
+                    T2 μs
+                    <input
+                      aria-label="Palette T2"
+                      type="number"
+                      min=".01"
+                      max="400"
+                      step="any"
+                      value={config.t2Us}
+                      onChange={(e) =>
+                        setConfig({ ...config, t2Us: +e.target.value })
+                      }
+                    />
+                  </label>
+                </>
+              )}
+            </div>
+            {tools.some((t) => t.kind === "noise") &&
+              config.scope === "selected" && (
+                <fieldset>
+                  <legend>Independent wait targets</legend>
+                  {model.wires.map((w) => (
+                    <label key={w.id}>
+                      <input
+                        type="checkbox"
+                        checked={config.targets.includes(w.id)}
+                        onChange={(e) =>
+                          setConfig({
+                            ...config,
+                            targets: e.target.checked
+                              ? [...config.targets, w.id]
+                              : config.targets.filter((id) => id !== w.id),
+                          })
+                        }
+                      />
+                      {w.label}
+                    </label>
+                  ))}
+                </fieldset>
+              )}
+          </details>
+        )}
       </div>
       {model.legendNote && <p className="uc-legend-note">{model.legendNote}</p>}
       <div
@@ -515,9 +508,7 @@ export function UnifiedCircuitCanvas({
           <div className="uc-ruler">
             <span>WIRE / TIME →</span>
             {model.columns.map((c) => (
-              <small key={c.key} className={`uc-zone-${c.zone}`}>
-                {c.label}
-              </small>
+              <small key={c.key} aria-hidden="true" />
             ))}
           </div>
           {model.wires.map((w, q) => (
@@ -562,7 +553,7 @@ export function UnifiedCircuitCanvas({
             }}
           >
             {model.columns.map((col) => (
-              <div key={col.key} className={`uc-column uc-zone-${col.zone}`}>
+              <div key={col.key} className="uc-column">
                 {model.wires.map((w) => {
                   const key = `${col.key}@${w.id}`,
                     nodes = model.nodes.filter(
@@ -611,13 +602,20 @@ export function UnifiedCircuitCanvas({
                             : {})}
                           onFocus={() => onSelect?.(node.id)}
                         >
-                          {node.wires.length > 1 && node.wires[0] !== w.id
-                            ? node.kind === "noise"
-                              ? node.label
+                          {node.wires.length === 2 &&
+                          ["cx", "cy", "cz"].includes(node.name || "")
+                            ? node.wires[0] === w.id
+                              ? "●"
                               : node.name === "cx"
                                 ? "⊕"
-                                : node.label
-                            : node.label}
+                                : node.name?.slice(1).toUpperCase()
+                            : node.wires.length > 1 && node.wires[0] !== w.id
+                              ? node.kind === "noise"
+                                ? node.label
+                                : node.name === "cx"
+                                  ? "⊕"
+                                  : node.label
+                              : node.label}
                           {node.owner !== "player" && <Lock size={10} />}
                         </button>
                       ))}

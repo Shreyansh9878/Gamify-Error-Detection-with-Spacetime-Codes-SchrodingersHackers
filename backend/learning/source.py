@@ -33,10 +33,10 @@ def source_calls(code,wrapper):
 
 
 def gate_call(node,name,args,keys,pi,index,existing):
-    if name not in ('h','x','y','z','s','sdg','rx','ry','rz','cx','cz'):raise SourceError('Unknown or unsupported gate.',node)
+    if name not in ('h','x','y','z','s','sdg','rx','ry','rz','cx','cy','cz','m'):raise SourceError('Unknown or unsupported gate.',node)
     if set(keys)-{'at'}:raise SourceError('Only at=column is accepted for a gate.',node)
     rotation=name in ('rx','ry','rz')
-    if len(args)!=(2 if rotation or name in ('cx','cz') else 1):raise SourceError('Wrong gate argument count.',node)
+    if len(args)!=(2 if rotation or name in ('cx','cy','cz') else 1):raise SourceError('Wrong gate argument count.',node)
     values={'id':f'code-{index}','name':name,'qubits':[integer(a,pi) for a in (args[1:] if rotation else args)],'column':integer(keys['at'],pi) if 'at' in keys else max((g.column for g in existing),default=-1)+1}
     if rotation:values['angleRadians']=float(number(args[0],pi))
     return Gate(**values)

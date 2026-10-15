@@ -1,5 +1,5 @@
 import { test, expect, Page, Locator } from "@playwright/test";
-import { pane, drop } from "./learning-helpers";
+import { pane, drop, cp } from "./learning-helpers";
 import { completeAdvancedSchools, runAdvanced } from "./unified-helpers";
 
 async function open(page: Page, step = 0) {
@@ -147,15 +147,19 @@ test("Bell phase QSphere, mixed populations, all-five wait and per-target trash 
   expect(await basis.nth(0).getAttribute("aria-label")).not.toBe(
     await basis.nth(1).getAttribute("aria-label"),
   );
-  if(info.project.name==="desktop"){
-    await page.setViewportSize({width:1440,height:1100});
-    await pane(page,"Experiment");
-    await page.getByRole("button",{name:"Visual circuit",exact:true}).click();
+  if (info.project.name === "desktop") {
+    await page.setViewportSize({ width: 1440, height: 1100 });
+    await pane(page, "Experiment");
+    await page
+      .getByRole("button", { name: "Visual circuit", exact: true })
+      .click();
   }
-  await pane(page,"Results");
-  await page.locator(".nw-results").evaluate(el=>{
-    const state=el.querySelector(".qs-state");
-    if(state)el.scrollTop+=state.getBoundingClientRect().top-el.getBoundingClientRect().top-14;
+  await pane(page, "Results");
+  await page.locator(".nw-results").evaluate((el) => {
+    const state = el.querySelector(".qs-state");
+    if (state)
+      el.scrollTop +=
+        state.getBoundingClientRect().top - el.getBoundingClientRect().top - 14;
   });
   await page.screenshot({
     path: `docs/screenshots/unified-bell-${info.project.name}.png`,
@@ -219,94 +223,80 @@ test("last three schools use one canvas, drag multiwire/T/capstone checks, revea
   });
 });
 
-test("T gate warns on X transport, glows green for Z, and needs no mandatory barrier run", async ({
+test("gold T rejects X/Y, accepts Z, and sandbox is truly blank", async ({
   page,
 }, info) => {
   await open(page, 4);
-  await drop(page, "Drag T", "payload2@q0");
-  for (const [name, target] of [
-    ["Ancilla H", "c0:openH@a0"],
-    ["Opening P", "c0:open@q0"],
-    ["Closing P′", "c0:close@q0"],
-    ["Final H", "c0:finalH@a0"],
-    ["Syndrome M", "c0:measure@a0"],
-  ])
-    await drop(page, `Drag ${name}`, target);
+  await expect(page.locator(".uc-node")).toHaveCount(1);
+  await drop(page, "Drag H", "c0@a0");
+  await cp(page, "CX", 1, "a0", "q0");
+  await cp(page, "CX", 4, "a0", "q0");
+  await drop(page, "Drag H", "c5@a0");
+  await drop(page, "Drag M", "c6@a0");
   await expect(page.locator(".uc-node-invalid")).toHaveCount(1);
-  await page.screenshot({
-    path: `docs/screenshots/unified-t-barrier-${info.project.name}.png`,
-  });
-  await drop(page, "Drag P X on q0 a0 open @ 1", "trash");
-  await drop(page, "Drag P′ X on q0 a0 close @ 3", "trash");
-  await page.locator(".uc-palette-settings summary").click();
-  await page
-    .getByLabel("Palette check Pauli", { exact: true })
-    .selectOption("Z");
-  await drop(page, "Drag Opening P", "c0:open@q0");
-  await drop(page, "Drag Closing P′", "c0:close@q0");
+  await drop(page, "Drag CX on a0 column 2", "trash");
+  await drop(page, "Drag CX on a0 column 5", "trash");
+  await cp(page, "CZ", 1, "a0", "q0");
+  await cp(page, "CZ", 4, "a0", "q0");
   await expect(page.locator(".uc-node-valid")).toHaveCount(1);
   await runAdvanced(page);
-  await pane(page, "Theory");
-  await page
-    .getByRole("button", { name: "Knowledge Check", exact: true })
-    .click();
-  await page.getByLabel("C) Z, because T Z T† = Z", { exact: true }).check();
-  await page.getByRole("button", { name: "Check answer", exact: true }).click();
-  await expect(
-    page.getByRole("heading", {
-      name: "Flight School 5 complete",
-      exact: true,
-    }),
-  ).toBeVisible();
-});
-
-test("capstone exploratory channels are undoable and cannot earn qualification", async ({
-  page,
-}, info) => {
-  await open(page, 5);
-  await page.locator(".uc-palette-settings summary").click();
-  await page
-    .getByLabel("Palette check Pauli", { exact: true })
-    .selectOption("Z");
-  await drop(page, "Drag Opening P", "payload2@q0");
-  await drop(page, "Drag Closing P′", "rail-a0:close@q0");
-  await expect(
-    page.getByRole("heading", { name: "✓ Invariant closed", exact: true }),
-  ).toBeVisible();
-  await page
-    .getByLabel("Decoherence scope", { exact: true })
-    .selectOption("all");
-  await drop(page, "Drag Decoherence · wait", "fault3@q0");
-  const response = page.waitForResponse((r) =>
-    r.url().endsWith("/graduation-lab/diagnostic"),
-  );
-  await page
-    .getByRole("button", { name: "Run diagnostic overlay", exact: true })
-    .click();
-  expect((await (await response).json()).qualifies).toBe(false);
-  await pane(page, "Results");
-  await expect(
-    page.getByText("Diagnostic — cannot qualify", { exact: true }),
-  ).toBeVisible();
-  expect(
-    await page.evaluate(
-      () =>
-        JSON.parse(
-          localStorage.getItem("quantum-shield.flight-school-6.progress.v1")!,
-        ).qualified,
-    ),
-  ).toBeNull();
-  await page.screenshot({
-    path: `docs/screenshots/unified-diagnostic-${info.project.name}.png`,
-  });
   await pane(page, "Experiment");
   await page
-    .getByRole("button", { name: "Undo diagnostic edit", exact: true })
+    .getByRole("button", { name: "Blank sandbox", exact: true })
     .click();
+  await expect(page.locator(".uc-node")).toHaveCount(0);
+  await page
+    .getByLabel("Number of data qubits", { exact: true })
+    .selectOption("5");
+  await page
+    .getByLabel("Number of ancillas", { exact: true })
+    .selectOption("2");
+  await drop(page, "Drag T", "c3@q4");
   await expect(
-    page.getByRole("button", { name: "Run diagnostic overlay", exact: true }),
-  ).toBeDisabled();
+    page.getByRole("button", { name: "Drag T on q4 column 4", exact: true }),
+  ).toBeAttached();
   await expect(
-    page.getByRole("heading", { name: "✓ Invariant closed", exact: true }),
-  ).toBeVisible();
+    page.getByRole("button", { name: "Drag Opening P", exact: true }),
+  ).toHaveCount(0);
+  await expect(page.getByLabel("Circuit zones", { exact: true })).toHaveCount(
+    0,
+  );
+  await page.screenshot({
+    path: `docs/screenshots/timeline-t-sandbox-${info.project.name}.png`,
+  });
+});
+
+test("capstone hardware changes invalidate telemetry and there are no spatial errors or fixed shell gates", async ({
+  page,
+}) => {
+  await open(page, 5);
+  await expect(page.locator(".uc-node")).toHaveCount(10);
+  await expect(
+    page.getByRole("button", { name: "Drag Decoherence · wait", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Drag Ancilla H", exact: true }),
+  ).toHaveCount(0);
+  await drop(page, "Drag H", "c0@a0");
+  await cp(page, "CZ", 1, "a0", "q1");
+  await cp(page, "CZ", 9, "a0", "q0");
+  await cp(page, "CZ", 10, "a0", "q1");
+  await drop(page, "Drag H", "c11@a0");
+  await drop(page, "Drag M", "c12@a0");
+  await runAdvanced(page);
+  await expect(
+    page.getByRole("region", { name: "Qualification comparison" }),
+  ).toBeVisible({ timeout: 60000 });
+  // Running the identical accepted draft must produce a fresh comparison too.
+  await runAdvanced(page);
+  await expect(
+    page.getByRole("region", { name: "Qualification comparison" }),
+  ).toBeVisible({ timeout: 60000 });
+  await pane(page, "Experiment");
+  await page.getByLabel("Bit-flip probability", { exact: true }).fill("0.3");
+  await pane(page, "Results");
+  await expect(page.getByText(/Previous run — circuit/)).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Qualification comparison" }),
+  ).toHaveCount(0);
 });

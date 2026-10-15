@@ -5,6 +5,7 @@ import {
   initialExperiment,
   sandboxInitial,
 } from "./contracts";
+import { initialHardware } from "../timeline/hardware";
 export const gate = (
   name: Gate["name"],
   qubits: number[],
@@ -100,6 +101,44 @@ export const protectionExamples: {
     },
   },
 ];
+/** Hardware examples are separate from the retained legacy spatial-channel fixtures. */
+export const hardwareProtectionExamples = protectionExamples.map(
+  (example, index) => {
+    const settings = [
+      { bitFlip: 0.025, phaseFlip: 0, depolarizing: 0, relaxationTimeUs: 0 },
+      { bitFlip: 0, phaseFlip: 0.04, depolarizing: 0, relaxationTimeUs: 0 },
+      { bitFlip: 0, phaseFlip: 0.04, depolarizing: 0, relaxationTimeUs: 0 },
+      {
+        bitFlip: 0.015,
+        phaseFlip: 0.005,
+        depolarizing: 0,
+        relaxationTimeUs: 0,
+      },
+      { bitFlip: 0.2, phaseFlip: 0, depolarizing: 0, relaxationTimeUs: 0 },
+      { bitFlip: 0, phaseFlip: 0, depolarizing: 0, relaxationTimeUs: 10 },
+    ][index];
+    const descriptions = [
+      "Start in zero with a 0.025 bit-flip probability per occupied layer and storage interval. All live wires, including generated helpers, receive noise.",
+      "Prepare plus with 0.04 phase-flip probability per layer on every live wire. Z probabilities hide phase damage; try X measurement and an X check.",
+      "Prepare H then H with 0.04 phase-flip probability per layer. Noise after the first H can become a difference in the final Z answer.",
+      "Prepare a Bell pair with bit-flip probability 0.015 and phase-flip probability 0.005 per layer on all live wires. Compare joint-state fidelity and helper costs.",
+      "Set bit-flip probability to 0.20 per layer. Multiple faults and noisy extraction can defeat the restricted repetition decoder; improvement is not guaranteed.",
+      "Prepare one. Every occupied layer and the storage interval adds 10 μs of relaxation (T1=100 μs, T2=80 μs) on all live wires. A repetition code cannot undo general relaxation.",
+    ];
+    return {
+      ...example,
+      description: descriptions[index],
+      experiment: {
+        ...example.experiment,
+        noise: {
+          ...initialExperiment.noise,
+          targetQubit: example.experiment.noise.targetQubit,
+        },
+        hardware: { ...initialHardware, ...settings, enabled: true },
+      },
+    };
+  },
+);
 const fullCheck = sandboxInitial.checks[0];
 export const checkExamples: {
   title: string;

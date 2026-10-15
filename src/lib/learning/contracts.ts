@@ -1,5 +1,6 @@
 import type { StateVisualization } from "../state-visualization/contracts";
 import { z } from "zod";
+import { hardwareSchema } from "../timeline/hardware";
 import type { LabState } from "../flight-school-1/contracts";
 export const gateNames = [
   "h",
@@ -12,7 +13,9 @@ export const gateNames = [
   "ry",
   "rz",
   "cx",
+  "cy",
   "cz",
+  "m",
 ] as const;
 export const gateSchema = z
   .object({
@@ -44,7 +47,7 @@ function validateGates(
       ctx.addIssue({ code: "custom", message: "Gate IDs must be unique." });
     ids.add(g.id);
     if (
-      g.qubits.length !== (["cx", "cz"].includes(g.name) ? 2 : 1) ||
+      g.qubits.length !== (["cx", "cy", "cz"].includes(g.name) ? 2 : 1) ||
       new Set(g.qubits).size !== g.qubits.length
     )
       ctx.addIssue({
@@ -56,7 +59,7 @@ function validateGates(
         code: "custom",
         message: "Only rotations require an angle.",
       });
-    if (clifford && ["rx", "ry", "rz"].includes(g.name))
+    if (clifford && ["rx", "ry", "rz", "m"].includes(g.name))
       ctx.addIssue({
         code: "custom",
         message:
@@ -113,16 +116,17 @@ export const experimentSchema = z
     qubits: z.number().int().min(1).max(3),
     operations: gates,
     noise: noiseSchema,
+    hardware: hardwareSchema.optional(),
   })
   .strict()
   .superRefine((c, ctx) => {
     validateGates(c.operations, c.qubits, ctx);
-    if (c.operations.some((g) => g.name === "cz"))
-      ctx.addIssue({
-        code: "custom",
-        message:
-          "CZ is available in the check sandbox, not this preparation palette.",
-      });
+    const measured = new Set<number>();
+    for (const g of [...c.operations].sort((a, b) => a.column - b.column)) {
+      if (g.qubits.some((q) => measured.has(q)))
+        ctx.addIssue({ code: "custom", message: "M is terminal on its wire." });
+      if (g.name === "m") g.qubits.forEach((q) => measured.add(q));
+    }
     if (c.noise.targetQubit >= c.qubits)
       ctx.addIssue({
         code: "custom",
@@ -249,7 +253,20 @@ export const checkDraftSchema = z
     )
       fail("Fault order at a boundary must be unique.");
     for (const f of d.faults) {
-      if(f.targets?.some(t=>t.kind==="ancilla"&&d.checks.some(c=>c.ancilla===t.index&&f.boundary>c.endBoundary)))ctx.addIssue({code:"custom",message:"This helper has already been measured. Place helper noise at or before readout."});
+      if (
+        f.targets?.some(
+          (t) =>
+            t.kind === "ancilla" &&
+            d.checks.some(
+              (c) => c.ancilla === t.index && f.boundary > c.endBoundary,
+            ),
+        )
+      )
+        ctx.addIssue({
+          code: "custom",
+          message:
+            "This helper has already been measured. Place helper noise at or before readout.",
+        });
       if (
         f.targets &&
         (new Set(f.targets.map((t) => `${t.kind}:${t.index}`)).size !==

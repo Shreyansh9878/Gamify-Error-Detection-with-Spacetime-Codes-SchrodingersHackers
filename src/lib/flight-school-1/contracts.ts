@@ -12,6 +12,9 @@ export const names = [
   "ry",
   "rz",
   "cx",
+  "cy",
+  "cz",
+  "m",
   "bit_flip",
   "phase_flip",
   "decoherence",
@@ -55,13 +58,20 @@ export const circuitSchema = z
       (c.combineErrors ? 8 : 1)
     )
       fail("Enable Combine Errors for multiple error blocks (maximum eight).");
-    for (const o of c.operations) {
+    const measured = new Set<number>();
+    for (const o of [...c.operations].sort((a, b) => a.column - b.column)) {
+      if (o.qubits.some((q) => measured.has(q)))
+        fail(
+          "Measurement is terminal on its wire. Place M after its last interaction.",
+        );
+      if (o.name === "m") o.qubits.forEach((q) => measured.add(q));
       if (ids.has(o.id)) fail("Block IDs must be unique.");
       ids.add(o.id);
       if (isError(o.name) !== (o.role === "error"))
         fail("Block role does not match its name.");
       if (
-        (o.name !== "decoherence" && o.qubits.length !== (o.name === "cx" ? 2 : 1)) ||
+        (o.name !== "decoherence" &&
+          o.qubits.length !== (["cx", "cy", "cz"].includes(o.name) ? 2 : 1)) ||
         new Set(o.qubits).size !== o.qubits.length
       )
         fail(

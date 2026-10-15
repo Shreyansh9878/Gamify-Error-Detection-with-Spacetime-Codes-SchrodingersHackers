@@ -66,11 +66,15 @@ test("tutorial, manual invariant, fault injection, scored mission, and persisten
     .getByRole("button", { name: "Continue to Flight School 3 →", exact: true })
     .click();
   await buildGuided(page);
-  await drop(page, "Drag Phase flip · Z error", "fault3@q0");
+  await labPane(page, "Experiment");
+  await drop(page, "Drag Phase flip · Z error", "c3@q0");
   await runCheck(page);
   await passCheckQuiz(page);
   await page
-    .getByRole("button", { name: "Continue to Flight School 4 →", exact: true })
+    .getByRole("button", {
+      name: "Continue to next Flight School →",
+      exact: true,
+    })
     .first()
     .click();
   await completeAdvancedSchools(page);

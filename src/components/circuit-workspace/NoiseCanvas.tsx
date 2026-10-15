@@ -28,7 +28,17 @@ export function NoiseCanvas({
   return (
     <UnifiedCircuitCanvas
       model={model}
-      tools={[...gateTools(), ...noiseTools]}
+      tools={[
+        ...gateTools(),
+        ...["cy", "cz", "m"].map((name) => ({
+          id: `gate-${name}`,
+          name,
+          label: name.toUpperCase(),
+          kind: "gate" as const,
+          twoWire: name !== "m",
+        })),
+        ...noiseTools,
+      ]}
       onError={onError}
       disabled={disabled}
       onSelect={onSelect}

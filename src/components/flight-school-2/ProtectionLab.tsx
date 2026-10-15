@@ -11,8 +11,11 @@ import {
   TechniquePreview,
 } from "@/lib/learning/contracts";
 import { protectionCode } from "@/lib/learning/code-generation";
-import { protectionTheory } from "@/lib/learning/content";
-import { protectionExamples } from "@/lib/learning/examples";
+import {
+  protectionTheory,
+  hardwareProtectionNote,
+} from "@/lib/learning/content";
+import { hardwareProtectionExamples } from "@/lib/learning/examples";
 import { useLocalProgress, useWorkbench } from "@/lib/learning/useWorkbench";
 import { MobilePane } from "../workspace/LearningWorkspace";
 import {
@@ -23,9 +26,14 @@ import {
 } from "../learning/LabFrame";
 import { LabTheory } from "../learning/LabTheory";
 import { ProtectionCanvas } from "../circuit-workspace/ProtectionCanvas";
-import { NoiseControls } from "../learning/NoiseControls";
-import { ResourceSummary } from "../learning/CircuitPreview";
+import { HardwareNoiseControls } from "../learning/HardwareNoiseControls";
+import { initialHardware } from "@/lib/timeline/contracts";
+import { CircuitPreview, ResourceSummary } from "../learning/CircuitPreview";
 import { ProtectionTelemetry } from "./ProtectionTelemetry";
+const hardwareExperiment: Experiment = {
+  ...initialExperiment,
+  hardware: initialHardware,
+};
 const settingsSchema = z.object({
   technique: z.enum(["detection", "mitigation", "correction"]),
   detectionPauli: z.enum(["X", "Y", "Z"]),
@@ -73,15 +81,15 @@ export function ProtectionLab({
   previous: number;
 }) {
   const work = useWorkbench(
-      "quantum-shield.flight-school-2.draft.v1",
-      initialExperiment,
+      "quantum-shield.flight-school-2.draft.hardware.v2",
+      hardwareExperiment,
       experimentSchema,
       protectionCode,
       "tutorial/protection-lab/compile",
       "experiment",
     ),
     progress = useLocalProgress(
-      "quantum-shield.flight-school-2.progress.v1",
+      "quantum-shield.flight-school-2.progress.hardware.v2",
       progressSchema,
       initialProgress,
     );
@@ -100,7 +108,10 @@ export function ProtectionLab({
     c = work.model,
     observed = Math.min(settings.qubit, c.qubits - 1);
   const body = (experiment: Experiment) => ({
-    experiment,
+    experiment: {
+      ...experiment,
+      hardware: experiment.hardware ?? initialHardware,
+    },
     technique: settings.technique,
     detectionPauli: settings.detectionPauli,
     correctionFamily: settings.correctionFamily,
@@ -216,14 +227,21 @@ export function ProtectionLab({
         <LabTheory
           number={2}
           title="Detection vs. Mitigation vs. Correction"
-          source={protectionTheory}
-          examples={protectionExamples.map((e) => (
+          source={hardwareProtectionNote + "\n" + protectionTheory}
+          examples={hardwareProtectionExamples.map((e) => (
             <article className="nw-example" key={e.title}>
               <h2>{e.title}</h2>
               <p>{e.description}</p>
               <button
                 onClick={() => {
-                  if (work.change(e.experiment)) setMobile("Experiment");
+                  if (
+                    work.change({
+                      ...e.experiment,
+                      hardware:
+                        e.experiment.hardware ?? c.hardware ?? initialHardware,
+                    })
+                  )
+                    setMobile("Experiment");
                 }}
               >
                 Load example: {e.title}
@@ -292,7 +310,7 @@ export function ProtectionLab({
               </button>
               <button
                 disabled={work.busy || work.dirty}
-                onClick={() => work.change(initialExperiment)}
+                onClick={() => work.change(hardwareExperiment)}
               >
                 Reset
               </button>
@@ -429,8 +447,8 @@ export function ProtectionLab({
           )}
           {pending && (
             <div className="nw-notice" role="alert">
-              Shrinking removes affected gates and moves a missing noise target
-              to q0.{" "}
+              Shrinking removes affected gates and moves a missing protected
+              wire to q0.{" "}
               <button
                 onClick={() => {
                   if (work.change(pending)) setPending(null);
@@ -456,7 +474,10 @@ export function ProtectionLab({
                   ))}
                 </select>
               </label>
-              <span>A → explicit noise at boundary {c.noise.boundary} → B</span>
+              <span>
+                Editable base circuit · generated methods appear in their own
+                read-only view
+              </span>
             </div>
             <ProtectionCanvas
               experiment={c}
@@ -466,19 +487,30 @@ export function ProtectionLab({
               onError={work.setError}
               disabled={work.busy || work.dirty}
             />
-            {c.noise.targetQubits && c.noise.targetQubits.length > 1 && (
-              <p className="nw-notice">
-                This method protects logical q{c.noise.targetQubit}. Additional
-                selected data wires receive their declared noise without extra
-                protection. Correction applies independent physical noise to the
-                encoded block.
-              </p>
-            )}
-            <NoiseControls
-              value={c.noise}
-              n={c.qubits}
+            <label>
+              Protected output wire
+              <select
+                aria-label="Protected output wire"
+                value={c.noise.targetQubit}
+                disabled={work.busy || work.dirty}
+                onChange={(e) =>
+                  work.change({
+                    ...c,
+                    noise: { ...c.noise, targetQubit: +e.target.value },
+                  })
+                }
+              >
+                {Array.from({ length: c.qubits }, (_, q) => (
+                  <option key={q} value={q}>
+                    q{q}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <HardwareNoiseControls
+              value={c.hardware ?? initialHardware}
               disabled={work.busy || work.dirty}
-              onChange={(noise) => work.change({ ...c, noise })}
+              onChange={(hardware) => work.change({ ...c, hardware })}
             />
           </div>
           <div hidden={work.editor !== "Code"}>
@@ -516,6 +548,13 @@ export function ProtectionLab({
                     </button>
                   ))}
                 </div>
+              )}
+              {selected && (
+                <CircuitPreview
+                  items={selected[1]}
+                  labels={preview.wireLabels}
+                  title="Transformed execution circuit — read-only"
+                />
               )}
               <ResourceSummary value={preview.resources} />
             </>

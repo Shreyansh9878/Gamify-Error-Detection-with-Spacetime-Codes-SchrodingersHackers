@@ -1,6 +1,7 @@
 from typing import Literal
 from pydantic import Field, model_validator
 from ..noise_lab.models import StrictModel
+from ..timeline_lab.models import HardwareNoise
 from ..learning.common import Gate, Samples, validate_gates
 
 
@@ -33,11 +34,15 @@ class Experiment(StrictModel):
     qubits: int = Field(ge=1,le=3)
     operations: list[Gate] = Field(default_factory=list,max_length=64)
     noise: Noise = Field(default_factory=Noise)
+    hardware: HardwareNoise | None = None
 
     @model_validator(mode='after')
     def bounded(self):
         validate_gates(self.operations,self.qubits)
-        if any(g.name=='cz' for g in self.operations):raise ValueError('CZ is available in the check lab; use the protection lab preparation palette here.')
+        measured=set()
+        for g in sorted(self.operations,key=lambda g:g.column):
+            if any(q in measured for q in g.qubits):raise ValueError('Place M after the last operation on its wire.')
+            if g.name=='m':measured.update(g.qubits)
         if self.noise.targetQubit>=self.qubits:raise ValueError('Noise targets a missing data wire.')
         if any(q<0 or q>=self.qubits for q in self.noise.targetQubits or []):raise ValueError('Noise targets a missing data wire.')
         return self

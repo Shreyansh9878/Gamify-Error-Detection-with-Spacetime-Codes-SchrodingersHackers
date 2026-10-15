@@ -17,6 +17,10 @@ def apply(state, op, n):
         for q in op.qubits:
             state=state.evolve(thermal_relaxation_error(op.t1Us, op.t2Us, op.timeUs, excited_state_population=0).to_quantumchannel(),qargs=[q])
         return state
+    if op.name == 'm':
+        q=op.qubits[0];bits=np.array([(i>>q)&1 for i in range(2**n)])
+        rho=state.data.copy();rho[bits[:,None]!=bits[None,:]]=0
+        return DensityMatrix(rho)
     circuit = QuantumCircuit(n)
     method = {'bit_flip': 'x', 'phase_flip': 'z'}.get(op.name, op.name)
     args = ([op.angleRadians] if op.name in ('rx','ry','rz') else []) + op.qubits

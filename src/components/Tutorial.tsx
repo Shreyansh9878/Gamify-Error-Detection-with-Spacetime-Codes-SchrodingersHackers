@@ -2,9 +2,7 @@
 import { useState } from "react";
 import { NoiseLab } from "./flight-school-1/NoiseLab";
 import { ProtectionLab } from "./flight-school-2/ProtectionLab";
-import { CheckLab } from "./flight-school-3/CheckLab";
-import { AdvancedLab } from "./advanced-learning/AdvancedLab";
-import { GraduationLab } from "./advanced-learning/GraduationLab";
+import { TimelineLab } from "./learning/TimelineLab";
 export function Tutorial({
   start,
   onStep,
@@ -51,8 +49,7 @@ export function Tutorial({
       />
     );
   if (step === 1) return <ProtectionLab {...props} />;
-  if (step === 2) return <CheckLab {...props} />;
-  if (step === 3 || step === 4)
-    return <AdvancedLab key={step} {...props} number={step === 3 ? 4 : 5} />;
-  return <GraduationLab {...props} />;
+  return (
+    <TimelineLab key={step} {...props} number={(step + 1) as 3 | 4 | 5 | 6} />
+  );
 }

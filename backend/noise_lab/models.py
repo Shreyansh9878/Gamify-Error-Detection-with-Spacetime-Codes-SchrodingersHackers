@@ -10,7 +10,7 @@ class StrictModel(BaseModel):
 class Operation(StrictModel):
     id: str = Field(min_length=1, max_length=64)
     role: Literal['prepare', 'error']
-    name: Literal['h', 'x', 'y', 'z', 's', 'sdg', 'rx', 'ry', 'rz', 'cx',
+    name: Literal['h', 'x', 'y', 'z', 's', 'sdg', 'rx', 'ry', 'rz', 'cx', 'cy', 'cz', 'm',
                   'bit_flip', 'phase_flip', 'decoherence']
     qubits: list[int] = Field(min_length=1, max_length=5)
     column: int = Field(ge=0, le=15)
@@ -24,7 +24,7 @@ class Operation(StrictModel):
         error = self.name in ('bit_flip', 'phase_flip', 'decoherence')
         if error != (self.role == 'error'):
             raise ValueError('Operation name does not match its preparation/error role.')
-        if (self.name != 'decoherence' and len(self.qubits) != (2 if self.name == 'cx' else 1)) or len(set(self.qubits)) != len(self.qubits):
+        if (self.name != 'decoherence' and len(self.qubits) != (2 if self.name in ('cx','cy','cz') else 1)) or len(set(self.qubits)) != len(self.qubits):
             raise ValueError('CX needs distinct control and target; other blocks need one qubit.')
         if self.name in ('rx', 'ry', 'rz'):
             if self.angleRadians is None:
@@ -53,7 +53,10 @@ class Circuit(StrictModel):
         errors = sum(op.role == 'error' for op in self.operations)
         if errors > (8 if self.combineErrors else 1):
             raise ValueError('Enable Combine Errors for multiple blocks; maximum eight errors.')
-        for op in self.operations:
+        measured=set()
+        for op in sorted(self.operations,key=lambda g:g.column):
+            if any(q in measured for q in op.qubits):raise ValueError('Measurement is terminal on its wire. Move M after its final gate or noise.')
+            if op.name=='m':measured.update(op.qubits)
             if op.id in ids:
                 raise ValueError('Block IDs must be unique.')
             ids.add(op.id)

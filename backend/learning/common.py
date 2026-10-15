@@ -14,14 +14,14 @@ from ..noise_lab.simulator import describe
 class Gate(StrictModel):
     id: str = Field(min_length=1, max_length=64)
     role: Literal['prepare'] = 'prepare'
-    name: Literal['h','x','y','z','s','sdg','rx','ry','rz','cx','cz']
+    name: Literal['h','x','y','z','s','sdg','rx','ry','rz','cx','cy','cz','m']
     qubits: list[int] = Field(min_length=1, max_length=2)
     column: int = Field(ge=0, le=15)
     angleRadians: float | None = Field(default=None, ge=-2*pi, le=2*pi)
 
     @model_validator(mode='after')
     def validate_gate(self):
-        if len(self.qubits) != (2 if self.name in ('cx','cz') else 1) or len(set(self.qubits)) != len(self.qubits):
+        if len(self.qubits) != (2 if self.name in ('cx','cy','cz') else 1) or len(set(self.qubits)) != len(self.qubits):
             raise ValueError('Controlled gates require distinct control and target; other gates need one wire.')
         if (self.name in ('rx','ry','rz')) != (self.angleRadians is not None):
             raise ValueError('Only rotations require an angleRadians parameter.')
@@ -45,6 +45,7 @@ def validate_gates(gates, n, clifford=False):
         if g.id in ids: raise ValueError('Gate IDs must be unique within a circuit section.')
         ids.add(g.id)
         if clifford and g.name in ('rx','ry','rz'): raise ValueError('This check lab accepts Clifford gates only; arbitrary rotations need non-Pauli checks.')
+        if clifford and g.name=='m': raise ValueError('This legacy unitary-check API does not accept data measurement; use the ordinary-gate timeline for terminal M.')
         for q in g.qubits:
             if not 0 <= q < n: raise ValueError('A gate targets a missing data wire.')
             if (q,g.column) in occupied: raise ValueError('Gates sharing a wire cannot occupy the same column.')
@@ -60,7 +61,7 @@ def instruction(name, qubits, stage, **extra):
 
 
 def gate_instruction(gate, stage='Payload'):
-    return instruction(gate.name,gate.qubits,stage,**({'angleRadians':gate.angleRadians} if gate.angleRadians is not None else {}),column=gate.column,sourceId=gate.id)
+    return instruction('measure' if gate.name=='m' else gate.name,gate.qubits,stage,**({'bit':gate.qubits[0], 'measureData':True} if gate.name=='m' else {}),**({'angleRadians':gate.angleRadians} if gate.angleRadians is not None else {}),column=gate.column,sourceId=gate.id)
 
 
 def channel(noise):
@@ -88,6 +89,9 @@ def evolve(items,n,state=None):
     state=DensityMatrix.from_label('0'*n) if state is None else state
     for item in items:
         if item['name']=='noise': state=state.evolve(channel(item['noise']).to_quantumchannel(),qargs=item['qubits'])
+        elif item['name']=='measure' and item.get('measureData'):
+            q=item['qubits'][0];bits=np.array([(v>>q)&1 for v in range(2**n)])
+            rho=state.data.copy();rho[bits[:,None]!=bits[None,:]]=0;state=DensityMatrix(rho)
         elif item['name'] not in ('measure','recovery'):
             qc=QuantumCircuit(n);append_instruction(qc,item);state=state.evolve(qc)
     return state
@@ -158,7 +162,7 @@ def native_export(variants,n,data_n,k,shots,seed,basis,processing=''):
         # Authored check IDs may contain whitespace. Keep their display labels
         # inside one Python comment in the separately copyable native export.
         return str(text).replace('\r', ' ').replace('\n', ' ')
-    lines=['# Standalone Qiskit 2+ / Aer. Times in microseconds; helpers are ideal.','from qiskit import QuantumCircuit, ClassicalRegister, transpile','from qiskit.quantum_info import DensityMatrix','from qiskit_aer import AerSimulator','from qiskit_aer.noise import pauli_error, depolarizing_error, thermal_relaxation_error','','circuits = {}']
+    lines=['# Standalone Qiskit 2+ / Aer. Times in microseconds; channels below define the actual noise.','from qiskit import QuantumCircuit, ClassicalRegister, transpile','from qiskit.quantum_info import DensityMatrix, Kraus','import numpy as np','from qiskit_aer import AerSimulator','from qiskit_aer.noise import pauli_error, depolarizing_error, thermal_relaxation_error','','circuits = {}']
     for label,items in variants.items():
         lines += [f'\n# {label}',f'qc = QuantumCircuit({n})',f'data = ClassicalRegister({data_n}, "data")']
         if k: lines += [f'syndrome = ClassicalRegister({k}, "syndrome")','qc.add_register(syndrome)']
@@ -172,7 +176,9 @@ def native_export(variants,n,data_n,k,shots,seed,basis,processing=''):
                 elif kind=='depolarizing':expr=f"depolarizing_error({noise['strength']},{noise.get('numQubits',1)})"
                 else:expr=f"thermal_relaxation_error({noise['t1Us']},{noise['t2Us']},{noise['timeUs']},excited_state_population=0)"
                 lines.append(f'qc.append({expr}.to_instruction(), {q}) # {comment(item["stage"])}')
-            elif name=='measure':lines.append(f'qc.measure({q[0]}, syndrome[{item["bit"]}])')
+            elif name=='measure':
+                if label=='Ideal' and item.get('measureData'):lines.append(f'qc.append(Kraus([np.diag([1,0]),np.diag([0,1])]).to_instruction(), [{q[0]}])')
+                else:lines.append(f'qc.measure({q[0]}, '+(f'data[{q[0]}])' if item.get('measureData') else f'syndrome[{item["bit"]}])'))
             elif name=='recovery':lines += [f'with qc.if_test((syndrome, {item["condition"]})):',f'    qc.x({q[0]}) # decoder hypothesis']
             else:lines.append(f'qc.{name}({args}) # {comment(item["stage"])}')
         if basis=='X':lines.append(f'qc.h(range({data_n})) # measurement rotation, not a repair')

@@ -26,6 +26,7 @@ from .graduation_lab.fixture import manifest as graduation_fixture
 from .learning.visualization import component_page, experiment_context
 from .noise_lab.models import StrictModel
 from pydantic import Field
+from .timeline_lab import models as timeline_models, service as timeline_service
 
 app=FastAPI(title='Quantum Shield Stage 1',version=VERSION)
 lock=threading.BoundedSemaphore(1)
@@ -47,7 +48,7 @@ async def bounded_body(request:Request,call_next):
 
 @app.exception_handler(RequestValidationError)
 async def invalid_request(request,exc):
-    if not any(request.url.path.startswith('/api/tutorial/'+lab+'/') for lab in ('noise-lab','protection-lab','check-lab','entangling-lab','non-clifford-lab','graduation-lab')):
+    if not any(request.url.path.startswith('/api/tutorial/'+lab+'/') for lab in ('noise-lab','protection-lab','check-lab','entangling-lab','non-clifford-lab','graduation-lab','timeline')):
         return JSONResponse({'error':{'code':'INVALID_REQUEST','message':'Invalid request. Check the circuit bounds, field types, and allowed settings.'}},status_code=422)
     details = [{'field': '.'.join(str(p) for p in e['loc']), 'message': e['msg']} for e in exc.errors()]
     return JSONResponse({'error':{'code':'INVALID_REQUEST','message':details[0]['message'] if details else 'Invalid request.', 'details':details}},status_code=422)
@@ -203,3 +204,23 @@ def capstone_reveal(request:graduation_models.RunRequest):
 @app.post('/api/tutorial/graduation-lab/diagnostic')
 def capstone_diagnostic(request:graduation_models.DiagnosticRequest):
     return compute(graduation_service.diagnostic,request)
+
+
+@app.post('/api/tutorial/timeline/compile')
+def timeline_compile(request:timeline_models.CompileRequest):
+    return compute(timeline_service.compile_source,request)
+
+
+@app.post('/api/tutorial/timeline/validate')
+def timeline_validate(request:timeline_models.Request):
+    return compute(timeline_service.validation,request.draft)
+
+
+@app.post('/api/tutorial/timeline/run')
+def timeline_run(request:timeline_models.Request):
+    return compute(timeline_service.run,request)
+
+
+@app.post('/api/tutorial/timeline/reveal')
+def timeline_reveal(request:timeline_models.Request):
+    return compute(timeline_service.reveal,request)

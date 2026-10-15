@@ -79,8 +79,8 @@ def parse(request: CompileRequest):
         if not isinstance(call.func, ast.Attribute) or not isinstance(call.func.value, ast.Name) or call.func.value.id != 'qc':
             raise SourceError('Use a supported qc method; dynamic calls and attribute chains are not allowed.', node)
         name = call.func.attr
-        expected = 2 if name in ('cx', 'rx', 'ry', 'rz') else 1
-        allowed = {'h','x','y','z','s','sdg','rx','ry','rz','cx','bit_flip','phase_flip','decoherence'}
+        expected = 2 if name in ('cx', 'cy', 'cz', 'rx', 'ry', 'rz') else 1
+        allowed = {'h','x','y','z','s','sdg','rx','ry','rz','cx','cy','cz','m','bit_flip','phase_flip','decoherence'}
         if name not in allowed or len(call.args) != expected:
             raise SourceError('Unknown method or wrong number of positional arguments.', node)
         keywords = {}

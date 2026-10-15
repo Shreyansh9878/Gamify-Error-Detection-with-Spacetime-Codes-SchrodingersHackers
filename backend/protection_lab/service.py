@@ -9,6 +9,8 @@ from ..learning.visualization import joint_frames
 
 def pieces(request):
     c=request.experiment;b=c.noise.boundary
+    if c.hardware is not None:
+        return [gate_instruction(g,'Base A') for g in ordered(c.operations) if g.name!='m'],[gate_instruction(g,'Base B') for g in ordered(c.operations) if g.name=='m']
     return [gate_instruction(g,'Base A') for g in ordered(c.operations) if g.column<b],[gate_instruction(g,'Base B') for g in ordered(c.operations) if g.column>=b]
 
 
@@ -17,13 +19,37 @@ def generated(request):
     a,b=pieces(request);noise=request.experiment.noise.model_dump(exclude_none=True)
     e=instruction('noise',[q],'Explicit noise boundary',noise=noise,sourceId='noise')
     errors=[dict(e,qubits=[target]) for target in request.experiment.noise.targetQubits or [q]] if request.experiment.noise.enabled else []
+    hardware=request.experiment.hardware
+    if hardware is not None:
+        from ..timeline_lab.service import hardware_items
+        errors=hardware_items(hardware,range(n))
     baseline=a+errors+b
+    def noisy(items,width,scale=1):
+        if hardware is None:return items
+        # Base gates in a simultaneous column form one layer; generated gates
+        # each take one layer. The explicit storage interval is one extra cycle.
+        from ..timeline_lab.service import hardware_items
+        from itertools import groupby
+        output=[];measured=set()
+        def layer_key(pair):
+            i,item=pair
+            return (item['stage'],item['column']) if 'column' in item else ('generated',i)
+        for _,pairs in groupby(enumerate(items),layer_key):
+            layer=[i for _,i in pairs];output.extend(layer)
+            measured.update(i['qubits'][0] for i in layer if i['name']=='measure')
+            if any(i['name'] not in ('noise','measure') for i in layer):
+                output.extend(hardware_items(hardware,[q for q in range(width) if q not in measured],scale))
+        return output
+    baseline=noisy(baseline,n)
     if request.technique=='mitigation':
         variants={f'Scale {scale}':a+[dict(item,stage=f'Noise copy {j+1}/{scale}') for j in range(scale) for item in errors]+b for scale in (1,3,5)}
+        if hardware is not None:variants={label:noisy(items,n,scale) for scale,(label,items) in zip((1,3,5),variants.items())}
         return variants,n,0,baseline
     if request.technique=='detection':
         tap=lambda:instruction('c'+request.detectionPauli.lower(),[n,q],'Controlled Pauli check')
+        if hardware is not None:errors=hardware_items(hardware,range(n+1))
         items=a+[instruction('h',[n],'Prepare ancilla'),tap()]+errors+[tap(),instruction('h',[n],'Read syndrome'),instruction('measure',[n],'Syndrome readout',bit=0)]+b
+        items=noisy(items,n+1)
         return {'Detection':items},n+1,1,baseline
     r1,r2,s0,s1=n,n+1,n+2,n+3
     encode=[instruction('cx',[q,r1],'Encode'),instruction('cx',[q,r2],'Encode')]
@@ -33,7 +59,9 @@ def generated(request):
     recovery=[instruction('recovery',[wire],'Conditional recovery',condition=condition) for condition,wire in ((1,q),(3,r1),(2,r2))]
     decode=[instruction('cx',[q,r2],'Decode'),instruction('cx',[q,r1],'Decode')]
     physical=([dict(e,qubits=[j],stage='Independent physical noise') for j in (q,r1,r2)] if request.experiment.noise.enabled and q in (request.experiment.noise.targetQubits or [q]) else [])+[item for item in errors if item['qubits']!=[q]]
+    if hardware is not None:physical=hardware_items(hardware,range(n+4))
     items=a+encode+rotate+physical+rotate+parity+readout+recovery+decode+b
+    items=noisy(items,n+4)
     return {'Correction':items},n+4,2,baseline
 
 
@@ -43,6 +71,8 @@ def preview(request):
     processing={'detection':'Keep only syndrome 0; normalize by the number of retained shots. No recovery.',
         'mitigation':'Compose the actual local channel at factors 1, 3, 5; fit measured expectations. No repaired state.',
         'correction':'Measure (s0,s1); recover X on the decoder hypothesis; decode and retain all shots.'}[request.technique]
+    if request.experiment.hardware is not None:
+        processing+=' Hardware channels act after every occupied layer on all live wires, including helpers, plus one common storage interval. The detection/correction shell protects storage of the prepared output; errors occurring before encoding/check opening are not retroactively repaired.'
     extra=''
     if request.technique=='detection':extra="\nkept = {bits.split()[0]: count for bits, count in results['Detection'].items() if int(bits.split()[-1], 2)==0}\nprint('kept data counts', kept)\n"
     elif request.technique=='mitigation':
@@ -58,13 +88,22 @@ def preview(request):
 
 def correct(request,items):
     n=request.experiment.qubits;q=request.experiment.noise.targetQubit
-    split=next(i for i,v in enumerate(items) if v['name']=='measure')
+    split=next(i for i,v in enumerate(items) if v['name']=='measure' and not v.get('measureData'))
     state=evolve(items[:split],n+4)
     decoded=[];probabilities={}
     for key,(p,branch) in branches(state,n+2,2).items():
         probabilities[key]=p
         if branch is None:continue
         condition=int(key,2);recover={1:q,3:n,2:n+1}.get(condition)
+        if request.experiment.hardware is not None:
+            # Each branch follows the actual displayed recovery/decode schedule,
+            # including hardware noise after conditional recovery and decode.
+            for item in items[split:]:
+                if item['name']=='recovery':
+                    if item['condition']==condition:branch=evolve([instruction('x',item['qubits'],'Conditional recovery')],n+2,branch)
+                elif all(w<n+2 for w in item['qubits']):branch=evolve([item],n+2,branch)
+            branch=partial_trace(branch,[n,n+1]);decoded.append(p*DensityMatrix.from_label(key).tensor(branch).data)
+            continue
         if recover is not None:branch=evolve([instruction('x',[recover],'Recovery')],n+2,branch)
         branch=evolve([instruction('cx',[q,n+1],'Decode'),instruction('cx',[q,n],'Decode')],n+2,branch)
         branch=partial_trace(branch,[n,n+1]);branch=evolve(pieces(request)[1],n,branch)
@@ -80,6 +119,7 @@ def run(request):
     ideal_metrics=stats(ideal,n,obs,0,seed,ideal);baseline=stats(base,n,obs,N,seed,ideal)
     result={'runId':str(uuid4()),'experiment':c.model_dump(exclude_none=True),'contentVersion':'protection-basics-v1','engineVersion':'protection-lab-1.0.0','experimentFingerprint':fingerprint(c.model_dump()),'settingsFingerprint':fingerprint(request.model_dump()),'technique':request.technique,'status':'success',
         'ideal':ideal_metrics,'baseline':baseline,'warnings':[],'seed':seed,'shotsPerVariant':N,'observable':obs.model_dump(),**preview(request)}
+    if c.hardware is not None:result['warnings'].append('This output-storage experiment includes noisy preparation, noisy helper gates and noisy recovery. A method can worsen the result; no improvement is guaranteed. Channels are independent across live wires after each occupied layer, plus one storage interval.')
     if request.technique=='mitigation':
         weights=[13/12,1/3,-5/12] if request.zneFit=='linear' else [15/8,-5/4,3/8]
         scales=[]

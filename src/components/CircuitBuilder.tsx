@@ -105,9 +105,7 @@ export function CircuitBuilder({
               />
             ))}
           {Array.from({ length: l.slots }, (_, c) => (
-            <small className="column-label" key={c}>
-              t{c}
-            </small>
+            <small className="column-label" key={c} aria-hidden="true" />
           ))}
           {Array.from({ length: l.qubits }, (_, q) => (
             <div className="wire-row" key={q}>

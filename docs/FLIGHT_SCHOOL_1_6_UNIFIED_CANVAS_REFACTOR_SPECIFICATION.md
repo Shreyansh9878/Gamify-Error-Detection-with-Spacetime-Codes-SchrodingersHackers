@@ -1,5 +1,7 @@
 # Flight Schools 1–6: Unified Canvas, QSphere and Interaction Refactor
 
+> Superseded in part by the user's subsequent ordinary-gate/hardware-noise directive. The implemented current behavior is documented in [FLIGHT_SCHOOL_ORDINARY_GATE_TIMELINE_IMPLEMENTATION.md](FLIGHT_SCHOOL_ORDINARY_GATE_TIMELINE_IMPLEMENTATION.md). In particular, zone headers, abstract P/P′ tiles, fixed helper shells, and spatial noise in Schools 2/6 no longer apply.
+
 **Revision:** 15 October 2026.  
 **Scope:** All six Flight School lessons, their tutorial physics/visualization APIs, state models, accessibility and regression tests. Main-mission gameplay, leaderboard work and deployment are outside scope.
 

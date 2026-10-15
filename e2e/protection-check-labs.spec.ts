@@ -84,11 +84,28 @@ test("protection methods repeat freely, source errors are atomic, and resampling
   const response = await resampled,
     payload = await response.json();
   expect(response.request().postDataJSON().sampleSeed).toBe(2027);
-  expect(payload.output.fidelity).toBeCloseTo(1);
+  expect(payload.output.fidelity).toBeGreaterThan(0);
+  expect(payload.output.fidelity).toBeLessThan(1);
   await expect(
     page.getByText("✓ Qiskit result", { exact: true }),
   ).toBeVisible();
   await screenshot(page, "flight-school-2", info.project.name === "mobile");
+  await pane(page, "Theory");
+  await page.getByRole("button", { name: "Examples", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Load example: Hidden phase", exact: true })
+    .click();
+  await pane(page, "Experiment");
+  await expect(
+    page.getByLabel("Phase-flip probability", { exact: true }),
+  ).toHaveValue("0.04");
+  await expect(
+    page.getByLabel("Bit-flip probability", { exact: true }),
+  ).toHaveValue("0");
+  await expect(page.locator(".uc-node")).toHaveCount(1); // Only the authored H; helpers stay in the read-only method view.
+  await expect(
+    page.getByRole("button", { name: "Drag Bit-flip channel", exact: true }),
+  ).toHaveCount(0);
   const code = await source(page),
     valid = await code.inputValue();
   await code.fill(`${valid}\nimport os`);
@@ -104,7 +121,9 @@ test("protection methods repeat freely, source errors are atomic, and resampling
   ).toHaveValue(`${valid}\nimport os`);
   const saved = await page.evaluate(() =>
     JSON.parse(
-      localStorage.getItem("quantum-shield.flight-school-2.progress.v1")!,
+      localStorage.getItem(
+        "quantum-shield.flight-school-2.progress.hardware.v2",
+      )!,
     ),
   );
   expect(saved.tried).toEqual({
@@ -121,61 +140,57 @@ test("protection methods repeat freely, source errors are atomic, and resampling
   ).toBe(700);
 });
 
-test("guided mismatch is diagnostic; sandbox coverage and knowledge check survive reload", async ({
+test("ordinary S checks diagnose faults; blank sandbox, source, and knowledge evidence survive reload", async ({
   page,
 }, info) => {
-  test.setTimeout(60000);
   await openLesson(page, 2);
   await buildGuided(page);
-  await drop(page, "Drag Phase flip · Z error", "fault3@q0");
-  await runCheck(page);
+  await pane(page, "Experiment");
+  await drop(page, "Drag Phase flip · Z error", "c3@q0");
+  const r = await runCheck(page);
+  expect(r.discardedShots).toBe(1024);
+  expect(r.output).toBeNull();
+  await screenshot(page, "timeline-school-3", info.project.name === "mobile");
+  await pane(page, "Theory");
+  await page
+    .getByRole("button", { name: "Knowledge Check", exact: true })
+    .click();
+  await page.getByLabel("X", { exact: true }).check();
   await expect(
-    page
-      .locator(".ql-comparison-metrics span")
-      .filter({ hasText: "Experiment flag" }),
-  ).toHaveText("Experiment flag 100.00%");
-  await screenshot(page, "flight-school-3", info.project.name === "mobile");
+    page.getByRole("button", {
+      name: "Continue to next Flight School →",
+      exact: true,
+    }),
+  ).toBeDisabled();
+  await passCheckQuiz(page);
   await pane(page, "Experiment");
   await page
-    .getByRole("button", {
-      name: "Sweep single X/Z fault coverage",
-      exact: true,
-    })
+    .getByRole("button", { name: "Blank sandbox", exact: true })
     .click();
-  await expect(
-    page.getByText(/tested fault locations · not a hardware score/),
-  ).toBeVisible();
-  await pane(page, "Theory");
+  await expect(page.locator(".uc-node")).toHaveCount(0);
   await page
-    .getByRole("button", { name: "Knowledge Check", exact: true })
-    .click();
-  await page.getByLabel("A) P′ = X", { exact: true }).check();
-  await page.getByRole("button", { name: "Check answer", exact: true }).click();
-  await expect(
-    page.getByRole("heading", {
-      name: "Try again — evaluate S X S†",
-      exact: true,
-    }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("heading", {
-      name: "Flight School 3 complete",
-      exact: true,
-    }),
-  ).toHaveCount(0);
-  await passCheckQuiz(page);
+    .getByLabel("Number of data qubits", { exact: true })
+    .selectOption("5");
+  await page
+    .getByLabel("Number of ancillas", { exact: true })
+    .selectOption("2");
+  await drop(page, "Drag H", "c0@q4");
   await page.reload();
+  await pane(page, "Experiment");
+  await page
+    .getByRole("button", { name: "Blank sandbox", exact: true })
+    .click();
+  await expect(
+    page.getByLabel("Number of data qubits", { exact: true }),
+  ).toHaveValue("5");
+  await expect(
+    page.getByRole("button", { name: "Drag H on q4 column 1", exact: true }),
+  ).toBeAttached();
   await pane(page, "Theory");
   await page
     .getByRole("button", { name: "Knowledge Check", exact: true })
     .click();
-  await expect(page.getByLabel("B) P′ = Y", { exact: true })).toBeChecked();
-  await expect(
-    page.getByRole("heading", {
-      name: "Flight School 3 complete",
-      exact: true,
-    }),
-  ).toBeVisible();
+  await expect(page.getByLabel("Y", { exact: true })).toBeChecked();
 });
 
 test("late simulation responses cannot certify changed protection experiments", async ({
@@ -205,7 +220,9 @@ test("late simulation responses cannot certify changed protection experiments", 
   ).toBeVisible();
   const saved = await page.evaluate(() =>
     JSON.parse(
-      localStorage.getItem("quantum-shield.flight-school-2.progress.v1")!,
+      localStorage.getItem(
+        "quantum-shield.flight-school-2.progress.hardware.v2",
+      )!,
     ),
   );
   expect(saved.tried.detection).toBe(false);

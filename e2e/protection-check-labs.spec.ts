@@ -48,7 +48,7 @@ async function screenshot(page: Page, name: string, mobile: boolean) {
         el.scrollTop = 0;
       });
   await page.screenshot({
-    path: `docs/screenshots/${name}-${mobile ? "mobile" : "desktop"}.png`,
+    path: `artifacts/screenshots/${name}-${mobile ? "mobile" : "desktop"}.png`,
   });
 }
 

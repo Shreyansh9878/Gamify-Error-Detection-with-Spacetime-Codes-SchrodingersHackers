@@ -72,7 +72,7 @@ for (let id = 1; id <= 10; id++)
       page.getByText("Operator trajectory", { exact: true }),
     ).toHaveCount(0);
     await page.screenshot({
-      path: `docs/screenshots/main-${id}-${test.info().project.name}.png`,
+      path: `artifacts/screenshots/main-${id}-${test.info().project.name}.png`,
     });
     await page
       .getByRole("button", { name: "Mission control", exact: true })

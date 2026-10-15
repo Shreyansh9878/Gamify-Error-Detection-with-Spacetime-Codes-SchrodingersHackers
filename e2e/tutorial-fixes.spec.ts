@@ -78,7 +78,7 @@ test("parameter-only inspector edits theta; dagger palettes, static Qiskit figur
   expect(dimensions.dx).toBeGreaterThan(0);
   expect(dimensions.dy).toBeLessThan(12);
   await page.screenshot({
-    path: `docs/screenshots/tutorial-parameter-mcq-${info.project.name}.png`,
+    path: `artifacts/screenshots/tutorial-parameter-mcq-${info.project.name}.png`,
   });
 });
 test("hardware sliders accept full endpoints and capstone hint highlights the hotspot", async ({

@@ -577,21 +577,6 @@
   flex-wrap: wrap;
   gap: 12px;
 }
-.uc-zones {
-  display: flex;
-  gap: 1px;
-  border-block: 1px solid #385361;
-  font-size: 10px;
-}
-.uc-zones span {
-  flex: 1;
-  padding: 9px 6px;
-  background: #1c3440;
-}
-.uc-zones span:nth-child(2),
-.uc-zones span:nth-child(4) {
-  background: #1b3c37;
-}
 .uc-scroll {
   overflow-x: auto;
   max-width: 100%;
@@ -878,12 +863,6 @@
   .uc-palette {
     padding: 10px 8px;
   }
-  .uc-zones {
-    flex-wrap: wrap;
-  }
-  .uc-zones span {
-    flex-basis: 45%;
-  }
   .uc-tools button {
     min-height: 44px;
   }
@@ -912,13 +891,6 @@
   }
   .uc-palette p span {
     display: none;
-  }
-  .uc-zones {
-    flex-wrap: nowrap;
-  }
-  .uc-zones span {
-    flex-basis: 25%;
-    font-size: 8px;
   }
   .uc-boundary > span {
     font-size: 9px;
@@ -989,11 +961,6 @@
     grid-template-columns: 1fr;
   }
 }
-
-.uc-zones span.uc-zone-inactive {
-  background: #202e37;
-  color: #8095a1;
-}
 .uc-legend-note {
   margin: 0;
   padding: 6px 10px;
@@ -1003,36 +970,155 @@
 }
 
 /* Briefing prose only: diagrams, equations, tables and code retain their own alignment. */
-.nw-theory p, .nw-theory li { text-align: justify; }
-.nw-theory h1, .nw-theory h2, .nw-theory h3, .nw-theory pre, .nw-theory code, .nw-theory table { text-align: left; }
-.noise-workspace .ql-answer { display:flex; flex-direction:row; align-items:flex-start; gap:10px; margin:10px 0; line-height:1.55; }
-.noise-workspace .ql-answer input[type="radio"] { width:16px; height:16px; flex:0 0 16px; margin: .25em 0 0; padding:0; }
-.noise-workspace .ql-answer span { flex:1; min-width:0; }
-.tutorial-circuit-figure { margin:18px 0; overflow-x:auto; text-align:center; }
-.tutorial-circuit-figure img { width:100%; height:auto; min-width:280px; display:block; }
-.tutorial-circuit-figure figcaption { font-size:12px; color:#b5cad6; margin-top:8px; text-align:center; }
-.uc-angle-inspector { padding:16px; margin:12px; border:1px solid #8de0c4; border-radius:8px; }
-.uc-angle-inspector label { display:flex; gap:10px; align-items:center; }
-.uc-angle-inspector input { min-width:0; max-width:220px; padding:8px; }
-.uc-angle-inspector button { padding:8px 12px; margin:6px 6px 0 0; }
-.capstone-hint { padding:12px; margin:14px 0; border-left:3px solid #f3be69; background:#332d1e; }
+.nw-theory p,
+.nw-theory li {
+  text-align: justify;
+}
+.nw-theory h1,
+.nw-theory h2,
+.nw-theory h3,
+.nw-theory pre,
+.nw-theory code,
+.nw-theory table {
+  text-align: left;
+}
+.noise-workspace .ql-answer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 10px 0;
+  line-height: 1.55;
+}
+.noise-workspace .ql-answer input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  margin: 0.25em 0 0;
+  padding: 0;
+}
+.noise-workspace .ql-answer span {
+  flex: 1;
+  min-width: 0;
+}
+.tutorial-circuit-figure {
+  margin: 18px 0;
+  overflow-x: auto;
+  text-align: center;
+}
+.tutorial-circuit-figure img {
+  width: 100%;
+  height: auto;
+  min-width: 280px;
+  display: block;
+}
+.tutorial-circuit-figure figcaption {
+  font-size: 12px;
+  color: #b5cad6;
+  margin-top: 8px;
+  text-align: center;
+}
+.uc-angle-inspector {
+  padding: 16px;
+  margin: 12px;
+  border: 1px solid #8de0c4;
+  border-radius: 8px;
+}
+.uc-angle-inspector label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.uc-angle-inspector input {
+  min-width: 0;
+  max-width: 220px;
+  padding: 8px;
+}
+.uc-angle-inspector button {
+  padding: 8px 12px;
+  margin: 6px 6px 0 0;
+}
+.capstone-hint {
+  padding: 12px;
+  margin: 14px 0;
+  border-left: 3px solid #f3be69;
+  background: #332d1e;
+}
 
-.uc-node-hotspot { border:2px solid #efb568; box-shadow:0 0 14px #eea95166; }
+.uc-node-hotspot {
+  border: 2px solid #efb568;
+  box-shadow: 0 0 14px #eea95166;
+}
 
 /* Main missions share the Flight School workspace and canvas. */
-.mission-briefing { padding:24px; }
-.mission-experiment { padding:12px; }
-.mission-columns { display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:8px 0; font-size:12px; }
-.mission-columns select { max-width:150px; padding:6px; }
-.mission-columns button { padding:7px 10px; border:1px solid #456470; border-radius:6px; }
-.mission-validation { padding:8px; font-size:12px; color:#bfd5df; }
-.mission-outcome { padding:24px; }
-.mission-combined { font-size:38px; font-variant-numeric:tabular-nums; display:inline-block; margin:12px 20px 8px 0; }
-.mission-pass { color:#8de0c4; font-weight:700; }
-.mission-fail { color:#f6ab9d; font-weight:700; }
+.mission-briefing {
+  padding: 24px;
+}
+.mission-experiment {
+  padding: 12px;
+}
+.mission-columns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 0;
+  font-size: 12px;
+}
+.mission-columns select {
+  max-width: 150px;
+  padding: 6px;
+}
+.mission-columns button {
+  padding: 7px 10px;
+  border: 1px solid #456470;
+  border-radius: 6px;
+}
+.mission-validation {
+  padding: 8px;
+  font-size: 12px;
+  color: #bfd5df;
+}
+.mission-outcome {
+  padding: 24px;
+}
+.mission-combined {
+  font-size: 38px;
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  margin: 12px 20px 8px 0;
+}
+.mission-pass {
+  color: #8de0c4;
+  font-weight: 700;
+}
+.mission-fail {
+  color: #f6ab9d;
+  font-weight: 700;
+}
 
-.uc-compact .uc-wire-line, .uc-compact .uc-wire-label, .uc-compact .uc-cell { height:38px; }
-.uc-compact .uc-wire-line { background:linear-gradient(transparent 18px,#43616c 18px,#43616c 20px,transparent 20px); }
-.uc-compact .uc-node { top:4px; }
-.mission-experiment .uc-palette p { display:none; }
-.mission-columns label { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.uc-compact .uc-wire-line,
+.uc-compact .uc-wire-label,
+.uc-compact .uc-cell {
+  height: 38px;
+}
+.uc-compact .uc-wire-line {
+  background: linear-gradient(
+    transparent 18px,
+    #43616c 18px,
+    #43616c 20px,
+    transparent 20px
+  );
+}
+.uc-compact .uc-node {
+  top: 4px;
+}
+.mission-experiment .uc-palette p {
+  display: none;
+}
+.mission-columns label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}

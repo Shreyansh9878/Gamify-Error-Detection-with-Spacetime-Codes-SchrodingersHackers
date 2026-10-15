@@ -79,3 +79,7 @@ pnpm exec playwright test
 ```
 
 `--calibrate` is the deliberate fixture-update command; review changes to references and targets. Temporary optimizer caches are ignored and disposable. The default verifier does not trust precomputed outcomes: it validates each stored draft, regenerates assisted closings, simulates it uncached three times, checks all pass/fail inequalities, round-trip spread and strict depth progression. `--optimize` additionally reruns the entire bounded search. The browser suite enters all ten missions, applies the reference through the same source editor a player uses, checks green connectors and locked closings, runs the real API, verifies passing outcomes and persistence, and exercises insertion/removal plus Dustbin interaction. Existing suites exercise all six tutorials on desktop and mobile.
+
+## Completed validation
+
+Post-cleanup verification passed 193 Python tests, 33 frontend tests and 54 production browser tests, plus TypeScript, the production build and all ten reference certificates. The reference-family optima were independently recomputed with the finalized player simulator before cleanup. The minimum reasonable-solution margin is 0.0570658; all uncached repeated scores have spread 0. Targets span 61.99–75.50% of the baseline-to-family-optimum improvement.

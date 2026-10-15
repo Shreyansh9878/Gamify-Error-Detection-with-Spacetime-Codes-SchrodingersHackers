@@ -25,9 +25,6 @@ const initial: PaletteConfig = {
   t2Us: 80,
   scope: "wire",
   targets: [],
-  ancilla: 0,
-  pauli: "X",
-  sign: 1,
 };
 export function UnifiedCircuitCanvas({
   model,
@@ -375,56 +372,6 @@ export function UnifiedCircuitCanvas({
                         setConfig({ ...config, angleRadians: +e.target.value })
                       }
                     />
-                  </label>
-                </>
-              )}
-              {tools.some((t) => ["P", "Pprime", "check"].includes(t.id)) && (
-                <>
-                  <label>
-                    Pauli for P / P′
-                    <select
-                      aria-label="Palette check Pauli"
-                      value={config.pauli}
-                      onChange={(e) =>
-                        setConfig({
-                          ...config,
-                          pauli: e.target.value as "X" | "Y" | "Z",
-                        })
-                      }
-                    >
-                      <option>X</option>
-                      <option>Y</option>
-                      <option>Z</option>
-                    </select>
-                  </label>
-                  <label>
-                    Closing sign
-                    <select
-                      aria-label="Palette closing sign"
-                      value={config.sign}
-                      onChange={(e) =>
-                        setConfig({
-                          ...config,
-                          sign: +e.target.value as 1 | -1,
-                        })
-                      }
-                    >
-                      <option value="1">+ no compensation</option>
-                      <option value="-1">− add ancilla Z</option>
-                    </select>
-                  </label>
-                  <label>
-                    Check rail
-                    <select
-                      aria-label="Palette check rail"
-                      value={config.ancilla}
-                      onChange={(e) =>
-                        setConfig({ ...config, ancilla: +e.target.value })
-                      }
-                    >
-                      <option value="0">a0</option>
-                      <option value="1">a1</option>
-                    </select>
                   </label>
                 </>
               )}

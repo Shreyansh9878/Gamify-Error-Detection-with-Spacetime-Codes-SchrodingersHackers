@@ -6,7 +6,6 @@ from uuid import uuid4
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-from .levels import LEVELS
 from .models import RunRequest, ResearchRequest, TutorialRequest, FaultRequest
 from .engine import evaluate, validate_checks, trace_fault, VERSION
 from .research import run_research

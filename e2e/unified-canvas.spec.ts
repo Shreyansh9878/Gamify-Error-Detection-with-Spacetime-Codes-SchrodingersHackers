@@ -116,7 +116,7 @@ test("pointer/touch and keyboard drags, click inactivity, single-item trash and 
   await drop(page, "Drag CX on q1 Column 1", "trash");
   await expect(page.locator(".uc-node")).toHaveCount(1);
   await page.screenshot({
-    path: `docs/screenshots/unified-trash-${info.project.name}.png`,
+    path: `artifacts/screenshots/unified-trash-${info.project.name}.png`,
   });
 });
 
@@ -162,7 +162,7 @@ test("Bell phase QSphere, mixed populations, all-five wait and per-target trash 
         state.getBoundingClientRect().top - el.getBoundingClientRect().top - 14;
   });
   await page.screenshot({
-    path: `docs/screenshots/unified-bell-${info.project.name}.png`,
+    path: `artifacts/screenshots/unified-bell-${info.project.name}.png`,
   });
   await pane(page, "Experiment");
   await page
@@ -194,7 +194,7 @@ test("Bell phase QSphere, mixed populations, all-five wait and per-target trash 
     page.getByRole("img", { name: /QSphere, 5 displayed wires/ }),
   ).toHaveCount(2);
   await page.screenshot({
-    path: `docs/screenshots/unified-mixed-${info.project.name}.png`,
+    path: `artifacts/screenshots/unified-mixed-${info.project.name}.png`,
   });
   await page.reload();
   await pane(page, "Experiment");
@@ -219,7 +219,7 @@ test("last three schools use one canvas, drag multiwire/T/capstone checks, revea
     ),
   ).toBe("complete");
   await page.screenshot({
-    path: `docs/screenshots/unified-graduated-${info.project.name}.png`,
+    path: `artifacts/screenshots/unified-graduated-${info.project.name}.png`,
   });
 });
 
@@ -262,7 +262,7 @@ test("gold T rejects X/Y, accepts Z, and sandbox is truly blank", async ({
     0,
   );
   await page.screenshot({
-    path: `docs/screenshots/timeline-t-sandbox-${info.project.name}.png`,
+    path: `artifacts/screenshots/timeline-t-sandbox-${info.project.name}.png`,
   });
 });
 

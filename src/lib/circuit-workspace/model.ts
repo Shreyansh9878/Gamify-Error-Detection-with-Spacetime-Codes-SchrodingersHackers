@@ -4,16 +4,7 @@ export type Wire = {
   kind: "data" | "ancilla" | "redundancy";
   index: number;
 };
-export type Stage =
-  | "prep"
-  | "payload"
-  | "open"
-  | "close"
-  | "openH"
-  | "finalH"
-  | "measure"
-  | "fault"
-  | "generated";
+export type Stage = "prep" | "payload" | "generated";
 export type Column = {
   key: string;
   label: string;
@@ -21,8 +12,6 @@ export type Column = {
   region: "preparation" | "payload";
   boundary: number;
   stage: Stage;
-  checkId?: string;
-  ancilla?: number;
 };
 export type Node = {
   id: string;
@@ -34,18 +23,15 @@ export type Node = {
   name?: string;
   angleRadians?: number;
   part?: number;
-  checkId?: string;
   detail?: string;
   tone?: "valid" | "invalid" | "hotspot";
 };
 export type Tool = {
   id: string;
   label: string;
-  kind: "gate" | "noise" | "check" | "stage";
+  kind: "gate" | "noise";
   name?: string;
   twoWire?: boolean;
-  stage?: Stage;
-  ancilla?: number;
 };
 export type DropTarget = Column & { wire: Wire };
 export type PaletteConfig = {
@@ -55,13 +41,9 @@ export type PaletteConfig = {
   t2Us: number;
   scope: "wire" | "selected" | "all";
   targets: string[];
-  ancilla: number;
-  pauli: "X" | "Y" | "Z";
-  sign: 1 | -1;
 };
 export type CanvasModel = {
   compactChecks?: boolean;
-  inactiveZones?: number[];
   legendNote?: string;
   wires: Wire[];
   columns: Column[];

@@ -33,11 +33,11 @@ export async function completeAdvancedSchools(page: Page) {
           12;
     });
     await page.screenshot({
-      path: "docs/screenshots/timeline-canvas-desktop.png",
+      path: "artifacts/screenshots/timeline-canvas-desktop.png",
     });
   }
   await page.screenshot({
-    path: `docs/screenshots/timeline-school-4-${test.info().project.name}.png`,
+    path: `artifacts/screenshots/timeline-school-4-${test.info().project.name}.png`,
   });
   await pane(page, "Theory");
   await page
@@ -65,7 +65,7 @@ export async function completeAdvancedSchools(page: Page) {
   await drop(page, "Drag M", "c6@a0");
   await runCheck(page);
   await page.screenshot({
-    path: `docs/screenshots/timeline-school-5-${test.info().project.name}.png`,
+    path: `artifacts/screenshots/timeline-school-5-${test.info().project.name}.png`,
   });
   await pane(page, "Theory");
   await page
@@ -96,7 +96,7 @@ export async function completeAdvancedSchools(page: Page) {
     .getByRole("button", { name: "I reviewed the comparison", exact: true })
     .click();
   await page.screenshot({
-    path: `docs/screenshots/timeline-school-6-${test.info().project.name}.png`,
+    path: `artifacts/screenshots/timeline-school-6-${test.info().project.name}.png`,
   });
   await page
     .getByRole("button", {

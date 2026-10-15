@@ -88,7 +88,7 @@ test("three error models, basis comparisons, source editing, history, resize and
         el.scrollTop = 0;
       });
     await page.screenshot({
-      path: "docs/screenshots/noise-lab-preview-desktop.png",
+      path: "artifacts/screenshots/noise-lab-preview-desktop.png",
     });
     for (let i = 0; i < 8; i++) await split.press("ArrowDown");
     await page.setViewportSize(viewport);
@@ -103,7 +103,7 @@ test("three error models, basis comparisons, source editing, history, resize and
   await run(page);
   await expect(page.getByText(/excited population decreased/)).toBeVisible();
   await page.screenshot({
-    path: `docs/screenshots/noise-lab-workbench-${info.project.name}.png`,
+    path: `artifacts/screenshots/noise-lab-workbench-${info.project.name}.png`,
   });
   await pane(page, "Experiment");
   await page.getByRole("button", { name: "Code", exact: true }).click();
@@ -230,7 +230,7 @@ test("three error models, basis comparisons, source editing, history, resize and
     ),
   ).toBe(true);
   await page.screenshot({
-    path: `docs/screenshots/noise-lab-${info.project.name}.png`,
+    path: `artifacts/screenshots/noise-lab-${info.project.name}.png`,
   });
 });
 

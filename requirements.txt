@@ -1,7 +1,7 @@
 qiskit>=2.1.2,<3
-qiskit-aer>=0.17.1
-qiskit-paulice>=0.2.0
-numpy>=1.26
-rich>=13.0
-pymupdf>=1.28
-
+qiskit-aer>=0.17.1,<1
+qiskit-paulice>=0.2.0,<1
+numpy>=1.26,<3
+fastapi>=0.115,<1
+uvicorn>=0.34,<1
+pydantic>=2.10,<3

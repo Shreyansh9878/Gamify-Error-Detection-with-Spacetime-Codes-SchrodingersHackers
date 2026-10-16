@@ -52,7 +52,8 @@ def calibrate():
             best=ordered[0];maximum=value(best,budget)
             position=(target-baseline['fidelity'])/(maximum-baseline['fidelity'])
             plausible=[c for c in ordered if target+.030001<=value(c,budget)<maximum-1e-8]
-            if .60<=position<=.80 and plausible:
+            # Preserve the existing third-star rule (target + 0.05).
+            if .60<=position<=.80 and plausible and maximum>=target+.05:
                 reasonable=min(plausible,key=lambda c:(sum(g['name'] in ('cx','cy','cz') for g in c['draft']['operations']),abs(value(c,budget)-target-.05)))
                 selected=budget,best,reasonable
                 break
@@ -77,7 +78,7 @@ def calibrate():
         rows.append(row)
         print(f'{number}: budget={budget:.2f} target={target:.2f} reasonable={row["reasonable"]:.6f} best={row["optimal"]:.6f}',flush=True)
     PATH.write_text(json.dumps(dict(protocol=PROTOCOL,score='Trusted Fidelity; backend.quantum_core.scoring.trusted_fidelity',
-        calibration='Noise unchanged. Highest two-decimal budget below 1 satisfying retention penalty and 60–80% target position; targets gently plateau.',
+        calibration='Noise unchanged. Highest two-decimal budget below 1 satisfying retention penalty, 60–80% target position, safe margins and the existing third-star threshold; targets gently plateau.',
         packages={name:version(name) for name in ('qiskit','qiskit-aer','qiskit-paulice','numpy')},levels=rows),indent=2)+'\n',encoding='utf-8')
 
 
@@ -86,6 +87,7 @@ def assert_target_validity(row,metrics):
     assert metrics['baseline']['fidelity']<t, 'Baseline must fail on fidelity itself.'
     assert row['baseline']<=t-.05 and row['everywhere']<=t-.05
     assert row['reasonable']>=t+.03 and row['optimal']>row['reasonable']
+    assert row['optimal']>=t+.05, 'The stored winner must reach the existing third-star threshold.'
     assert row['misplaced']<t
     assert .60<=(t-row['baseline'])/(row['optimal']-row['baseline'])<=.80
     # Retention contributes a real penalty; fidelity can also contribute.

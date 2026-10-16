@@ -1,7 +1,7 @@
 {
   "protocol": "main-missions-trusted-v3-all-wire",
   "score": "Trusted Fidelity; backend.quantum_core.scoring.trusted_fidelity",
-  "calibration": "Noise unchanged. Highest two-decimal budget below 1 satisfying retention penalty and 60\u201380% target position; targets gently plateau.",
+  "calibration": "Noise unchanged. Highest two-decimal budget below 1 satisfying retention penalty, 60\u201380% target position, safe margins and the existing third-star threshold; targets gently plateau.",
   "packages": {
     "qiskit": "2.5.2",
     "qiskit-aer": "0.17.2",
@@ -507,7 +507,7 @@
       "qubits": 3,
       "ancillas": 1,
       "tCount": 0,
-      "minimumKept": 0.98,
+      "minimumKept": 0.97,
       "target": 0.64,
       "spread": 0.0,
       "initialMinimumKept": 0.6,
@@ -531,7 +531,7 @@
           "fidelity": 0.4370084277046908,
           "retention": 0.9292397616967594,
           "correct_shot_yield": 0.4060856072197824,
-          "score": 0.41437306859161466,
+          "score": 0.4186449558966829,
           "addedAncillas": 1,
           "addedTwoQubit": 5,
           "addedDepth": 6
@@ -540,7 +540,7 @@
           "fidelity": 0.8193110857524656,
           "retention": 0.8203685005107728,
           "correct_shot_yield": 0.6721370068706034,
-          "score": 0.6858540886434729,
+          "score": 0.6929247493511376,
           "addedAncillas": 1,
           "addedTwoQubit": 2,
           "addedDepth": 2
@@ -549,7 +549,7 @@
           "fidelity": 0.8194288053407247,
           "retention": 0.8205287456518735,
           "correct_shot_yield": 0.6723648897972381,
-          "score": 0.6860866222420796,
+          "score": 0.6931596802033383,
           "addedAncillas": 1,
           "addedTwoQubit": 2,
           "addedDepth": 2
@@ -558,7 +558,7 @@
           "fidelity": 0.44869335075147454,
           "retention": 0.9736515985953141,
           "correct_shot_yield": 0.4368709982382612,
-          "score": 0.4457867328961849,
+          "score": 0.44869335075147454,
           "addedAncillas": 1,
           "addedTwoQubit": 2,
           "addedDepth": 3
@@ -567,7 +567,7 @@
           "fidelity": 0.9325889826562053,
           "retention": 0.4621584954815352,
           "correct_shot_yield": 0.43100392112704733,
-          "score": 0.4397999195173953,
+          "score": 0.4443339393062344,
           "addedAncillas": 1,
           "addedTwoQubit": 3,
           "addedDepth": 3
@@ -576,19 +576,19 @@
           "fidelity": 0.8018535347052178,
           "retention": 0.8057755156782813,
           "correct_shot_yield": 0.6461139454255496,
-          "score": 0.6592999443117852,
+          "score": 0.6660968509541748,
           "addedAncillas": 1,
           "addedTwoQubit": 3,
           "addedDepth": 5
         }
       },
       "baseline": 0.45594358412173425,
-      "everywhere": 0.41437306859161466,
-      "reasonable": 0.6858540886434729,
-      "optimal": 0.6860866222420796,
-      "misplaced": 0.4457867328961849,
-      "tooSmall": 0.4397999195173953,
-      "overchecked": 0.6592999443117852,
+      "everywhere": 0.4186449558966829,
+      "reasonable": 0.6929247493511376,
+      "optimal": 0.6931596802033383,
+      "misplaced": 0.44869335075147454,
+      "tooSmall": 0.4443339393062344,
+      "overchecked": 0.6660968509541748,
       "baselineDraft": {
         "version": 1,
         "levelId": 2,

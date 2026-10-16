@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "generator": "python scripts/cache_level_searches.py",
   "implementation": "backend.missions.reference.optimize",
-  "generatedAtUtc": "2026-10-16T12:38:03.338417+00:00",
-  "seconds": 401.5582005000033,
+  "generatedAtUtc": "2026-10-16T12:57:53.602800+00:00",
+  "seconds": 382.12158360000467,
   "seed": 2026,
   "signature": {
     "files": {
@@ -62,7 +62,7 @@
       "backend/timeline_lab/models.py": "f929e900b991f2a7ce84a7acc0b87bac21d48897b58e17fea4a81dbb6326567a",
       "backend/timeline_lab/service.py": "b64dc5d7189068b253a55abf19f296b5109df472c36588619458113148ea6261",
       "backend/tutorial.py": "70edd19f35a6fae0fb2a3b9cc86e2abd2b88ca7db1ba5ca3e9081997c18577f1",
-      "backend/missions/references.json": "c153177c516288ad1c5c8e3e81a218fc3a8232727d39a0ea6f8473b91453dd4b",
+      "backend/missions/references.json": "9ee9fe95bafe4359d40cd77c719c2a45b946dcffaa1b948bb28078620e0d0033",
       "backend/reference_solutions/capstone.json": "6d979d856752d63b9f77b5e38a7b7fca46395a296b2546cb296ede5354811b6f",
       "backend/reference_solutions/tutorials.json": "451475f2576ee39c7073922b0ba25e19dd2cee5d2ca5f350bf19f37283fcf0fd"
     },
@@ -77,7 +77,7 @@
   "results": [
     {
       "level": 1,
-      "seconds": 2.733850099990377,
+      "seconds": 2.4141885000281036,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -159,7 +159,7 @@
     },
     {
       "level": 2,
-      "seconds": 26.5732907000056,
+      "seconds": 13.349392000003718,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -167,7 +167,7 @@
           "label": "IXI",
           "start": 1,
           "end": 2,
-          "score": 0.6860866222420796,
+          "score": 0.6931596802033383,
           "fidelity": 0.8194288053407247,
           "retention": 0.8205287456518735,
           "correct_shot_yield": 0.6723648897972381,
@@ -241,7 +241,7 @@
     },
     {
       "level": 3,
-      "seconds": 23.012225100013893,
+      "seconds": 19.2193949999928,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -323,7 +323,7 @@
     },
     {
       "level": 4,
-      "seconds": 19.930973200011067,
+      "seconds": 19.209620000008726,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -395,7 +395,7 @@
     },
     {
       "level": 5,
-      "seconds": 21.739318699983414,
+      "seconds": 20.274627600010717,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -467,7 +467,7 @@
     },
     {
       "level": 6,
-      "seconds": 21.99124419997679,
+      "seconds": 21.90173079998931,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -539,7 +539,7 @@
     },
     {
       "level": 7,
-      "seconds": 23.24423690000549,
+      "seconds": 23.781015499989735,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -611,7 +611,7 @@
     },
     {
       "level": 8,
-      "seconds": 96.05978110001888,
+      "seconds": 95.35839199999464,
       "result": {
         "kind": "custom-t-pauli-search",
         "pauliceUsed": false,
@@ -683,7 +683,7 @@
     },
     {
       "level": 9,
-      "seconds": 84.25973530000192,
+      "seconds": 83.57492320000893,
       "result": {
         "kind": "custom-t-pauli-search",
         "pauliceUsed": false,
@@ -755,7 +755,7 @@
     },
     {
       "level": 10,
-      "seconds": 81.93042069999501,
+      "seconds": 82.94851359998574,
       "result": {
         "kind": "custom-t-pauli-search",
         "pauliceUsed": false,

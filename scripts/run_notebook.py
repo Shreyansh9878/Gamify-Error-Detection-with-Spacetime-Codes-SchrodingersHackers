@@ -25,6 +25,7 @@ def analysis_inputs():
     sources = [''.join(c['source']) for c in notebook['cells']]
     result = {'notebookSources': hashlib.sha256(json.dumps(sources).encode()).hexdigest()}
     for name in ('scripts/level_design_analysis.py', 'scripts/cache_level_searches.py', 'scripts/run_notebook.py',
+                 'scripts/validate_main_levels.py','scripts/validate_capstone.py','scripts/validate_t_scoring.py',
                  'notebooks/requirements.txt', 'notebooks/data/level_search_results.json'):
         result[name] = hashlib.sha256((ROOT / name).read_text(encoding='utf-8').encode('utf-8')).hexdigest()
     return result

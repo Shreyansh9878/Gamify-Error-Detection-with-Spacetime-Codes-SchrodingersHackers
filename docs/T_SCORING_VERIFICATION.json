@@ -45,11 +45,11 @@
       "invalidXYRejected": true,
       "smallTDensityDifference": 2.220446049250313e-16,
       "coldRunSeconds": [
-        0.18303210000158288,
-        0.1534185000055004,
-        0.16416210000170395
+        0.12078160000964999,
+        0.10586519999196753,
+        0.11171110000577755
       ],
-      "maxRunSeconds": 0.18303210000158288,
+      "maxRunSeconds": 0.12078160000964999,
       "interactiveTwoSecondGoalMet": true,
       "scoreSpread": 0.0
     },
@@ -66,11 +66,11 @@
       "invalidXYRejected": true,
       "smallTDensityDifference": 2.220446049250313e-16,
       "coldRunSeconds": [
-        0.20766049998928793,
-        0.1766207999899052,
-        0.1726716999837663
+        0.1299445999902673,
+        0.11821700001019053,
+        0.12444380001397803
       ],
-      "maxRunSeconds": 0.20766049998928793,
+      "maxRunSeconds": 0.1299445999902673,
       "interactiveTwoSecondGoalMet": true,
       "scoreSpread": 0.0
     },
@@ -87,11 +87,11 @@
       "invalidXYRejected": true,
       "smallTDensityDifference": 2.220446049250313e-16,
       "coldRunSeconds": [
-        0.18554469998343848,
-        0.19452910000109114,
-        0.20795410001301207
+        0.12093799997819588,
+        0.13802160002524033,
+        0.16784479998750612
       ],
-      "maxRunSeconds": 0.20795410001301207,
+      "maxRunSeconds": 0.16784479998750612,
       "interactiveTwoSecondGoalMet": true,
       "scoreSpread": 0.0
     }

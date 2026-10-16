@@ -15,7 +15,7 @@ from .models import Draft, Gate
 from .levels import get_level
 
 CP = ('cx', 'cy', 'cz')
-PROTOCOL = 'main-missions-exact-v2-all-wire'
+PROTOCOL = 'main-missions-trusted-v3-all-wire'
 
 
 from .simulation import exact_density, simulate
@@ -122,16 +122,17 @@ def _run(serialized):
         raise ValueError(next(c['message'] for c in v['checks'] if not c['valid']))
     metrics=simulate(l,v['operations']);score=metrics['score'];retention=metrics['retention']
     return dict(levelId=d.levelId,combinedScore=score,passed=bool(v['valid'] and score+1e-12>=l['targetScore']),
-                target=l['targetScore'],status='Target reached.' if v['valid'] and score+1e-12>=l['targetScore'] else
-                'Add a closed check.' if not v['hasChecks'] else 'Try a smaller window around the noisy crossing.',
+                target=l['targetScore'],minimumKept=l['minimumKept'],
+                status=(f'Kept {retention:.0%} of shots, below the {l["minimumKept"]:.0%} budget.'
+                        if retention<l['minimumKept'] else f'Fidelity {metrics["fidelity"] or 0:.2f} with {retention:.0%} kept.'),
                 configHash=fingerprint(dict(protocol=PROTOCOL,level=l,draft=d.model_dump())),
-                fidelity=metrics['fidelity'], retention=retention,
+                fidelity=metrics['fidelity'], retention=retention,correct_shot_yield=metrics['correct_shot_yield'],
                 protocol=PROTOCOL)
 
 
 def run(d):
-    # Do not expose tutorial telemetry on the mission API/UI.
-    return {k:v for k,v in _run(d.model_dump_json()).items() if k not in ('fidelity','retention')}
+    # The secondary research yield stays out of the compact player response.
+    return {k:v for k,v in _run(d.model_dump_json()).items() if k!='correct_shot_yield'}
 
 
 def generate(d):

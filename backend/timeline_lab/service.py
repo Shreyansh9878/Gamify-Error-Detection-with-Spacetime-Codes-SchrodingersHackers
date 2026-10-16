@@ -14,11 +14,12 @@ from ..learning.common import channel, instruction, evolve, stats, Observable, f
 from ..learning.visualization import state_visualization
 from .models import Draft, Request, Operation, fixed_payload, CompileRequest
 from ..quantum_core.noise import hardware_items
+from ..quantum_core.scoring import trusted_fidelity
+from .capstone_config import TARGET_SCORE as CAPSTONE_GOAL, MINIMUM_KEPT as CAPSTONE_MINIMUM_KEPT
 
 CP=('cx','cy','cz')
 FAULTS=('bit_flip','phase_flip','decoherence')
 PROTOCOL='timeline-hardware-layers-v3-two-data-one-helper'
-CAPSTONE_GOAL=.62
 HOTSPOT={'channel':'decoherence','timeUs':70.,'t1Us':100.,'t2Us':200.}
 CHECK_STRENGTH=.02
 
@@ -168,6 +169,10 @@ def evaluate(d,shots=1024,seed=2026,visuals=True):
     baseline_fidelity=min(1.,max(0.,float(state_fidelity(ideal,baseline))))
     threshold=max(CAPSTONE_GOAL,baseline_fidelity+.01) if d.lesson==6 else None
     metrics={'baselineScore':baseline_fidelity,'qualificationThreshold':threshold,'fidelity':f,'retention':r,'score':(f or 0)*r,'samplingOverhead':1/r if r>1e-12 else None}
+    if d.lesson==6:
+        metrics.update(score=trusted_fidelity(f,r,CAPSTONE_MINIMUM_KEPT),
+                       minimumKept=CAPSTONE_MINIMUM_KEPT,correct_shot_yield=(f or 0)*r,
+                       scoreVersion='trusted-fidelity-v1')
     if not visuals:return metrics
     sampled=joint.copy();sampled.seed(seed);raw=sampled.sample_counts(shots)
     all_counts={format(i,f'0{n}b'):0 for i in range(2**n)};kept_counts=all_counts.copy();syndromes={};kept=0
@@ -239,9 +244,7 @@ def compile_source(request):
         return {'draft':None,'diagnostics':[{'line':getattr(exc,'line',getattr(exc,'lineno',1)),'column':getattr(exc,'column',getattr(exc,'colno',1)),'message':str(exc)}]}
 
 
-@lru_cache(maxsize=8)
-def comparison(noise_json):
-    noise=json.loads(noise_json);best=None;count=0
+def reference_candidates(noise):
     # Exhaustive bounded reference family: one full-payload Pauli-product check.
     # Does not assert a global optimum across arbitrary shells/two-ancilla loops.
     for label in itertools.product('IXYZ',repeat=2):
@@ -254,8 +257,15 @@ def comparison(noise_json):
         tail=[Operation(id='fh',name='h',qubits=[2],column=13),Operation(id='m',name='m',qubits=[2],column=14)]
         if sign<0:tail.insert(0,Operation(id='sign',name='z',qubits=[2],column=12))
         d=Draft(lesson=6,dataQubits=2,ancillas=1,columns=15,hardware=noise,operations=[Operation(id='h',name='h',qubits=[2],column=0)]+opening+close+tail)
-        m=evaluate(d,visuals=False);count+=1
-        if best is None or m['score']>best['score']:best={**m,'draft':d.model_dump(),'openingPauli':''.join(reversed(label))}
+        yield {**evaluate(d,visuals=False),'draft':d.model_dump(),'openingPauli':''.join(reversed(label))}
+
+
+@lru_cache(maxsize=8)
+def comparison(noise_json):
+    noise=json.loads(noise_json)
+    candidates=list(reference_candidates(noise))
+    best=max(candidates,key=lambda candidate:candidate['score'])
+    count=len(candidates)
     return {'best':best,'candidates':count,'scope':'Exact maximum over 15 single-ancilla full-payload Pauli-product shells; fixed tap order and terminal readout. Arbitrary placements and multi-check circuits are outside this certificate.',
             'globalUpperBound':1.,'protocol':PROTOCOL,'physicsKey':fingerprint({'noise':noise,'protocol':PROTOCOL,'payload':[g.model_dump() for g in fixed_payload(6)],'referenceFamily':'15-full-window-fixed-order-v2'})}
 
@@ -280,7 +290,7 @@ def paulice_search(noise_json):
 def reveal(request):
     d=request.draft;player=run(request)
     if d.lesson!=6 or not player['validation']['valid'] or player['score']<player['qualificationThreshold']:
-        raise ValueError('First run a complete valid check with exact Fps × retention above both 0.62 and the unchecked baseline + 0.01.')
+        raise ValueError('First run a complete valid check with Trusted Fidelity above the target and the unchecked baseline + 0.01.')
     key=json.dumps(d.hardware.model_dump(),sort_keys=True)
     try:research=paulice_search(key)
     except Exception as error:research={'available':False,'message':f'Paulice search failed ({type(error).__name__}). Retry; qualification remains valid.'}

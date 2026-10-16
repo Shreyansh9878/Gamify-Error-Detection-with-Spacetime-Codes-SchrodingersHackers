@@ -39,13 +39,15 @@ def verify_tutorials():
                 repeats=[evaluate(d)['score'] for _ in range(3)]
                 assert max(repeats)-min(repeats)<1e-12
         results.append(dict(id=number,criteria=ref['criteria'],experimentValid=True,
-                            scoreMetric='F_ps * S_keep' if number==6 else 'No numeric score; completion requires experiment and learning evidence'))
+                            scoreMetric='Trusted Fidelity (explicit shot budget)' if number==6 else 'No numeric score; completion requires experiment and learning evidence'))
         print(f'Flight School {number}: stored experiment valid; completion exercised by full-progression browser test',flush=True)
     return results
 
 
 if __name__=='__main__':
     verify_tutorials()
+    from scripts.validate_capstone import verify as verify_capstone
+    verify_capstone()
     verify()
     from scripts.validate_t_scoring import verify_t_scoring
     verify_t_scoring()

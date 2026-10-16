@@ -62,11 +62,20 @@ def candidates(number):
                 yield label,start,end,d
 
 
+def scored_candidates(number):
+    """Evaluate reachable drafts once; retain both physical metrics for budgets."""
+    for label,start,end,draft in candidates(number):
+        result=_run(draft.model_dump_json())
+        yield dict(label=label,start=start,end=end,score=result['combinedScore'],
+                   fidelity=result['fidelity'],retention=result['retention'],
+                   correct_shot_yield=result['correct_shot_yield'],draft=draft.model_dump())
+
+
 def optimize(number):
     best=None; broadest=None;count=0
-    for label,start,end,draft in candidates(number):
-        count+=1; result=_run(draft.model_dump_json())
-        candidate=dict(label=label,start=start,end=end,score=result['combinedScore'],draft=draft.model_dump())
+    for candidate in scored_candidates(number):
+        count+=1;label=candidate['label'];start=candidate['start'];end=candidate['end']
+        draft=Draft.model_validate(candidate['draft'])
         if best is None or candidate['score']>best['score']:best=candidate
         if start==0 and end==len(get_level(number)['payload']):
             cost=sum(g['name'] in ('cx','cy','cz') for g in validate(draft)['operations'])

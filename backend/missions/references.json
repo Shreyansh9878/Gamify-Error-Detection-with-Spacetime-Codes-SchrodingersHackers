@@ -1,6 +1,7 @@
 {
-  "protocol": "main-missions-exact-v2-all-wire",
-  "score": "F_ps * S_keep; exact density-matrix expectation",
+  "protocol": "main-missions-trusted-v3-all-wire",
+  "score": "Trusted Fidelity; backend.quantum_core.scoring.trusted_fidelity",
+  "calibration": "Noise unchanged. Highest two-decimal budget below 1 satisfying retention penalty and 60\u201380% target position; targets gently plateau.",
   "packages": {
     "qiskit": "2.5.2",
     "qiskit-aer": "0.17.2",
@@ -13,12 +14,67 @@
       "qubits": 2,
       "ancillas": 1,
       "tCount": 0,
-      "baseline": 0.4666646815850889,
-      "everywhere": 0.4357752750844933,
-      "reasonable": 0.681382501677898,
-      "optimal": 0.6816147235629979,
-      "target": 0.6,
+      "minimumKept": 0.99,
+      "target": 0.63,
       "spread": 0.0,
+      "initialMinimumKept": 0.6,
+      "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "candidateCount": 75,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.4666646815850889,
+          "retention": 1.0,
+          "correct_shot_yield": 0.4666646815850889,
+          "score": 0.4666646815850889
+        },
+        "everywhere": {
+          "fidelity": 0.4546009803652649,
+          "retention": 0.9585885070779094,
+          "correct_shot_yield": 0.4357752750844933,
+          "score": 0.44017704553989223
+        },
+        "reasonable": {
+          "fidelity": 0.8223690455156564,
+          "retention": 0.821266480857143,
+          "correct_shot_yield": 0.6753841319764908,
+          "score": 0.6822061939156473
+        },
+        "optimal": {
+          "fidelity": 0.8274532685611461,
+          "retention": 0.8237501131009537,
+          "correct_shot_yield": 0.6816147235629979,
+          "score": 0.6884997207707049
+        },
+        "misplaced": {
+          "fidelity": 0.45970736424112546,
+          "retention": 0.9736515985953138,
+          "correct_shot_yield": 0.44759481007941,
+          "score": 0.4521159697771818
+        },
+        "tooSmall": {
+          "fidelity": 0.9397352163622812,
+          "retention": 0.4706859864072551,
+          "correct_shot_yield": 0.4423201972751156,
+          "score": 0.4467880780556724
+        },
+        "overchecked": {
+          "fidelity": 0.813636879178886,
+          "retention": 0.8125776268145035,
+          "correct_shot_yield": 0.6611431243719381,
+          "score": 0.6678213377494325
+        }
+      },
+      "baseline": 0.4666646815850889,
+      "everywhere": 0.44017704553989223,
+      "reasonable": 0.6822061939156473,
+      "optimal": 0.6884997207707049,
+      "misplaced": 0.4521159697771818,
+      "tooSmall": 0.4467880780556724,
+      "overchecked": 0.6678213377494325,
       "baselineDraft": {
         "version": 1,
         "levelId": 1,
@@ -100,8 +156,7 @@
         "levelId": 1,
         "bands": {
           "0": 8,
-          "6": 8,
-          "2": 8
+          "6": 8
         },
         "operations": [
           {
@@ -118,37 +173,46 @@
             "name": "cx",
             "qubits": [
               2,
-              1
+              0
             ],
             "boundary": 0,
-            "slot": 2
+            "slot": 1
           },
           {
             "id": "g2",
-            "name": "cx",
+            "name": "cy",
             "qubits": [
               2,
               1
             ],
-            "boundary": 2,
+            "boundary": 6,
             "slot": 1
           },
           {
             "id": "g3",
+            "name": "z",
+            "qubits": [
+              2
+            ],
+            "boundary": 6,
+            "slot": 5
+          },
+          {
+            "id": "g4",
             "name": "h",
             "qubits": [
               2
             ],
-            "boundary": 2,
+            "boundary": 6,
             "slot": 6
           },
           {
-            "id": "g4",
+            "id": "g5",
             "name": "m",
             "qubits": [
               2
             ],
-            "boundary": 2,
+            "boundary": 6,
             "slot": 7
           }
         ]
@@ -212,49 +276,209 @@
           }
         ]
       },
-      "optimizer": {
-        "kind": "clifford-pauli-reference-search",
-        "pauliceUsed": false,
-        "broadest": {
-          "label": "XY",
-          "cost": 6
+      "misplacedDraft": {
+        "version": 1,
+        "levelId": 1,
+        "bands": {
+          "0": 8,
+          "6": 8,
+          "1": 8
         },
-        "candidateCount": 75,
-        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              2
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              2,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              2,
+              0
+            ],
+            "boundary": 1,
+            "slot": 0
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              2
+            ],
+            "boundary": 1,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              2
+            ],
+            "boundary": 1,
+            "slot": 7
+          }
+        ]
       },
-      "metrics": {
-        "baseline": {
-          "fidelity": 0.4666646815850889,
-          "keptFraction": 1.0,
-          "combinedScore": 0.4666646815850889,
-          "addedAncillas": 0,
-          "addedTwoQubit": 0,
-          "addedDepth": 0
+      "tooSmallDraft": {
+        "version": 1,
+        "levelId": 1,
+        "bands": {
+          "0": 4,
+          "6": 8,
+          "1": 8,
+          "2": 8
         },
-        "everywhere": {
-          "fidelity": 0.4546009803652649,
-          "keptFraction": 0.9585885070779094,
-          "combinedScore": 0.4357752750844933,
-          "addedAncillas": 1,
-          "addedTwoQubit": 3,
-          "addedDepth": 3
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              2
+            ],
+            "boundary": 1,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              2,
+              1
+            ],
+            "boundary": 1,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cz",
+            "qubits": [
+              2,
+              0
+            ],
+            "boundary": 2,
+            "slot": 0
+          },
+          {
+            "id": "g3",
+            "name": "cz",
+            "qubits": [
+              2,
+              1
+            ],
+            "boundary": 2,
+            "slot": 1
+          },
+          {
+            "id": "g4",
+            "name": "h",
+            "qubits": [
+              2
+            ],
+            "boundary": 2,
+            "slot": 6
+          },
+          {
+            "id": "g5",
+            "name": "m",
+            "qubits": [
+              2
+            ],
+            "boundary": 2,
+            "slot": 7
+          }
+        ]
+      },
+      "overcheckedDraft": {
+        "version": 1,
+        "levelId": 1,
+        "bands": {
+          "0": 4,
+          "6": 8,
+          "1": 8
         },
-        "reasonable": {
-          "fidelity": 0.8273339201939829,
-          "keptFraction": 0.8235882574694097,
-          "combinedScore": 0.681382501677898,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        },
-        "optimal": {
-          "fidelity": 0.8274532685611461,
-          "keptFraction": 0.8237501131009537,
-          "combinedScore": 0.6816147235629979,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        }
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              2
+            ],
+            "boundary": 1,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cy",
+            "qubits": [
+              2,
+              0
+            ],
+            "boundary": 1,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              2,
+              0
+            ],
+            "boundary": 6,
+            "slot": 0
+          },
+          {
+            "id": "g3",
+            "name": "cz",
+            "qubits": [
+              2,
+              1
+            ],
+            "boundary": 6,
+            "slot": 1
+          },
+          {
+            "id": "g4",
+            "name": "z",
+            "qubits": [
+              2
+            ],
+            "boundary": 6,
+            "slot": 5
+          },
+          {
+            "id": "g5",
+            "name": "h",
+            "qubits": [
+              2
+            ],
+            "boundary": 6,
+            "slot": 6
+          },
+          {
+            "id": "g6",
+            "name": "m",
+            "qubits": [
+              2
+            ],
+            "boundary": 6,
+            "slot": 7
+          }
+        ]
       }
     },
     {
@@ -262,12 +486,67 @@
       "qubits": 3,
       "ancillas": 1,
       "tCount": 0,
-      "baseline": 0.45594358412173425,
-      "everywhere": 0.4060856072197824,
-      "reasonable": 0.6721370068706034,
-      "optimal": 0.6723648897972381,
-      "target": 0.6,
+      "minimumKept": 0.98,
+      "target": 0.64,
       "spread": 0.0,
+      "initialMinimumKept": 0.6,
+      "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.45594358412173425,
+          "retention": 1.0,
+          "correct_shot_yield": 0.45594358412173425,
+          "score": 0.45594358412173425
+        },
+        "everywhere": {
+          "fidelity": 0.4370084277046908,
+          "retention": 0.9292397616967594,
+          "correct_shot_yield": 0.4060856072197824,
+          "score": 0.41437306859161466
+        },
+        "reasonable": {
+          "fidelity": 0.8193110857524656,
+          "retention": 0.8203685005107728,
+          "correct_shot_yield": 0.6721370068706034,
+          "score": 0.6858540886434729
+        },
+        "optimal": {
+          "fidelity": 0.8194288053407247,
+          "retention": 0.8205287456518735,
+          "correct_shot_yield": 0.6723648897972381,
+          "score": 0.6860866222420796
+        },
+        "misplaced": {
+          "fidelity": 0.44869335075147454,
+          "retention": 0.9736515985953141,
+          "correct_shot_yield": 0.4368709982382612,
+          "score": 0.4457867328961849
+        },
+        "tooSmall": {
+          "fidelity": 0.9325889826562053,
+          "retention": 0.4621584954815352,
+          "correct_shot_yield": 0.43100392112704733,
+          "score": 0.4397999195173953
+        },
+        "overchecked": {
+          "fidelity": 0.8018535347052178,
+          "retention": 0.8057755156782813,
+          "correct_shot_yield": 0.6461139454255496,
+          "score": 0.6592999443117852
+        }
+      },
+      "baseline": 0.45594358412173425,
+      "everywhere": 0.41437306859161466,
+      "reasonable": 0.6858540886434729,
+      "optimal": 0.6860866222420796,
+      "misplaced": 0.4457867328961849,
+      "tooSmall": 0.4397999195173953,
+      "overchecked": 0.6592999443117852,
       "baselineDraft": {
         "version": 1,
         "levelId": 2,
@@ -490,49 +769,208 @@
           }
         ]
       },
-      "optimizer": {
-        "kind": "clifford-pauli-reference-search",
-        "pauliceUsed": false,
-        "broadest": {
-          "label": "XXY",
-          "cost": 10
+      "misplacedDraft": {
+        "version": 1,
+        "levelId": 2,
+        "bands": {
+          "0": 8,
+          "10": 8,
+          "1": 8
         },
-        "candidateCount": 315,
-        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 1,
+            "slot": 0
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 7
+          }
+        ]
       },
-      "metrics": {
-        "baseline": {
-          "fidelity": 0.45594358412173425,
-          "keptFraction": 1.0,
-          "combinedScore": 0.45594358412173425,
-          "addedAncillas": 0,
-          "addedTwoQubit": 0,
-          "addedDepth": 0
+      "tooSmallDraft": {
+        "version": 1,
+        "levelId": 2,
+        "bands": {
+          "0": 4,
+          "10": 8,
+          "1": 8,
+          "2": 8
         },
-        "everywhere": {
-          "fidelity": 0.4370084277046908,
-          "keptFraction": 0.9292397616967594,
-          "combinedScore": 0.4060856072197824,
-          "addedAncillas": 1,
-          "addedTwoQubit": 5,
-          "addedDepth": 6
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 1,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cz",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 2,
+            "slot": 0
+          },
+          {
+            "id": "g3",
+            "name": "cz",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 1
+          },
+          {
+            "id": "g4",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 6
+          },
+          {
+            "id": "g5",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 7
+          }
+        ]
+      },
+      "overcheckedDraft": {
+        "version": 1,
+        "levelId": 2,
+        "bands": {
+          "0": 8,
+          "10": 8
         },
-        "reasonable": {
-          "fidelity": 0.8193110857524656,
-          "keptFraction": 0.8203685005107728,
-          "combinedScore": 0.6721370068706034,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        },
-        "optimal": {
-          "fidelity": 0.8194288053407247,
-          "keptFraction": 0.8205287456518735,
-          "combinedScore": 0.6723648897972381,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        }
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cy",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cy",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 10,
+            "slot": 1
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 10,
+            "slot": 2
+          },
+          {
+            "id": "g4",
+            "name": "z",
+            "qubits": [
+              3
+            ],
+            "boundary": 10,
+            "slot": 5
+          },
+          {
+            "id": "g5",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 10,
+            "slot": 6
+          },
+          {
+            "id": "g6",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 10,
+            "slot": 7
+          }
+        ]
       }
     },
     {
@@ -540,12 +978,67 @@
       "qubits": 3,
       "ancillas": 2,
       "tCount": 0,
-      "baseline": 0.44538478594480574,
-      "everywhere": 0.3360666962162594,
-      "reasonable": 0.665396285374112,
-      "optimal": 0.6656209888427601,
-      "target": 0.59,
+      "minimumKept": 0.94,
+      "target": 0.65,
       "spread": 0.0,
+      "initialMinimumKept": 0.6,
+      "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.44538478594480574,
+          "retention": 1.0,
+          "correct_shot_yield": 0.44538478594480574,
+          "score": 0.44538478594480574
+        },
+        "everywhere": {
+          "fidelity": 0.41200357506117674,
+          "retention": 0.8156887865993838,
+          "correct_shot_yield": 0.3360666962162594,
+          "score": 0.3575177619321909
+        },
+        "reasonable": {
+          "fidelity": 0.8144163987124963,
+          "retention": 0.817022209309674,
+          "correct_shot_yield": 0.665396285374112,
+          "score": 0.7078683886958639
+        },
+        "optimal": {
+          "fidelity": 0.8145333377734423,
+          "retention": 0.8171807806691624,
+          "correct_shot_yield": 0.6656209888427601,
+          "score": 0.7081074349391067
+        },
+        "misplaced": {
+          "fidelity": 0.4383035273620752,
+          "retention": 0.9736515985953147,
+          "correct_shot_yield": 0.42675493008604976,
+          "score": 0.4383035273620752
+        },
+        "tooSmall": {
+          "fidelity": 0.9288227100349525,
+          "retention": 0.45407602744092923,
+          "correct_shot_yield": 0.42175612636958937,
+          "score": 0.44867673018041426
+        },
+        "overchecked": {
+          "fidelity": 0.7993134610668075,
+          "retention": 0.8012831721372791,
+          "correct_shot_yield": 0.640476425615639,
+          "score": 0.6813578995911054
+        }
+      },
+      "baseline": 0.44538478594480574,
+      "everywhere": 0.3575177619321909,
+      "reasonable": 0.7078683886958639,
+      "optimal": 0.7081074349391067,
+      "misplaced": 0.4383035273620752,
+      "tooSmall": 0.44867673018041426,
+      "overchecked": 0.6813578995911054,
       "baselineDraft": {
         "version": 1,
         "levelId": 3,
@@ -857,49 +1350,199 @@
           }
         ]
       },
-      "optimizer": {
-        "kind": "clifford-pauli-reference-search",
-        "pauliceUsed": false,
-        "broadest": {
-          "label": "XXX",
-          "cost": 11
+      "misplacedDraft": {
+        "version": 1,
+        "levelId": 3,
+        "bands": {
+          "0": 8,
+          "13": 8,
+          "1": 8
         },
-        "candidateCount": 315,
-        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 1,
+            "slot": 0
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 7
+          }
+        ]
       },
-      "metrics": {
-        "baseline": {
-          "fidelity": 0.44538478594480574,
-          "keptFraction": 1.0,
-          "combinedScore": 0.44538478594480574,
-          "addedAncillas": 0,
-          "addedTwoQubit": 0,
-          "addedDepth": 0
+      "tooSmallDraft": {
+        "version": 1,
+        "levelId": 3,
+        "bands": {
+          "0": 4,
+          "13": 8,
+          "2": 8,
+          "3": 8
         },
-        "everywhere": {
-          "fidelity": 0.41200357506117674,
-          "keptFraction": 0.8156887865993838,
-          "combinedScore": 0.3360666962162594,
-          "addedAncillas": 2,
-          "addedTwoQubit": 12,
-          "addedDepth": 7
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cz",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 3,
+            "slot": 0
+          },
+          {
+            "id": "g3",
+            "name": "cz",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 3,
+            "slot": 1
+          },
+          {
+            "id": "g4",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 6
+          },
+          {
+            "id": "g5",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 7
+          }
+        ]
+      },
+      "overcheckedDraft": {
+        "version": 1,
+        "levelId": 3,
+        "bands": {
+          "0": 8,
+          "13": 8
         },
-        "reasonable": {
-          "fidelity": 0.8144163987124963,
-          "keptFraction": 0.817022209309674,
-          "combinedScore": 0.665396285374112,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        },
-        "optimal": {
-          "fidelity": 0.8145333377734423,
-          "keptFraction": 0.8171807806691624,
-          "combinedScore": 0.6656209888427601,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        }
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cy",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g3",
+            "name": "cy",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 13,
+            "slot": 1
+          },
+          {
+            "id": "g4",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 13,
+            "slot": 6
+          },
+          {
+            "id": "g5",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 13,
+            "slot": 7
+          }
+        ]
       }
     },
     {
@@ -907,12 +1550,67 @@
       "qubits": 3,
       "ancillas": 2,
       "tCount": 0,
-      "baseline": 0.436065661456261,
-      "everywhere": 0.3319205917308496,
-      "reasonable": 0.6592505457510566,
-      "optimal": 0.6594721468958933,
-      "target": 0.59,
+      "minimumKept": 0.92,
+      "target": 0.66,
       "spread": 0.0,
+      "initialMinimumKept": 0.5,
+      "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.436065661456261,
+          "retention": 1.0,
+          "correct_shot_yield": 0.436065661456261,
+          "score": 0.436065661456261
+        },
+        "everywhere": {
+          "fidelity": 0.4078660005751065,
+          "retention": 0.8137981377776745,
+          "correct_shot_yield": 0.3319205917308496,
+          "score": 0.36078325188135824
+        },
+        "reasonable": {
+          "fidelity": 0.8100216735416745,
+          "retention": 0.8138677856218363,
+          "correct_shot_yield": 0.6592505457510566,
+          "score": 0.716576680164192
+        },
+        "optimal": {
+          "fidelity": 0.8101376810277944,
+          "retention": 0.8140247791699347,
+          "correct_shot_yield": 0.6594721468958933,
+          "score": 0.716817550973797
+        },
+        "misplaced": {
+          "fidelity": 0.4291329153816674,
+          "retention": 0.9736515985953144,
+          "correct_shot_yield": 0.4178259490712283,
+          "score": 0.4291329153816674
+        },
+        "tooSmall": {
+          "fidelity": 0.9260622117359145,
+          "retention": 0.44589108919237713,
+          "correct_shot_yield": 0.4129228882508287,
+          "score": 0.44882922635959643
+        },
+        "overchecked": {
+          "fidelity": 0.797132712498669,
+          "retention": 0.7969459122602495,
+          "correct_shot_yield": 0.635271656754739,
+          "score": 0.6905126703855857
+        }
+      },
+      "baseline": 0.436065661456261,
+      "everywhere": 0.36078325188135824,
+      "reasonable": 0.716576680164192,
+      "optimal": 0.716817550973797,
+      "misplaced": 0.4291329153816674,
+      "tooSmall": 0.44882922635959643,
+      "overchecked": 0.6905126703855857,
       "baselineDraft": {
         "version": 1,
         "levelId": 4,
@@ -1144,49 +1842,149 @@
           }
         ]
       },
-      "optimizer": {
-        "kind": "clifford-pauli-reference-search",
-        "pauliceUsed": false,
-        "broadest": {
-          "label": "XXX",
-          "cost": 12
+      "misplacedDraft": {
+        "version": 1,
+        "levelId": 4,
+        "bands": {
+          "0": 8,
+          "15": 8,
+          "1": 8
         },
-        "candidateCount": 315,
-        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 7
+          }
+        ]
       },
-      "metrics": {
-        "baseline": {
-          "fidelity": 0.436065661456261,
-          "keptFraction": 1.0,
-          "combinedScore": 0.436065661456261,
-          "addedAncillas": 0,
-          "addedTwoQubit": 0,
-          "addedDepth": 0
+      "tooSmallDraft": {
+        "version": 1,
+        "levelId": 4,
+        "bands": {
+          "0": 4,
+          "15": 8,
+          "2": 8,
+          "3": 8
         },
-        "everywhere": {
-          "fidelity": 0.4078660005751065,
-          "keptFraction": 0.8137981377776745,
-          "combinedScore": 0.3319205917308496,
-          "addedAncillas": 2,
-          "addedTwoQubit": 12,
-          "addedDepth": 7
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 2,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 2,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 7
+          }
+        ]
+      },
+      "overcheckedDraft": {
+        "version": 1,
+        "levelId": 4,
+        "bands": {
+          "0": 8,
+          "15": 8
         },
-        "reasonable": {
-          "fidelity": 0.8100216735416745,
-          "keptFraction": 0.8138677856218363,
-          "combinedScore": 0.6592505457510566,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        },
-        "optimal": {
-          "fidelity": 0.8101376810277944,
-          "keptFraction": 0.8140247791699347,
-          "combinedScore": 0.6594721468958933,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        }
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 15,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 15,
+            "slot": 7
+          }
+        ]
       }
     },
     {
@@ -1194,12 +1992,67 @@
       "qubits": 3,
       "ancillas": 2,
       "tCount": 0,
-      "baseline": 0.4244327819552206,
-      "everywhere": 0.31803004193345985,
-      "reasonable": 0.6490793641202743,
-      "optimal": 0.6492965094579561,
-      "target": 0.58,
+      "minimumKept": 0.9,
+      "target": 0.66,
       "spread": 0.0,
+      "initialMinimumKept": 0.5,
+      "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.4244327819552206,
+          "retention": 1.0,
+          "correct_shot_yield": 0.4244327819552206,
+          "score": 0.4244327819552206
+        },
+        "everywhere": {
+          "fidelity": 0.39245349564137266,
+          "retention": 0.8103636366232763,
+          "correct_shot_yield": 0.31803004193345985,
+          "score": 0.3533667132593998
+        },
+        "reasonable": {
+          "fidelity": 0.79183992628869,
+          "retention": 0.8022497596496027,
+          "correct_shot_yield": 0.6352533905460607,
+          "score": 0.7058371006067341
+        },
+        "optimal": {
+          "fidelity": 0.8008642797619691,
+          "retention": 0.8107447489741189,
+          "correct_shot_yield": 0.6492965094579561,
+          "score": 0.7214405660643957
+        },
+        "misplaced": {
+          "fidelity": 0.4176931491926475,
+          "retention": 0.9736515985953157,
+          "correct_shot_yield": 0.4066876024337329,
+          "score": 0.4176931491926475
+        },
+        "tooSmall": {
+          "fidelity": 0.9167220224503396,
+          "retention": 0.43816006103137894,
+          "correct_shot_yield": 0.40167097730564993,
+          "score": 0.4463010858951666
+        },
+        "overchecked": {
+          "fidelity": 0.7725803589658974,
+          "retention": 0.7849550491356627,
+          "correct_shot_yield": 0.6064408536333239,
+          "score": 0.6738231707036932
+        }
+      },
+      "baseline": 0.4244327819552206,
+      "everywhere": 0.3533667132593998,
+      "reasonable": 0.7058371006067341,
+      "optimal": 0.7214405660643957,
+      "misplaced": 0.4176931491926475,
+      "tooSmall": 0.4463010858951666,
+      "overchecked": 0.6738231707036932,
       "baselineDraft": {
         "version": 1,
         "levelId": 5,
@@ -1339,7 +2192,7 @@
         "bands": {
           "0": 4,
           "18": 8,
-          "2": 8,
+          "3": 8,
           "4": 8
         },
         "operations": [
@@ -1349,17 +2202,17 @@
             "qubits": [
               3
             ],
-            "boundary": 2,
+            "boundary": 3,
             "slot": 0
           },
           {
             "id": "g1",
-            "name": "cx",
+            "name": "cy",
             "qubits": [
               3,
               1
             ],
-            "boundary": 2,
+            "boundary": 3,
             "slot": 2
           },
           {
@@ -1431,49 +2284,159 @@
           }
         ]
       },
-      "optimizer": {
-        "kind": "clifford-pauli-reference-search",
-        "pauliceUsed": false,
-        "broadest": {
-          "label": "XXX",
-          "cost": 13
+      "misplacedDraft": {
+        "version": 1,
+        "levelId": 5,
+        "bands": {
+          "0": 8,
+          "18": 8,
+          "1": 8
         },
-        "candidateCount": 315,
-        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 7
+          }
+        ]
       },
-      "metrics": {
-        "baseline": {
-          "fidelity": 0.4244327819552206,
-          "keptFraction": 1.0,
-          "combinedScore": 0.4244327819552206,
-          "addedAncillas": 0,
-          "addedTwoQubit": 0,
-          "addedDepth": 0
+      "tooSmallDraft": {
+        "version": 1,
+        "levelId": 5,
+        "bands": {
+          "0": 4,
+          "18": 8,
+          "3": 8,
+          "4": 8
         },
-        "everywhere": {
-          "fidelity": 0.39245349564137266,
-          "keptFraction": 0.8103636366232763,
-          "combinedScore": 0.31803004193345985,
-          "addedAncillas": 2,
-          "addedTwoQubit": 12,
-          "addedDepth": 10
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 3,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 7
+          }
+        ]
+      },
+      "overcheckedDraft": {
+        "version": 1,
+        "levelId": 5,
+        "bands": {
+          "0": 8,
+          "18": 8
         },
-        "reasonable": {
-          "fidelity": 0.8007498838849688,
-          "keptFraction": 0.8105893952443175,
-          "combinedScore": 0.6490793641202743,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        },
-        "optimal": {
-          "fidelity": 0.8008642797619691,
-          "keptFraction": 0.8107447489741189,
-          "combinedScore": 0.6492965094579561,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        }
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cy",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cz",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 18,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 18,
+            "slot": 7
+          }
+        ]
       }
     },
     {
@@ -1481,12 +2444,67 @@
       "qubits": 3,
       "ancillas": 2,
       "tCount": 0,
-      "baseline": 0.41498159114065014,
-      "everywhere": 0.3215142839619547,
-      "reasonable": 0.6423861466095577,
-      "optimal": 0.6426000689397053,
-      "target": 0.58,
+      "minimumKept": 0.87,
+      "target": 0.67,
       "spread": 0.0,
+      "initialMinimumKept": 0.5,
+      "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.41498159114065014,
+          "retention": 1.0,
+          "correct_shot_yield": 0.41498159114065014,
+          "score": 0.41498159114065014
+        },
+        "everywhere": {
+          "fidelity": 0.38586394948109487,
+          "retention": 0.8332322425930776,
+          "correct_shot_yield": 0.3215142839619547,
+          "score": 0.3695566482321318
+        },
+        "reasonable": {
+          "fidelity": 0.7838269777236881,
+          "retention": 0.7993620661240461,
+          "correct_shot_yield": 0.6265615523969741,
+          "score": 0.720185692410315
+        },
+        "optimal": {
+          "fidelity": 0.7956390162147299,
+          "retention": 0.8076527870602541,
+          "correct_shot_yield": 0.6426000689397053,
+          "score": 0.738620768896213
+        },
+        "misplaced": {
+          "fidelity": 0.4083949375249719,
+          "retention": 0.9736515985953156,
+          "correct_shot_yield": 0.39763438377942295,
+          "score": 0.4083949375249719
+        },
+        "tooSmall": {
+          "fidelity": 0.912869310424418,
+          "retention": 0.4303039130191701,
+          "correct_shot_yield": 0.39281123635073856,
+          "score": 0.4515071682192397
+        },
+        "overchecked": {
+          "fidelity": 0.7676882868586593,
+          "retention": 0.7803477005169015,
+          "correct_shot_yield": 0.5990637893639142,
+          "score": 0.6885790682343842
+        }
+      },
+      "baseline": 0.41498159114065014,
+      "everywhere": 0.3695566482321318,
+      "reasonable": 0.720185692410315,
+      "optimal": 0.738620768896213,
+      "misplaced": 0.4083949375249719,
+      "tooSmall": 0.4515071682192397,
+      "overchecked": 0.6885790682343842,
       "baselineDraft": {
         "version": 1,
         "levelId": 6,
@@ -1644,10 +2662,10 @@
             "name": "cx",
             "qubits": [
               3,
-              1
+              0
             ],
             "boundary": 2,
-            "slot": 2
+            "slot": 1
           },
           {
             "id": "g2",
@@ -1718,49 +2736,159 @@
           }
         ]
       },
-      "optimizer": {
-        "kind": "clifford-pauli-reference-search",
-        "pauliceUsed": false,
-        "broadest": {
-          "label": "XXZ",
-          "cost": 14
+      "misplacedDraft": {
+        "version": 1,
+        "levelId": 6,
+        "bands": {
+          "0": 8,
+          "20": 8,
+          "1": 8
         },
-        "candidateCount": 315,
-        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 7
+          }
+        ]
       },
-      "metrics": {
-        "baseline": {
-          "fidelity": 0.41498159114065014,
-          "keptFraction": 1.0,
-          "combinedScore": 0.41498159114065014,
-          "addedAncillas": 0,
-          "addedTwoQubit": 0,
-          "addedDepth": 0
+      "tooSmallDraft": {
+        "version": 1,
+        "levelId": 6,
+        "bands": {
+          "0": 4,
+          "20": 8,
+          "3": 8,
+          "4": 8
         },
-        "everywhere": {
-          "fidelity": 0.38586394948109487,
-          "keptFraction": 0.8332322425930776,
-          "combinedScore": 0.3215142839619547,
-          "addedAncillas": 2,
-          "addedTwoQubit": 10,
-          "addedDepth": 9
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 3,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 3,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 7
+          }
+        ]
+      },
+      "overcheckedDraft": {
+        "version": 1,
+        "levelId": 6,
+        "bands": {
+          "0": 8,
+          "20": 8
         },
-        "reasonable": {
-          "fidelity": 0.7955256454998044,
-          "keptFraction": 0.8074989791258912,
-          "combinedScore": 0.6423861466095577,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        },
-        "optimal": {
-          "fidelity": 0.7956390162147299,
-          "keptFraction": 0.8076527870602541,
-          "combinedScore": 0.6426000689397053,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        }
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cy",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 20,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 20,
+            "slot": 7
+          }
+        ]
       }
     },
     {
@@ -1768,12 +2896,67 @@
       "qubits": 3,
       "ancillas": 3,
       "tCount": 0,
-      "baseline": 0.40538232392733997,
-      "everywhere": 0.2761919480041414,
-      "reasonable": 0.6351144320519374,
-      "optimal": 0.6353248974274665,
-      "target": 0.57,
+      "minimumKept": 0.86,
+      "target": 0.67,
       "spread": 0.0,
+      "initialMinimumKept": 0.5,
+      "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.40538232392733997,
+          "retention": 1.0,
+          "correct_shot_yield": 0.40538232392733997,
+          "score": 0.40538232392733997
+        },
+        "everywhere": {
+          "fidelity": 0.36680045788980864,
+          "retention": 0.7529760175138953,
+          "correct_shot_yield": 0.2761919480041414,
+          "score": 0.3211534279117923
+        },
+        "reasonable": {
+          "fidelity": 0.7779881470071973,
+          "retention": 0.7962351898980224,
+          "correct_shot_yield": 0.6194615399706863,
+          "score": 0.7203041162449841
+        },
+        "optimal": {
+          "fidelity": 0.789773556603663,
+          "retention": 0.8044393131616275,
+          "correct_shot_yield": 0.6353248974274665,
+          "score": 0.7387498807296121
+        },
+        "misplaced": {
+          "fidelity": 0.3989526940964047,
+          "retention": 0.9736515985953165,
+          "correct_shot_yield": 0.38844092837087274,
+          "score": 0.3989526940964047
+        },
+        "tooSmall": {
+          "fidelity": 0.9073228767871362,
+          "retention": 0.42291016128037545,
+          "correct_shot_yield": 0.383716064155422,
+          "score": 0.4461814699481651
+        },
+        "overchecked": {
+          "fidelity": 0.7612168636687514,
+          "retention": 0.776782015930046,
+          "correct_shot_yield": 0.5912995699205598,
+          "score": 0.6875576394425114
+        }
+      },
+      "baseline": 0.40538232392733997,
+      "everywhere": 0.3211534279117923,
+      "reasonable": 0.7203041162449841,
+      "optimal": 0.7387498807296121,
+      "misplaced": 0.3989526940964047,
+      "tooSmall": 0.4461814699481651,
+      "overchecked": 0.6875576394425114,
       "baselineDraft": {
         "version": 1,
         "levelId": 7,
@@ -1988,10 +3171,10 @@
             "name": "cx",
             "qubits": [
               3,
-              1
+              0
             ],
             "boundary": 3,
-            "slot": 2
+            "slot": 1
           },
           {
             "id": "g2",
@@ -2062,49 +3245,159 @@
           }
         ]
       },
-      "optimizer": {
-        "kind": "clifford-pauli-reference-search",
-        "pauliceUsed": false,
-        "broadest": {
-          "label": "XXY",
-          "cost": 15
+      "misplacedDraft": {
+        "version": 1,
+        "levelId": 7,
+        "bands": {
+          "0": 8,
+          "23": 8,
+          "1": 8
         },
-        "candidateCount": 315,
-        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 1,
+            "slot": 7
+          }
+        ]
       },
-      "metrics": {
-        "baseline": {
-          "fidelity": 0.40538232392733997,
-          "keptFraction": 1.0,
-          "combinedScore": 0.40538232392733997,
-          "addedAncillas": 0,
-          "addedTwoQubit": 0,
-          "addedDepth": 0
+      "tooSmallDraft": {
+        "version": 1,
+        "levelId": 7,
+        "bands": {
+          "0": 4,
+          "23": 8,
+          "4": 8,
+          "5": 8
         },
-        "everywhere": {
-          "fidelity": 0.36680045788980864,
-          "keptFraction": 0.7529760175138953,
-          "combinedScore": 0.2761919480041414,
-          "addedAncillas": 3,
-          "addedTwoQubit": 15,
-          "addedDepth": 10
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 4,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              3,
+              1
+            ],
+            "boundary": 4,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 5,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 5,
+            "slot": 7
+          }
+        ]
+      },
+      "overcheckedDraft": {
+        "version": 1,
+        "levelId": 7,
+        "bands": {
+          "0": 8,
+          "23": 8
         },
-        "reasonable": {
-          "fidelity": 0.7896613320747198,
-          "keptFraction": 0.8042871117714059,
-          "combinedScore": 0.6351144320519374,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 1
-        },
-        "optimal": {
-          "fidelity": 0.789773556603663,
-          "keptFraction": 0.8044393131616275,
-          "combinedScore": 0.6353248974274665,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 1
-        }
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              3,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cz",
+            "qubits": [
+              3,
+              2
+            ],
+            "boundary": 0,
+            "slot": 3
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              3
+            ],
+            "boundary": 23,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              3
+            ],
+            "boundary": 23,
+            "slot": 7
+          }
+        ]
       }
     },
     {
@@ -2112,12 +3405,67 @@
       "qubits": 4,
       "ancillas": 3,
       "tCount": 1,
-      "baseline": 0.3907487267704999,
-      "everywhere": 0.21193481493712743,
-      "reasonable": 0.616307659270219,
-      "optimal": 0.6175343139718612,
-      "target": 0.56,
+      "minimumKept": 0.83,
+      "target": 0.67,
       "spread": 0.0,
+      "initialMinimumKept": 0.5,
+      "optimizer": {
+        "kind": "custom-t-pauli-search",
+        "pauliceUsed": false,
+        "candidateCount": 891,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.3907487267704999,
+          "retention": 1.0,
+          "correct_shot_yield": 0.3907487267704999,
+          "score": 0.3907487267704999
+        },
+        "everywhere": {
+          "fidelity": 0.3325289057220995,
+          "retention": 0.6373425326045046,
+          "correct_shot_yield": 0.21193481493712743,
+          "score": 0.25534315052665957
+        },
+        "reasonable": {
+          "fidelity": 0.7588407569983342,
+          "retention": 0.7916787292188064,
+          "correct_shot_yield": 0.6007580861798784,
+          "score": 0.7238049231082871
+        },
+        "optimal": {
+          "fidelity": 0.770559692986463,
+          "retention": 0.8014100913823816,
+          "correct_shot_yield": 0.6175343139718612,
+          "score": 0.7440172457492304
+        },
+        "misplaced": {
+          "fidelity": 0.3841686969613713,
+          "retention": 0.9736515985953172,
+          "correct_shot_yield": 0.37404646592671914,
+          "score": 0.3841686969613713
+        },
+        "tooSmall": {
+          "fidelity": 0.8865915644739706,
+          "retention": 0.4153695940641999,
+          "correct_shot_yield": 0.36826317823629706,
+          "score": 0.4436905761883097
+        },
+        "overchecked": {
+          "fidelity": 0.7444910381780301,
+          "retention": 0.7676358264068501,
+          "correct_shot_yield": 0.571497993344286,
+          "score": 0.6885517992099831
+        }
+      },
+      "baseline": 0.3907487267704999,
+      "everywhere": 0.25534315052665957,
+      "reasonable": 0.7238049231082871,
+      "optimal": 0.7440172457492304,
+      "misplaced": 0.3841686969613713,
+      "tooSmall": 0.4436905761883097,
+      "overchecked": 0.6885517992099831,
       "baselineDraft": {
         "version": 1,
         "levelId": 8,
@@ -2344,7 +3692,7 @@
         "bands": {
           "0": 4,
           "30": 8,
-          "3": 8,
+          "4": 8,
           "8": 8
         },
         "operations": [
@@ -2354,18 +3702,18 @@
             "qubits": [
               4
             ],
-            "boundary": 3,
+            "boundary": 4,
             "slot": 0
           },
           {
             "id": "g1",
-            "name": "cx",
+            "name": "cy",
             "qubits": [
               4,
-              1
+              0
             ],
-            "boundary": 3,
-            "slot": 2
+            "boundary": 4,
+            "slot": 1
           },
           {
             "id": "g2",
@@ -2436,49 +3784,159 @@
           }
         ]
       },
-      "optimizer": {
-        "kind": "custom-t-pauli-search",
-        "pauliceUsed": false,
-        "broadest": {
-          "label": "XXXZ",
-          "cost": 19
+      "misplacedDraft": {
+        "version": 1,
+        "levelId": 8,
+        "bands": {
+          "0": 8,
+          "30": 8,
+          "1": 8
         },
-        "candidateCount": 891,
-        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 1,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 1,
+            "slot": 7
+          }
+        ]
       },
-      "metrics": {
-        "baseline": {
-          "fidelity": 0.3907487267704999,
-          "keptFraction": 1.0,
-          "combinedScore": 0.3907487267704999,
-          "addedAncillas": 0,
-          "addedTwoQubit": 0,
-          "addedDepth": 0
+      "tooSmallDraft": {
+        "version": 1,
+        "levelId": 8,
+        "bands": {
+          "0": 4,
+          "30": 8,
+          "4": 8,
+          "5": 8
         },
-        "everywhere": {
-          "fidelity": 0.3325289057220995,
-          "keptFraction": 0.6373425326045046,
-          "combinedScore": 0.21193481493712743,
-          "addedAncillas": 3,
-          "addedTwoQubit": 24,
-          "addedDepth": 11
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 4,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 4,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 5,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 5,
+            "slot": 7
+          }
+        ]
+      },
+      "overcheckedDraft": {
+        "version": 1,
+        "levelId": 8,
+        "bands": {
+          "0": 8,
+          "30": 8
         },
-        "reasonable": {
-          "fidelity": 0.7700410747807148,
-          "keptFraction": 0.8003568633604713,
-          "combinedScore": 0.616307659270219,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        },
-        "optimal": {
-          "fidelity": 0.770559692986463,
-          "keptFraction": 0.8014100913823816,
-          "combinedScore": 0.6175343139718612,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        }
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              4,
+              3
+            ],
+            "boundary": 0,
+            "slot": 4
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 30,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 30,
+            "slot": 7
+          }
+        ]
       }
     },
     {
@@ -2486,12 +3944,67 @@
       "qubits": 4,
       "ancillas": 3,
       "tCount": 3,
-      "baseline": 0.3811990330345677,
-      "everywhere": 0.204178946162573,
-      "reasonable": 0.6081872332175502,
-      "optimal": 0.6093918980306683,
-      "target": 0.55,
+      "minimumKept": 0.82,
+      "target": 0.67,
       "spread": 0.0,
+      "initialMinimumKept": 0.5,
+      "optimizer": {
+        "kind": "custom-t-pauli-search",
+        "pauliceUsed": false,
+        "candidateCount": 699,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.3811990330345677,
+          "retention": 1.0,
+          "correct_shot_yield": 0.3811990330345677,
+          "score": 0.3811990330345677
+        },
+        "everywhere": {
+          "fidelity": 0.3229922347842689,
+          "retention": 0.6321481576761343,
+          "correct_shot_yield": 0.204178946162573,
+          "score": 0.24899871483240615
+        },
+        "reasonable": {
+          "fidelity": 0.751839572103775,
+          "retention": 0.7886321064591516,
+          "correct_shot_yield": 0.5929248254675472,
+          "score": 0.7230790554482284
+        },
+        "optimal": {
+          "fidelity": 0.7633985244840413,
+          "retention": 0.7982618232626771,
+          "correct_shot_yield": 0.6093918980306683,
+          "score": 0.7431608512569126
+        },
+        "misplaced": {
+          "fidelity": 0.3747916134959662,
+          "retention": 0.9736515985953176,
+          "correct_shot_yield": 0.3649164536204659,
+          "score": 0.3747916134959662
+        },
+        "tooSmall": {
+          "fidelity": 0.8793077977667241,
+          "retention": 0.40829952462428826,
+          "correct_shot_yield": 0.3590209558265832,
+          "score": 0.4378304339348576
+        },
+        "overchecked": {
+          "fidelity": 0.7428806781756577,
+          "retention": 0.7809101426410301,
+          "correct_shot_yield": 0.5801230563594181,
+          "score": 0.7074671419017293
+        }
+      },
+      "baseline": 0.3811990330345677,
+      "everywhere": 0.24899871483240615,
+      "reasonable": 0.7230790554482284,
+      "optimal": 0.7431608512569126,
+      "misplaced": 0.3747916134959662,
+      "tooSmall": 0.4378304339348576,
+      "overchecked": 0.7074671419017293,
       "baselineDraft": {
         "version": 1,
         "levelId": 9,
@@ -2718,7 +4231,7 @@
         "bands": {
           "0": 4,
           "35": 8,
-          "4": 8,
+          "5": 8,
           "9": 8
         },
         "operations": [
@@ -2728,18 +4241,18 @@
             "qubits": [
               4
             ],
-            "boundary": 4,
+            "boundary": 5,
             "slot": 0
           },
           {
             "id": "g1",
-            "name": "cx",
+            "name": "cy",
             "qubits": [
               4,
-              1
+              0
             ],
-            "boundary": 4,
-            "slot": 2
+            "boundary": 5,
+            "slot": 1
           },
           {
             "id": "g2",
@@ -2810,49 +4323,161 @@
           }
         ]
       },
-      "optimizer": {
-        "kind": "custom-t-pauli-search",
-        "pauliceUsed": false,
-        "broadest": {
-          "label": "YXXY",
-          "cost": 20
+      "misplacedDraft": {
+        "version": 1,
+        "levelId": 9,
+        "bands": {
+          "0": 8,
+          "35": 8,
+          "1": 8
         },
-        "candidateCount": 699,
-        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 1,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 1,
+            "slot": 7
+          }
+        ]
       },
-      "metrics": {
-        "baseline": {
-          "fidelity": 0.3811990330345677,
-          "keptFraction": 1.0,
-          "combinedScore": 0.3811990330345677,
-          "addedAncillas": 0,
-          "addedTwoQubit": 0,
-          "addedDepth": 0
+      "tooSmallDraft": {
+        "version": 1,
+        "levelId": 9,
+        "bands": {
+          "0": 4,
+          "35": 8,
+          "5": 8,
+          "6": 8
         },
-        "everywhere": {
-          "fidelity": 0.3229922347842689,
-          "keptFraction": 0.6321481576761343,
-          "combinedScore": 0.204178946162573,
-          "addedAncillas": 3,
-          "addedTwoQubit": 24,
-          "addedDepth": 13
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 5,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 5,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 6,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 6,
+            "slot": 7
+          }
+        ]
+      },
+      "overcheckedDraft": {
+        "version": 1,
+        "levelId": 9,
+        "bands": {
+          "0": 4,
+          "35": 8,
+          "5": 8,
+          "9": 8
         },
-        "reasonable": {
-          "fidelity": 0.7628854533994833,
-          "keptFraction": 0.7972195963462345,
-          "combinedScore": 0.6081872332175502,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        },
-        "optimal": {
-          "fidelity": 0.7633985244840413,
-          "keptFraction": 0.7982618232626771,
-          "combinedScore": 0.6093918980306683,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        }
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 5,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 5,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cy",
+            "qubits": [
+              4,
+              3
+            ],
+            "boundary": 5,
+            "slot": 4
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 9,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 9,
+            "slot": 7
+          }
+        ]
       }
     },
     {
@@ -2860,12 +4485,67 @@
       "qubits": 4,
       "ancillas": 3,
       "tCount": 5,
-      "baseline": 0.3719583256414559,
-      "everywhere": 0.2174031887502856,
-      "reasonable": 0.6002948178139932,
-      "optimal": 0.6014786016402718,
-      "target": 0.55,
+      "minimumKept": 0.8,
+      "target": 0.67,
       "spread": 0.0,
+      "initialMinimumKept": 0.5,
+      "optimizer": {
+        "kind": "custom-t-pauli-search",
+        "pauliceUsed": false,
+        "candidateCount": 651,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.3719583256414559,
+          "retention": 1.0,
+          "correct_shot_yield": 0.3719583256414559,
+          "score": 0.3719583256414559
+        },
+        "everywhere": {
+          "fidelity": 0.327538393365561,
+          "retention": 0.6637487181774289,
+          "correct_shot_yield": 0.2174031887502856,
+          "score": 0.271753985937857
+        },
+        "reasonable": {
+          "fidelity": 0.7447778084101793,
+          "retention": 0.7857601690145553,
+          "correct_shot_yield": 0.5852167366146726,
+          "score": 0.7315209207683406
+        },
+        "optimal": {
+          "fidelity": 0.7562971049794116,
+          "retention": 0.7952940685349386,
+          "correct_shot_yield": 0.6014786016402718,
+          "score": 0.7518482520503397
+        },
+        "misplaced": {
+          "fidelity": 0.3657112608468525,
+          "retention": 0.9736515985953182,
+          "correct_shot_yield": 0.3560753537478474,
+          "score": 0.3657112608468525
+        },
+        "tooSmall": {
+          "fidelity": 0.8728183250980566,
+          "retention": 0.4010618595405919,
+          "correct_shot_yield": 0.35005414050493144,
+          "score": 0.43756767563116433
+        },
+        "overchecked": {
+          "fidelity": 0.7358896025970726,
+          "retention": 0.7781150400202079,
+          "correct_shot_yield": 0.5726067675752761,
+          "score": 0.715758459469095
+        }
+      },
+      "baseline": 0.3719583256414559,
+      "everywhere": 0.271753985937857,
+      "reasonable": 0.7315209207683406,
+      "optimal": 0.7518482520503397,
+      "misplaced": 0.3657112608468525,
+      "tooSmall": 0.43756767563116433,
+      "overchecked": 0.715758459469095,
       "baselineDraft": {
         "version": 1,
         "levelId": 10,
@@ -3092,7 +4772,7 @@
         "bands": {
           "0": 4,
           "39": 8,
-          "4": 8,
+          "5": 8,
           "9": 8
         },
         "operations": [
@@ -3102,18 +4782,18 @@
             "qubits": [
               4
             ],
-            "boundary": 4,
+            "boundary": 5,
             "slot": 0
           },
           {
             "id": "g1",
-            "name": "cx",
+            "name": "cy",
             "qubits": [
               4,
-              1
+              0
             ],
-            "boundary": 4,
-            "slot": 2
+            "boundary": 5,
+            "slot": 1
           },
           {
             "id": "g2",
@@ -3184,49 +4864,161 @@
           }
         ]
       },
-      "optimizer": {
-        "kind": "custom-t-pauli-search",
-        "pauliceUsed": false,
-        "broadest": {
-          "label": "ZIXY",
-          "cost": 19
+      "misplacedDraft": {
+        "version": 1,
+        "levelId": 10,
+        "bands": {
+          "0": 8,
+          "39": 8,
+          "1": 8
         },
-        "candidateCount": 651,
-        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 0,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              0
+            ],
+            "boundary": 0,
+            "slot": 1
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 1,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 1,
+            "slot": 7
+          }
+        ]
       },
-      "metrics": {
-        "baseline": {
-          "fidelity": 0.3719583256414559,
-          "keptFraction": 1.0,
-          "combinedScore": 0.3719583256414559,
-          "addedAncillas": 0,
-          "addedTwoQubit": 0,
-          "addedDepth": 0
+      "tooSmallDraft": {
+        "version": 1,
+        "levelId": 10,
+        "bands": {
+          "0": 4,
+          "39": 8,
+          "5": 8,
+          "6": 8
         },
-        "everywhere": {
-          "fidelity": 0.327538393365561,
-          "keptFraction": 0.6637487181774289,
-          "combinedScore": 0.2174031887502856,
-          "addedAncillas": 3,
-          "addedTwoQubit": 21,
-          "addedDepth": 11
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 5,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 5,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 6,
+            "slot": 6
+          },
+          {
+            "id": "g3",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 6,
+            "slot": 7
+          }
+        ]
+      },
+      "overcheckedDraft": {
+        "version": 1,
+        "levelId": 10,
+        "bands": {
+          "0": 4,
+          "39": 8,
+          "5": 8,
+          "9": 8
         },
-        "reasonable": {
-          "fidelity": 0.7557892202129544,
-          "keptFraction": 0.7942622119495851,
-          "combinedScore": 0.6002948178139932,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        },
-        "optimal": {
-          "fidelity": 0.7562971049794116,
-          "keptFraction": 0.7952940685349386,
-          "combinedScore": 0.6014786016402718,
-          "addedAncillas": 1,
-          "addedTwoQubit": 2,
-          "addedDepth": 2
-        }
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 5,
+            "slot": 0
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              4,
+              1
+            ],
+            "boundary": 5,
+            "slot": 2
+          },
+          {
+            "id": "g2",
+            "name": "cy",
+            "qubits": [
+              4,
+              3
+            ],
+            "boundary": 5,
+            "slot": 4
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              4
+            ],
+            "boundary": 9,
+            "slot": 6
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              4
+            ],
+            "boundary": 9,
+            "slot": 7
+          }
+        ]
       }
     }
   ]

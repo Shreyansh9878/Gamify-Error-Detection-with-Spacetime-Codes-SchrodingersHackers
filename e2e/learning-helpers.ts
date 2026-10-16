@@ -11,7 +11,7 @@ export async function pane(
 }
 export async function runProtection(page: Page) {
   await pane(page, "Experiment");
-  await Promise.all([
+  const [response] = await Promise.all([
     page.waitForResponse(
       (r) =>
         r.url().endsWith("/api/tutorial/protection-lab/run") &&
@@ -21,6 +21,7 @@ export async function runProtection(page: Page) {
       .getByRole("button", { name: "Run selected method", exact: true })
       .click(),
   ]);
+  expect(response.ok()).toBeTruthy();
   await pane(page, "Results");
   await expect(
     page.getByText("✓ Qiskit result", { exact: true }),
@@ -44,7 +45,7 @@ export async function cp(
     `c${column}@${target}`,
   );
 }
-export async function runCheck(page: Page, invalid = false) {
+export async function runCheck(page: Page) {
   await pane(page, "Experiment");
   const response = page.waitForResponse(
     (r) =>

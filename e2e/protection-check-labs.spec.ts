@@ -1,4 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
+import { MISSION_VERSION } from "../src/lib/progress";
 import {
   pane,
   drop,
@@ -9,20 +10,23 @@ import {
 } from "./learning-helpers";
 
 async function openLesson(page: Page, step: number) {
-  await page.addInitScript((step) => {
-    if (!localStorage.getItem("quantum-shield-qed-v2"))
-      localStorage.setItem(
-        "quantum-shield-qed-v2",
-        JSON.stringify({
-          version: 2,
-          missionVersion: 2,
-          tutorial: "new",
-          step,
-          sound: false,
-          best: { 1: { score: 700, stars: 2 } },
-        }),
-      );
-  }, step);
+  await page.addInitScript(
+    ({ step, missionVersion }) => {
+      if (!localStorage.getItem("quantum-shield-qed-v2"))
+        localStorage.setItem(
+          "quantum-shield-qed-v2",
+          JSON.stringify({
+            version: 2,
+            missionVersion,
+            tutorial: "new",
+            step,
+            sound: false,
+            best: { 1: { score: 700, stars: 2 } },
+          }),
+        );
+    },
+    { step, missionVersion: MISSION_VERSION },
+  );
   await page.goto("/");
   await expect(
     page.getByLabel("Flight school lesson", { exact: true }),

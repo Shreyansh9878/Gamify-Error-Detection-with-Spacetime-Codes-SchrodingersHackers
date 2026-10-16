@@ -1,4 +1,18 @@
+// The backend admits one computation at a time. Serialize this tab's POSTs
+// so automatic previews cannot collide with a player's explicit run.
+let pending: Promise<void> = Promise.resolve();
+
 export async function api<T>(path: string, body?: unknown): Promise<T> {
+  if (body === undefined) return request<T>(path);
+  const result = pending.then(() => request<T>(path, body));
+  pending = result.then(
+    () => {},
+    () => {},
+  );
+  return result;
+}
+
+async function request<T>(path: string, body?: unknown): Promise<T> {
   const base = (process.env.NEXT_PUBLIC_API_BASE_URL || "/api").replace(
     /\/$/,
     "",

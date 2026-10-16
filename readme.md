@@ -25,6 +25,8 @@ Live game: [Quantum Shield](https://gamify-error-detection-with-spaceti-sand.ver
 
 ## Local setup
 
+This branch's Trusted Fidelity changes require a new deployment of the frontend and Python function together; the linked existing live game may still use the previous metric. No deployment configuration changes are needed. See [migration, stale statements and exact hosted recheck commands](docs/TRUSTED_FIDELITY_MIGRATION.md).
+
 Use Node.js 24.x and preferably Python 3.12 to match deployment. The existing Python 3.10 development environment also passes the physics tests:
 
 ```powershell
@@ -47,13 +49,15 @@ For local production verification, start `.venv/Scripts/python.exe -m uvicorn ap
 
 Complete the six tutorials or choose **Skip Tutorial / Unlock All Levels**. The tutorials retain their three-pane workspace, blank sandboxes, hardware noise controls, QSphere/Bloch views and parameter-only gate inspector.
 
-All main missions share that workspace and drag/drop renderer. The left panel has the objective, the upper-right panel has the circuit and source editor, and the lower-right panel contains only the combined score, pass/fail and a short status. Use the Dustbin to remove authored gates. The payload is immutable. The number of ancillas is fixed by the mission.
+All main missions share that workspace and drag/drop renderer. The left panel has the objective, the upper-right panel has the circuit and source editor, and the lower-right panel contains Trusted Fidelity, pass/fail, a short status and compact kept-shot fidelity/shot-budget indicators. Use the Dustbin to remove authored gates. The payload is immutable. The number of ancillas is fixed by the mission.
 
 Missions 1–3 require manual closing products. Missions 4–10 generate signed closing products immediately before the player's final H. Inserting editable columns inside the payload permits short check windows; removing occupied columns requires moving their gates first. Invalid propagation, including X/Y at a T/Tdg crossing, turns the connector red and blocks scoring. Main missions permit Clifford checks and H/M readout; arbitrary rotations belong to the tutorials.
 
-The score is the exact expectation **post-selected fidelity × kept-shot fraction**. Noise and targets are server-owned. Changing a draft invalidates its displayed result. Scores do not fluctuate with sampled counts. See [mission physics](docs/SCIENTIFIC_REPORT.md) and [reference validation](docs/LEVEL_VALIDATION.md).
+The score is **Trusted Fidelity = F_ps · min(1, S_keep / S_min)**. The per-level shot budget S_min is shown beside kept-shot fidelity and shots kept. This is a game design choice using simulation-only full-state fidelity, not a fidelity estimator obtainable from hardware counts alone. Detailed artifacts always report F_ps and S_keep together; their product remains the secondary `correct_shot_yield`. Noise and targets are server-owned. Changing a draft invalidates its displayed result. Scores do not fluctuate with sampled counts. See [mission physics](docs/SCIENTIFIC_REPORT.md) and [reference validation](docs/LEVEL_VALIDATION.md).
 
-Progress is device-local under `quantum-shield-qed-v2`. Tutorial completion and sound preferences survive the redesign. Mission bests use `missionVersion: 2`; older bests are archived under `quantum-shield.archived-missions-v1` (or `v2` for unversioned profiles). Complete Flight School 6 to open Main1, then pass each mission to unlock the next. The explicit tutorial skip still unlocks every mission. Scores store the combined score multiplied by 1000. One star means passing; two/three stars mean exceeding the target by 0.025/0.05. Local storage is not a trusted leaderboard.
+Progress is device-local under `quantum-shield-qed-v2`. Tutorial completion and sound preferences survive the redesign. Mission bests use `missionVersion: 3`; previous bests are archived under `quantum-shield.archived-missions-v1` or `v2` and cleared so old-metric scores/stars never masquerade as Trusted Fidelity records. `unlockedThrough` preserves previously earned access; tutorial completion/skip, lesson evidence and sound preferences remain. FS6 results are not persisted as score records, so its next run computes the new metric. Complete Flight School 6 to open Main1, then pass each mission to unlock the next. The explicit tutorial skip still unlocks every mission. Scores store Trusted Fidelity multiplied by 1000. One star means passing; two/three stars mean exceeding the target by 0.025/0.05. Local storage is not a trusted leaderboard.
+
+The [final Trusted Fidelity verification record](docs/TRUSTED_FIDELITY_VERIFICATION.json) records actual local test counts, timings and scope. The [migration guide](docs/TRUSTED_FIDELITY_MIGRATION.md) lists superseded statements, calibration caveats and the exact hosted rerun commands.
 
 ## Source map
 
@@ -105,7 +109,7 @@ pnpm build
 pnpm exec playwright test
 ```
 
-Recompute the complete bounded reference search with `python scripts/validate_main_levels.py --optimize`. Use `--calibrate` only when deliberately changing mission physics/targets and reviewing the resulting reference JSON. Ordinary validation runs all four stored strategies through the player engine with uncached repeats. Browser tests smoke every Flight School and every main mission on desktop/mobile; generated screenshots and traces are verification artifacts.
+Recompute the complete bounded reference search with `python scripts/validate_main_levels.py --optimize`. Use `--calibrate` only when deliberately changing mission physics/targets and reviewing the resulting reference JSON. Ordinary validation runs all seven stored strategies through the player engine with uncached repeats. Browser tests smoke every Flight School and every main mission on desktop/mobile; generated screenshots and traces are verification artifacts.
 
 ## Static Qiskit circuit figures
 
@@ -114,7 +118,7 @@ Recompute the complete bounded reference search with `python scripts/validate_ma
 .venv/Scripts/python.exe scripts/generate_tutorial_circuits.py
 ```
 
-Keep the generator, drawing requirements and `public/tutorial-circuits` assets together. Figures use Qiskit's matplotlib renderer once, never on a request. Regenerate the FS6 certificate with `python scripts/verify_capstone_difficulty.py`.
+Keep the generator, drawing requirements and `public/tutorial-circuits` assets together. Figures use Qiskit's matplotlib renderer once, never on a request. Regenerate and verify all seven FS6 strategies with `python scripts/verify_capstone_difficulty.py`. Regenerate the human table with `python scripts/render_level_validation.py`.
 
 ## Noise, science and submission
 

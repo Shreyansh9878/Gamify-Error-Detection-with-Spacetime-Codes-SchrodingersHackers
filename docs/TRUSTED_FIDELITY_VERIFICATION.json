@@ -1,0 +1,94 @@
+{
+  "generatedAtUtc": "2026-10-16T13:06:30.963504+00:00",
+  "codeCommit": "936b429d3e1ea8cae91df2dee806bbb1fe2e4ace",
+  "safetyTag": "pre-trusted-fidelity",
+  "branch": "codex/trusted-fidelity",
+  "allChecksGreen": true,
+  "cutoffIst": "2026-10-17 01:00 IST",
+  "cutoffHit": false,
+  "backend": {
+    "command": ".venv/Scripts/python.exe -m pytest tests -q",
+    "passed": 240,
+    "warnings": 3,
+    "seconds": 65.7,
+    "warningScope": "Existing Starlette/httpx deprecation and two Paulice output-basis warnings."
+  },
+  "frontend": {
+    "typecheckPassed": true,
+    "unitTestsPassed": 41,
+    "productionBuildPassed": true
+  },
+  "levelValidation": {
+    "command": ".venv/Scripts/python.exe scripts/validate_all_levels.py",
+    "passed": true,
+    "scoredLevels": 11,
+    "strategiesPerScoredLevel": 7,
+    "exactSpread": 0
+  },
+  "browser": {
+    "command": "$env:DEPLOYMENT_URL='http://127.0.0.1:3001'; pnpm exec playwright test --config playwright.deployment.config.ts --reporter=json",
+    "startTime": "2026-10-16T13:01:45.952Z",
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0,
+    "scope": "Desktop/mobile direct links, console/assets/origin, QSphere, full real drag/drop progression, score migration, budget markers and Main2 third star.",
+    "durationMilliseconds": 144398.92899999997
+  },
+  "smoke": {
+    "command": ".venv/Scripts/python.exe scripts/smoke_deployment.py http://127.0.0.1:3001",
+    "requests": 114,
+    "maxSeconds": 2.715325199998915,
+    "scoreTolerance": 1e-09,
+    "hosted": false
+  },
+  "notebook": {
+    "executedCells": 24,
+    "summaryLevels": 16,
+    "numericDisagreements": 0,
+    "runnerWallSeconds": 39.27,
+    "analysisSeconds": 36.19228139999905,
+    "searchSeconds": 382.12158360000467,
+    "savedCheckPassed": true
+  },
+  "matchedStudy": {
+    "rows": 35,
+    "originalFieldsAndNoiseUnchanged": true,
+    "executedNotebookCells": 4,
+    "gameBudget": null
+  },
+  "tValidation": {
+    "maxCliffordMetricDifference": 9.992007221626409e-16,
+    "smallCliffordDensityDifference": 3.3306690738754696e-16,
+    "levels": [
+      {
+        "level": 8,
+        "smallTDensityDifference": 2.220446049250313e-16,
+        "maxRunSeconds": 0.12078160000964999,
+        "scoreSpread": 0.0,
+        "invalidXYRejected": true
+      },
+      {
+        "level": 9,
+        "smallTDensityDifference": 2.220446049250313e-16,
+        "maxRunSeconds": 0.1299445999902673,
+        "scoreSpread": 0.0,
+        "invalidXYRejected": true
+      },
+      {
+        "level": 10,
+        "smallTDensityDifference": 2.220446049250313e-16,
+        "maxRunSeconds": 0.16784479998750612,
+        "scoreSpread": 0.0,
+        "invalidXYRejected": true
+      }
+    ]
+  },
+  "deploymentConfigurationUnchanged": true,
+  "noiseModelUnchanged": true,
+  "fs1Through5CompletionUnchanged": true,
+  "merged": false,
+  "pushed": false,
+  "deployed": false,
+  "verificationNote": "An initial overlapping HTTP smoke/browser run received expected 429 BUSY responses. Final browser suite ran alone; guards/config were not weakened."
+}

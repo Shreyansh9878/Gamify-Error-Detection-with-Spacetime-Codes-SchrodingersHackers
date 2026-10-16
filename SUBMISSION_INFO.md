@@ -1,6 +1,6 @@
 # Submission information — Schrodinger's Hackers
 
-This is a factual collection and planning aid, **not the team's final report, narration, slides, or recorded presentation**. Snapshot: 16 October 2026; local base commit `04182c2`, plus the menu credits and this document. Recheck the final branch and artifacts before submission. `Done` means the stated evidence exists; it does not certify eligibility, judging scores, or submission acceptance. `Needs us` means team action is required. `Unknown` means **Unconfirmed** by the supplied sources.
+This is a factual collection and planning aid, **not the team's final report, narration, slides, or recorded presentation**. Trusted Fidelity update: 16 October 2026; section C3/C5 and current references supersede the old product metric. Initial snapshot: 16 October 2026; local base commit `04182c2`, plus the menu credits and this document. Recheck the final branch and artifacts before submission. `Done` means the stated evidence exists; it does not certify eligibility, judging scores, or submission acceptance. `Needs us` means team action is required. `Unknown` means **Unconfirmed** by the supplied sources.
 
 ## Contents
 
@@ -63,7 +63,7 @@ This is a factual collection and planning aid, **not the team's final report, na
 | Actual qiskit-paulice calls on Clifford inputs; vary target/order/check budget | Done | `backend/quantum_core/paulice.py`, `backend/research.py`, `scripts/verify_paulice.py`, matched study. T inputs explicitly rejected. |
 | Custom valid checks or unchecked results for T circuits; only I/Z support at T crossings | Done | `backend/quantum_core/pauli.py`, `backend/missions/reference.py`; `tests/test_t_capable_scoring.py`. |
 | Disclosed noise; no paid hardware/account needed | Done | Synthetic protocols and exact parameters in section C and `backend/quantum_core/noise.py`. Owner's organizer clarification permits chosen noise; no calibration/QPU claim. |
-| For every studied configuration record unchecked fidelity, postselected fidelity, kept fraction and added ancilla/2Q/depth cost | Done | Detailed per-strategy mission JSON, matched study JSON and notebook. Compact game UI shows only combined score; use detailed artifacts for scientific comparisons. |
+| For every studied configuration record unchecked fidelity, postselected fidelity, kept fraction and added ancilla/2Q/depth cost | Done | Detailed per-strategy mission JSON, matched study JSON and notebook. Compact game UI shows Trusted Fidelity plus kept-shot fidelity and shot-budget indicators; use detailed artifacts for scientific comparisons. |
 | Compare T/depth/check-location effects and justify the best trade-off | Needs us | Numeric experiments exist, including negative results under uniform noise. Team must select figures and explain findings in its final report/video. |
 | Always pair postselected fidelity with retained fraction | Needs us | Data contains both. Preserve the pairing in all final figures and report claims. |
 | Presentation: 40%, explain and justify succinctly; honest limitations | Needs us | Actual recording, explanation and delivery belong to the team. |
@@ -71,7 +71,7 @@ This is a factual collection and planning aid, **not the team's final report, na
 | Methods: 20%, creative mechanics and correct QEC elements | Needs us | Explain exact invariant/scoring mapping, restrictions and original game design. Tests are evidence, not a judging score. |
 | Qiskit: 10%, intended API/add-on use and reproducible notebook | Done | Qiskit 2.5.2, Aer 0.17.2, Paulice 0.2.1; source and notebook reproduction commands below. |
 
-Brief pp.4–5: each criterion is marked 0–10; team score = `4×Presentation + 3×Effect + 2×Methods + Qiskit` (maximum 100), averaged across judges. Do not confuse that judging score with the game's `F_ps × S_keep`.
+Brief pp.4–5: each criterion is marked 0–10; team score = `4×Presentation + 3×Effect + 2×Methods + Qiskit` (maximum 100), averaged across judges. Do not confuse that judging score with the game's Trusted Fidelity objective with an explicit shot budget.
 
 ## B. Deadline and repository readiness
 
@@ -117,6 +117,8 @@ print('\n'.join(early))
 ```
 
 ## C. Project facts for the report
+
+Current verification record: [Trusted Fidelity final checks](docs/TRUSTED_FIDELITY_VERIFICATION.json). The updated frontend/Python code must be deployed together; the existing owner-reported hosted checks predate this metric.
 
 Supporting material added after the initial snapshot: [the executed per-level design/validation notebook](notebooks/level_design_and_validation.ipynb). It covers all sixteen lessons/missions, calls the real game functions, draws circuits using Qiskit, rescales no targets, and produces fresh score/propagation/noise/T-validation evidence. Its cached finite-family searches were actually regenerated with `scripts/cache_level_searches.py`; the source/version-fingerprinted data lives in `notebooks/data/level_search_results.json`. The cache avoids repeating the expensive search during ordinary reading/execution; winners are freshly scored on every notebook execution. This is supporting analysis, not the final report or video.
 
@@ -188,10 +190,10 @@ Active API routes: `GET /api/health`, `GET /api/levels`; `POST /api/missions/{co
 - **Inserted columns:** main-only editable bands at payload boundaries allow short intervals inside U; payload instructions remain fixed. Main1–3 need manual P′; Main4–10 generate locked signed closings before the player's final H, propagating only the selected interval. H/M remain player-placed. `backend/missions/{models,service,reference}.py`; `src/components/circuit-workspace/MissionCanvas.tsx`.
 - **T/Tdg restriction:** `T X T† = (X+Y)/sqrt(2)` is not one Pauli. Transport rejects X/Y support at each T/Tdg crossing; I/Z commute. It does not relax the rule merely because later T gates could cancel. Tutorial RX/RY/RZ use actual matrices and admit commuting axes/noncommuting Pauli-preserving special angles, with invalid sums rejected; main check gates remain restricted.
 - **Ideal reference:** Clifford output projector from stabilizer generators; T-doped payload from `Statevector.from_instruction`, always on initial |0…0〉. No stabilizer simulator evaluates a non-Clifford workload. `backend/quantum_core/scoring.py::ideal_reference`.
-- **Postselection:** let B be the unnormalized data block of noisy joint rho with every measured helper syndrome zero. `S_keep = Tr(B)`; `F_ps = Tr(rho_ideal B)/S_keep`; `combined = F_ps × S_keep = Tr(rho_ideal B)`. If S_keep≈0, conditional fidelity is undefined (`None`) and score is zero. Expected N_kept=N S_keep; N_discarded=N(1−S_keep); sampling overhead=1/S_keep when positive. Scores are exact density expectations; sampled diagnostic counts are seeded (2026) and do not decide pass/fail. Function: `accepted_metrics`.
+- **Postselection:** let B be the unnormalized data block of noisy joint rho with every measured helper syndrome zero. `S_keep = Tr(B)`; `F_ps = Tr(rho_ideal B)/S_keep`; `correct_shot_yield = F_ps × S_keep = Tr(rho_ideal B)`; `Trusted Fidelity = F_ps × min(1,S_keep/S_min)`. If S_keep≈0, conditional fidelity is undefined (`None`) and score is zero. Expected N_kept=N S_keep; N_discarded=N(1−S_keep); sampling overhead=1/S_keep when positive. Scores are exact density expectations; sampled diagnostic counts are seeded (2026) and do not decide pass/fail. Functions: `accepted_metrics` and the single `trusted_fidelity` implementation. This is an explicit-budget game design choice and simulation-only full-state fidelity; report F_ps and S_keep together, never as a hardware-count fidelity claim.
 - **Fault behavior:** anticommuting faults flip detectable syndrome parity; commuting faults can evade the check. A matched shell does not repair the state, detect every error, implement general QEC, or prove a fault-tolerance threshold.
 - **T scoring and search:** exact `AerSimulator(method='density_matrix', max_parallel_threads=1)` with a statevector ideal handles T/Tdg. Custom finite search in `backend/missions/reference.py` enumerates nonidentity single-helper Pauli products over five declared windows: whole payload, hotspot, predecessor+hotspot, hotspot→end, hotspot+up-to-three-following gates. Candidates pass the ordinary validator/auto-closer and must have I/Z at T crossings. The best is **best found / exact optimum within this declared family**, not an unrestricted global optimum over arbitrary multi-helper placements.
-- **Paulice scope:** `backend/quantum_core/paulice.py::optimize_clifford` verifies Clifford input first, translates CY/Y to supported gates, calls `add_pauli_checks(..., cost='gamma', method='windowed', seed=2026)` and enforces helper budget. Used by `backend/research.py`, timeline reveal and validation scripts. Native gamma/measurement-parity cost is **not** the game's coherent-state fidelity×yield optimum. Even Clifford mission best-game-score references are separately enumerated and Aer-scored; do not call them Paulice-certified global optima. Native searches may sensibly add zero checks.
+- **Paulice scope:** `backend/quantum_core/paulice.py::optimize_clifford` verifies Clifford input first, translates CY/Y to supported gates, calls `add_pauli_checks(..., cost='gamma', method='windowed', seed=2026)` and enforces helper budget. Used by `backend/research.py`, timeline reveal and validation scripts. Native gamma/measurement-parity cost is **not** the game's budgeted coherent-state objective. Even Clifford mission best-game-score references are separately enumerated and Aer-scored; do not call them Paulice-certified global optima. Native searches may sensibly add zero checks.
 
 ### C4. Disclosed synthetic noise protocols
 
@@ -210,35 +212,38 @@ Independent channels are composed sequentially; their probabilities are not a ca
 
 ### C5. Final validation table and test evidence
 
-Source: [level validation](docs/LEVEL_VALIDATION.md), `backend/missions/references.json`, `docs/CAPSTONE_DIFFICULTY_VERIFICATION.json`. Baseline=no checks. Blanket=checks everywhere allowed by the declared comparison; T blanket is a valid broad full-span product, not an invalid X-through-T circuit assigned a fake score. Best found is bounded as described above. All three quantities in this table are combined scores, not conditional fidelity alone.
+Source: [level validation](docs/LEVEL_VALIDATION.md), `backend/missions/references.json`, `docs/CAPSTONE_DIFFICULTY_VERIFICATION.json`. Baseline=no checks. Blanket=checks everywhere allowed by the declared comparison; T blanket is a valid broad full-span product, not an invalid X-through-T circuit assigned a fake score. Best found is bounded as described above. The strategy columns are Trusted Fidelity scores, not conditional fidelity alone. Main2’s final 0.97 budget preserves the existing three-star threshold; no star rule changed. S_min is the shot budget. Full paired F_ps/S_keep values and correct_shot_yield, plus three additional plausible strategies per level, are in the linked validation document. Noise and payloads are unchanged; budgets/targets and reference strategies were recalibrated.
 
-| Level | Data qubits | Fixed ancillas | T/Tdg | Baseline | Blanket | Reasonable | Best found | Target | Run spread |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| FS6 | 2 | 1 | 0 | 0.494132 | 0.456980 | 0.668136 | 0.686119 | 0.62 | 0 |
-| Main1 | 2 | 1 | 0 | 0.466665 | 0.435775 | 0.681383 | 0.681615 | 0.60 | 0 |
-| Main2 | 3 | 1 | 0 | 0.455944 | 0.406086 | 0.672137 | 0.672365 | 0.60 | 0 |
-| Main3 | 3 | 2 | 0 | 0.445385 | 0.336067 | 0.665396 | 0.665621 | 0.59 | 0 |
-| Main4 | 3 | 2 | 0 | 0.436066 | 0.331921 | 0.659251 | 0.659472 | 0.59 | 0 |
-| Main5 | 3 | 2 | 0 | 0.424433 | 0.318030 | 0.649079 | 0.649297 | 0.58 | 0 |
-| Main6 | 3 | 2 | 0 | 0.414982 | 0.321514 | 0.642386 | 0.642600 | 0.58 | 0 |
-| Main7 | 3 | 3 | 0 | 0.405382 | 0.276192 | 0.635114 | 0.635325 | 0.57 | 0 |
-| Main8 | 4 | 3 | 1 | 0.390749 | 0.211935 | 0.616308 | 0.617534 | 0.56 | 0 |
-| Main9 | 4 | 3 | 3 | 0.381199 | 0.204179 | 0.608187 | 0.609392 | 0.55 | 0 |
-| Main10 | 4 | 3 | 5 | 0.371958 | 0.217403 | 0.600295 | 0.601479 | 0.55 | 0 |
+| Level | Data | Ancillas | T/Tdg | S_min | Baseline | Blanket | Reasonable | Best found | Target | Spread |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| FS6 | 2 | 1 | 0 | 0.99 | 0.494132 | 0.461596 | 0.674885 | 0.693050 | 0.62 | 0 |
+| 1 | 2 | 1 | 0 | 0.99 | 0.466665 | 0.440177 | 0.682206 | 0.688500 | 0.63 | 0 |
+| 2 | 3 | 1 | 0 | 0.97 | 0.455944 | 0.418645 | 0.692925 | 0.693160 | 0.64 | 0 |
+| 3 | 3 | 2 | 0 | 0.94 | 0.445385 | 0.357518 | 0.707868 | 0.708107 | 0.65 | 0 |
+| 4 | 3 | 2 | 0 | 0.92 | 0.436066 | 0.360783 | 0.716577 | 0.716818 | 0.66 | 0 |
+| 5 | 3 | 2 | 0 | 0.90 | 0.424433 | 0.353367 | 0.705837 | 0.721441 | 0.66 | 0 |
+| 6 | 3 | 2 | 0 | 0.87 | 0.414982 | 0.369557 | 0.720186 | 0.738621 | 0.67 | 0 |
+| 7 | 3 | 3 | 0 | 0.86 | 0.405382 | 0.321153 | 0.720304 | 0.738750 | 0.67 | 0 |
+| 8 | 4 | 3 | 1 | 0.83 | 0.390749 | 0.255343 | 0.723805 | 0.744017 | 0.67 | 0 |
+| 9 | 4 | 3 | 3 | 0.82 | 0.381199 | 0.248999 | 0.723079 | 0.743161 | 0.67 | 0 |
+| 10 | 4 | 3 | 5 | 0.80 | 0.371958 | 0.271754 | 0.731521 | 0.751848 | 0.67 | 0 |
 
 FS1–5 completion is learning evidence/experiments/MCQs, not a numeric fidelity threshold. A zero-check/blanket numeric failure for them would be invented. Stored tutorial requests: `backend/reference_solutions/tutorials.json`; exact ordered completion: `e2e/full-progression.spec.ts`.
 
-T scorer certificates in `docs/T_SCORING_VERIFICATION.json`: Clifford stabilizer/statevector references agree over Main1–7, maximum metric difference 7.78e−16; independent small-Clifford density difference 2.78e−16; small-T density difference 2.22e−16. Each T level's valid Z shell has noiseless fidelity/retention/score 1; X/Y crossings are rejected before scoring. Exact score repeat spread is 0. Certificate maximum uncached local seconds: Main8 0.236, Main9 0.280, Main10 0.334 (seven physical wires). These are local saved certificate timings, not Vercel cold starts or a universal performance guarantee. Reproduction validates a 10-second ceiling; actual times vary by machine.
+T scorer certificates in `docs/T_SCORING_VERIFICATION.json`: Clifford stabilizer/statevector references agree over Main1–7, maximum metric difference 9.99e-16; independent small-Clifford density difference 3.33e-16; small-T density difference 2.22e-16. Each T level’s valid Z shell has noiseless fidelity/retention/score 1; X/Y crossings are rejected before scoring. Exact repeat spread is 0. Uncached local maximum seconds: Main8 0.121, Main9 0.130, Main10 0.168 (seven physical wires). These are local measurements, not Vercel cold starts; actual times vary. Reproduction enforces a 10-second ceiling.
 
 | Verification | Evidence and scope |
 |---|---|
-| Backend suite | Fresh run for this task: **215 passed**, three dependency warnings (Starlette/httpx deprecation and two Paulice basis-translation warnings), no gameplay changes. `pytest tests -q`. |
-| Frontend | Fresh typecheck, **39 Vitest tests passed**, production build succeeded. |
-| Full progression | Fresh local production journey passed on desktop and mobile: FS1→6, then Main1→10 using real drag/drop handlers, MCQs, reference scores and ordered unlocks; two project cases. |
-| New menu credits | Fresh desktop/mobile cases passed: names, absent unknown links/photos, known safe link, keyboard link focus, Escape/close focus return, no horizontal dialog overflow, absent in workbenches. `e2e/team-credits.spec.ts`. |
-| All level references / T crosschecks | `scripts/validate_all_levels.py` freshly passed FS1–6 stored requests, all four main strategies with repeated exact scores and T agreement/density/forbidden-crossing tests. |
-| Hosted API | Owner's saved `artifacts/live-smoke.json`: 78 requests, maximum 2.414 seconds, reference agreement within 1e−9. This ignored local artifact is not automatically included in the public repo. |
-| Hosted browser suite | Owner reports “All tests passed” after switching to mobile/hotspot connectivity. The deployment config runs six desktop/mobile cases. Treat as **owner-reported**, not a newly independently rerun hosted test by this task; preserve the actual output/trace if needed for the report. |
+| Backend suite | Trusted Fidelity final run: **240 passed**, 3 existing dependency warnings; includes saved notebook/source checks. `pytest tests -q`. |
+| Frontend | Fresh typecheck, **41 Vitest tests passed**, production build succeeded. |
+| Full progression | Final local production browser suite: **8 passed**, desktop/mobile, 144.40 s; full FS1→Main10 real drag/drop/unlocks, Main2 three stars, direct links/assets/console, QSphere and legacy-score migration. |
+| New menu credits | Earlier credits-task desktop/mobile cases passed (unchanged; not rerun by the metric task): names, absent unknown links/photos, known safe link, keyboard link focus, Escape/close focus return, no horizontal dialog overflow, absent in workbenches. `e2e/team-credits.spec.ts`. |
+| All level references / T crosschecks | `scripts/validate_all_levels.py` freshly passed FS1–6 stored requests, all seven main strategies with repeated exact scores and T agreement/density/forbidden-crossing tests. |
+| Current local production API | **114 requests passed**, max 2.715 s; all seven FS6/main strategies match final references. Hosted redeployment remains pending. |
+| Trusted Fidelity notebook | 24 real executed cells, all 16 summaries match with zero numeric disagreements; 39.27 s kernel execution including startup, 36.19 s analysis; cached search 382.12 s. |
+| Matched study preservation | All 35 rows, pre-existing fields, noise protocol and Paulice observable results are unchanged from `pre-trusted-fidelity`; unbudgeted correct-shot yield is not the game score. |
+| Hosted API | Owner's saved `artifacts/live-smoke.json`: 78 requests, maximum 2.414 seconds, **before Trusted Fidelity**, reference agreement within 1e−9. This ignored local artifact is not automatically included in the public repo. |
+| Hosted browser suite | Owner reports “All tests passed” after switching to mobile/hotspot connectivity. The previous config ran six cases; the current suite has eight and must be rerun after redeployment. Treat as **owner-reported**, not a newly independently rerun hosted test by this task; preserve the actual output/trace if needed for the report. |
 
 Reproduce on Windows (set these thread limits before numeric imports for stable timings):
 
@@ -302,7 +307,7 @@ Known limits, with evidence in `backend/*/models.py`, `api/index.py`, `vercel.js
 - Hobby is personal/noncommercial with finite free quotas and cold starts. No paid add-on/external database; no claim of unlimited concurrency or uptime. Actual dashboard bundle size and cross-redeploy storage persistence still require owner confirmation; local feasibility measurements are not cloud measurements.
 - Some Wi-Fi/ISP network paths timed out while mobile data reached the same site; user reported all tests passing after network change. Organization Wi-Fi access is not guaranteed by app tests. This is not evidence of a physics/scoring failure.
 - Local progress does not sync between browsers, devices, localhost, preview URLs or production origins. There is no secure multiplayer/leaderboard feature.
-- Synthetic hotspot improvement is not calibrated hardware advantage. Under uniform noise, check overhead can make the combined score worse even when conditional fidelity rises. Discuss both outcomes.
+- Synthetic hotspot improvement is not calibrated hardware advantage. Under uniform noise, check overhead can make correct-shot yield or budgeted game score worse even when conditional fidelity rises. Discuss both outcomes.
 - Existing notes (`SCIENTIFIC_REPORT.md`, `DELIVERABLES_AUDIT.md`, `DEMO_SCRIPT.md`) contain old draft/submission assertions; treat code/current certificates and this dated evidence as the factual starting point, not a team-authored final deliverable.
 
 ### C7. Possible result figures and screenshots to capture yourselves
@@ -317,7 +322,7 @@ Known limits, with evidence in `backend/*/models.py`, `api/index.py`, `vercel.js
 | FS6 zero / sensible / blanket and qualified comparison | `/?school=6`, stored reference requests | Fidelity/yield/overhead trade-off and distinction between native Paulice and Aer-scored reference. |
 | Main1 inserted interval; Main4 auto-closer; Main10 green T-safe solution | `/?mission=1`, `4`, `10` after legitimate unlock or visible expert skip | Player agency, locked payloads, generated P′ and T constraints. |
 | Paired F_ps and S_keep versus T count/depth | `docs/TRACK_EXPERIMENTS.json`, notebook | Matched-family comparison; never plot conditional fidelity without yield/context. |
-| Baseline / blanket / reasonable / best-found combined-score bars with target line | Section C5 table plus full reference metrics | Fair solvability and meaningful overhead; label bounded best found honestly. |
+| Baseline / blanket / reasonable / best-found Trusted Fidelity bars with target line | Section C5 table plus full reference metrics | Fair solvability and meaningful overhead; label bounded best found honestly. |
 | Main menu About, desktop and mobile | Mission control footer → About the team | Team identity, responsive UI and no workbench space consumed. |
 
 ## D. Libraries, tools, and published-method credits
@@ -700,7 +705,7 @@ Suggestions only. No official page count or video duration was confirmed. These 
 3. Scientific method: invariant, signed propagation, ancilla shell, ideal reference, noisy channel evolution and postselection metrics. State initial state and restrictions.
 4. Game-to-physics mapping and architecture: one data-flow diagram, shared workspaces, immutable payload, assisted closing, inserted intervals, local persistence.
 5. Experimental protocol: matched Clifford/T family, width/depth, T counts, check count/location/order, exact synthetic noise parameters, seeds/dependency versions and resource overhead.
-6. Results: paired F_ps/S_keep figures, combined-score comparison and baseline/blanket/typical/best-found table; explain positive and negative outcomes under distinct protocols.
+6. Results: paired F_ps/S_keep figures, Trusted Fidelity comparison with explicit shot budgets and baseline/blanket/typical/best-found table; explain positive and negative outcomes under distinct protocols.
 7. Verification: unit/frontend/progression/live evidence, independent density checks, T rejection, seven-wire timing; label owner-reported versus reproduced results.
 8. Limitations and decisions: finite search family, synthetic noise, capped width, no general QEC decoder or quantum-advantage claim, free hosting and network dependence.
 9. Reproduction/setup and artifact locations.

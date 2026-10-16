@@ -70,7 +70,7 @@ def test_ideal_reference_matches_bell_state_and_handles_t():
 def test_accepted_metrics_normalizes_only_the_zero_syndrome_block():
     rho=np.diag([.6,.1,.2,.1]);ideal=np.diag([1,0])
     result=accepted_metrics(rho,ideal,1)
-    assert result==pytest.approx({'fidelity':6/7,'retention':.7,'score':.6})
+    assert result==pytest.approx({'fidelity':6/7,'retention':.7,'score':.6,'correct_shot_yield':.6})
     empty=accepted_metrics(np.diag([0,0,1,0]),ideal,1)
     assert empty['fidelity'] is None and empty['score']==0
 

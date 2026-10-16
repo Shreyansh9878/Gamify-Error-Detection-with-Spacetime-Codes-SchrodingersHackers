@@ -9,7 +9,6 @@ import type {
   DropTarget,
   PaletteConfig,
   Node,
-  Wire,
 } from "@/lib/circuit-workspace/model";
 type Carry = {
   tool?: Tool;

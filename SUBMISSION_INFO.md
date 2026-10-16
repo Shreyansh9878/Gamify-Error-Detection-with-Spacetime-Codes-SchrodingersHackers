@@ -235,14 +235,14 @@ T scorer certificates in `docs/T_SCORING_VERIFICATION.json`: Clifford stabilizer
 | Verification | Evidence and scope |
 |---|---|
 | Backend suite | Trusted Fidelity final run: **240 passed**, 3 existing dependency warnings; includes saved notebook/source checks. `pytest tests -q`. |
-| Frontend | Fresh typecheck, **41 Vitest tests passed**, production build succeeded. |
-| Full progression | Final local production browser suite: **8 passed**, desktop/mobile, 144.40 s; full FS1→Main10 real drag/drop/unlocks, Main2 three stars, direct links/assets/console, QSphere and legacy-score migration. |
-| New menu credits | Earlier credits-task desktop/mobile cases passed (unchanged; not rerun by the metric task): names, absent unknown links/photos, known safe link, keyboard link focus, Escape/close focus return, no horizontal dialog overflow, absent in workbenches. `e2e/team-credits.spec.ts`. |
+| Frontend | Cleanup review: strict typecheck/unused-symbol checks, **43 Vitest tests passed**, production build succeeded. |
+| Full progression | Cleanup review full local production browser suite: **64 passed**, desktop/mobile, 266.41 s; zero skipped/flaky/unexpected, full FS1→Main10 real drag/drop/unlocks, Main2 three stars, direct links/assets/console, QSphere and legacy-score migration. See `docs/CLEANUP.md`. |
+| New menu credits | Included in the cleanup review full desktop/mobile suite: names, absent unknown links/photos, known safe link, keyboard link focus, Escape/close focus return, no horizontal dialog overflow, absent in workbenches. `e2e/team-credits.spec.ts`. |
 | All level references / T crosschecks | `scripts/validate_all_levels.py` freshly passed FS1–6 stored requests, all seven main strategies with repeated exact scores and T agreement/density/forbidden-crossing tests. |
-| Current local production API | **114 requests passed**, max 2.715 s; all seven FS6/main strategies match final references. Hosted redeployment remains pending. |
+| Current local production API | Previous local metric verification: **114 requests passed**, max 2.715 s; all seven FS6/main strategies match final references. Trusted Fidelity has subsequently been verified on the hosted API as described below. |
 | Trusted Fidelity notebook | 24 real executed cells, all 16 summaries match with zero numeric disagreements; 39.27 s kernel execution including startup, 36.19 s analysis; cached search 382.12 s. |
 | Matched study preservation | All 35 rows, pre-existing fields, noise protocol and Paulice observable results are unchanged from `pre-trusted-fidelity`; unbudgeted correct-shot yield is not the game score. |
-| Hosted API | Owner's saved `artifacts/live-smoke.json`: 78 requests, maximum 2.414 seconds, **before Trusted Fidelity**, reference agreement within 1e−9. This ignored local artifact is not automatically included in the public repo. |
+| Hosted API | Independent 16 Oct cleanup-review run: **114 requests passed**, maximum **2.13 seconds**, protocol `main-missions-trusted-v3-all-wire`, reference agreement within 1e−9, including all seven main/FS6 strategies. Reproduce with `scripts/smoke_deployment.py` and the live URL in C6; ignored raw output is `artifacts/cleanup-hosted-smoke.json`. Earlier owner-reported smoke used 78 requests before the metric change. |
 | Hosted browser suite | Owner reports “All tests passed” after switching to mobile/hotspot connectivity. The previous config ran six cases; the current suite has eight and must be rerun after redeployment. Treat as **owner-reported**, not a newly independently rerun hosted test by this task; preserve the actual output/trace if needed for the report. |
 
 Reproduce on Windows (set these thread limits before numeric imports for stable timings):

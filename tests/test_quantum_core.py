@@ -1,6 +1,5 @@
 """Small readable checks for every public core physics function."""
 import json
-from math import pi
 from types import SimpleNamespace
 import numpy as np
 import pytest

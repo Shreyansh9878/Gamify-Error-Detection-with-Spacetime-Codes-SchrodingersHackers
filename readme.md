@@ -25,7 +25,7 @@ Live game: [Quantum Shield](https://gamify-error-detection-with-spaceti-sand.ver
 
 ## Local setup
 
-This branch's Trusted Fidelity changes require a new deployment of the frontend and Python function together; the linked existing live game may still use the previous metric. No deployment configuration changes are needed. See [migration, stale statements and exact hosted recheck commands](docs/TRUSTED_FIDELITY_MIGRATION.md).
+The live game was independently checked on 16 October 2026: all 114 API smoke requests passed using `main-missions-trusted-v3-all-wire`, with score agreement within 1e-9 and a slowest request of 2.13 seconds. Trusted Fidelity is deployed. Future code changes still require deploying the frontend and Python function together; no deployment configuration changes are needed. See [migration, stale statements and exact hosted recheck commands](docs/TRUSTED_FIDELITY_MIGRATION.md).
 
 Use Node.js 24.x and preferably Python 3.12 to match deployment. The existing Python 3.10 development environment also passes the physics tests:
 

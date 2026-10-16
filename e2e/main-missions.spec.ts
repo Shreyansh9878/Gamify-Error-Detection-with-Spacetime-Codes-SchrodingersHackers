@@ -126,10 +126,15 @@ test("main DnD, inserted columns, manual red/green closure, Dustbin and removal 
   await expect(page.locator('[data-canvas-target="b1s0@a0"]')).toHaveCount(0);
   const ref = refs()[0];
   const bad = structuredClone(ref.reasonableDraft);
-  const closing = bad.operations.find(
-    (g) => g.name === "cx" && g.boundary === 2,
-  )!;
-  closing.name = "cz";
+  const closing = bad.operations
+    .filter((g) => ["cx", "cy", "cz"].includes(g.name))
+    .sort((a, b) => a.boundary - b.boundary || a.slot - b.slot)
+    .at(-1)!;
+  expect(
+    closing,
+    "The manual reference must contain a closing check",
+  ).toBeDefined();
+  closing.name = closing.name === "cz" ? "cx" : "cz";
   await applyInvalid(page, bad);
   await expect(
     page.locator('.uc-connector-layer path[stroke="#fb8f99"]'),
@@ -151,9 +156,38 @@ test("main T crossing rejects a non-Pauli opening and blocks scoring", async ({
   page,
 }) => {
   await enter(page, 8);
-  const valid = refs()[7].reasonableDraft,
-    bad = structuredClone(valid);
-  bad.operations.find((g) => g.name === "cx")!.name = "cz";
+  const levels = await (await page.request.get("/api/levels")).json();
+  const level = levels.find((l: { id: number }) => l.id === 8);
+  const crossing = level.payload.find(
+    (g: { name: string }) => g.name === "t" || g.name === "tdg",
+  );
+  expect(
+    crossing,
+    "This test needs a real non-Clifford crossing",
+  ).toBeDefined();
+  const start = crossing.column,
+    end = start + 1,
+    helper = level.qubits;
+  // Isolate the actual T boundary: the calibrated winning window may avoid it.
+  const valid: Draft = {
+    version: 1,
+    levelId: 8,
+    bands: { "0": 4, [level.payload.length]: 8, [start]: 4, [end]: 8 },
+    operations: [
+      { id: "h0", name: "h", qubits: [helper], boundary: start, slot: 0 },
+      {
+        id: "opening",
+        name: "cz",
+        qubits: [helper, crossing.qubits[0]],
+        boundary: start,
+        slot: 1,
+      },
+      { id: "h1", name: "h", qubits: [helper], boundary: end, slot: 6 },
+      { id: "readout", name: "m", qubits: [helper], boundary: end, slot: 7 },
+    ],
+  };
+  const bad = structuredClone(valid);
+  bad.operations.find((g) => g.id === "opening")!.name = "cx";
   await applyInvalid(page, bad);
   await expect(page.locator(".mission-validation")).toContainText("Non-Pauli");
   await expect(

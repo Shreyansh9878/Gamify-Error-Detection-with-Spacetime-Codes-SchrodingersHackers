@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 from backend.app import app
 from backend.missions.models import Draft, CompileRequest
 from backend.missions.levels import get_level
-from backend.missions.reference import shell, empty
+from backend.missions.reference import shell
 from backend.missions.service import validate, run, generate, compile_source, _run, exact_density
 
 REFERENCE=Path(__file__).resolve().parents[1]/'backend/missions/references.json'

@@ -87,7 +87,7 @@ export function noiseModel(c: Circuit): CanvasModel {
     columns,
     nodes: c.operations
       .flatMap((o) =>
-        o.qubits.map((q, i) => ({
+        o.qubits.map((q) => ({
           id: o.id,
           label:
             o.name === "decoherence"

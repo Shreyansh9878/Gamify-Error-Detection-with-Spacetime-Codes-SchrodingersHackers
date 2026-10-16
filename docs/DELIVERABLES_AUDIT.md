@@ -20,7 +20,7 @@ Source: complete five-page “Qiskit Fall Fest 2026 Hackathon — Advanced Track
 | Disclosed comparable synthetic noise | Met | SCIENTIFIC_REPORT exact parameters and distinct protocols; experiment JSON; organizer clarification above |
 | Record unchecked/postselected fidelity, kept yield and resource overhead for every configuration | Met | references.json per-strategy metrics; TRACK_EXPERIMENTS rows and separate observable benchmarks; notebook |
 | Compare T count, depth, check placement and fidelity/yield trade-off | Met | Executable notebook, matched experiment, mission references, written interpretation including negative results |
-| Never present research conditional fidelity without retained fraction | Met | Paired report/JSON/notebook metrics; main UI deliberately shows product only |
+| Never present research conditional fidelity without retained fraction | Met | Paired report/JSON/notebook metrics; compact main UI shows Trusted Fidelity, kept-shot fidelity and retained fraction with the shot budget |
 | Reproducible runnable code and dependencies | Met | requirements.lock.txt, pnpm-lock.yaml, setup commands, seeded counts and exact score repeats |
 | Reproducible notebook (Qiskit judging quality) | Met | notebooks/track_experiments.ipynb; execute_track_notebook.py executes real outputs |
 | Written report | Met | SCIENTIFIC_REPORT.md, LEVEL_VALIDATION.md, generated physics certificates |

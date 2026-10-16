@@ -1,6 +1,4 @@
 """Regression tests for the integrated canvas contracts and real quantum frames."""
-import copy
-import json
 import numpy as np
 import pytest
 from fastapi.testclient import TestClient
@@ -12,7 +10,7 @@ from backend.learning.visualization import state_visualization, component_page, 
 from backend.noise_lab.models import Circuit, LabRunRequest
 from backend.noise_lab.simulator import run_lab
 from backend.advanced_lab.models import Draft, NonCliffordDraft, RunRequest, NonCliffordRequest
-from backend.advanced_lab.service import run, validate
+from backend.advanced_lab.service import run
 from backend.graduation_lab.models import Strategy, RunRequest as CapstoneRequest
 from backend.graduation_lab import service as capstone
 

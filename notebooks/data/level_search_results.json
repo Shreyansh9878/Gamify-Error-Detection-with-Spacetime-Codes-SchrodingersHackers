@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "generator": "python scripts/cache_level_searches.py",
   "implementation": "backend.missions.reference.optimize",
-  "generatedAtUtc": "2026-10-16T12:57:53.602800+00:00",
-  "seconds": 382.12158360000467,
+  "generatedAtUtc": "2026-10-16T14:58:12.279898+00:00",
+  "seconds": 423.6031994000077,
   "seed": 2026,
   "signature": {
     "files": {
@@ -11,7 +11,7 @@
       "backend/advanced_lab/__init__.py": "b17a28796a2b702dbf173aaf6943b796e8c0bef8cadc2c49812b3f0f10bca3fd",
       "backend/advanced_lab/code_parser.py": "f13915d85d65db96b2b626326d796a86c9810501bd0e3ef66497c61c6f593f6e",
       "backend/advanced_lab/models.py": "316baf7a5665fe986a3828b206f4166af298dcbf187ee0319a6f59be71df4e63",
-      "backend/advanced_lab/service.py": "333ec2359f1168feed437b6151eab2fc612337aa2684038c4b61e93baee3c2b7",
+      "backend/advanced_lab/service.py": "d7295bf9742e6cba068d75b9154f4b726751357fc0d5a31b5a5f5cc2eba18edb",
       "backend/app.py": "e1d03ebe7a2d78dfa13eef382acd568c2dbb0c21e8d0e15756d5ed2539d3cbbb",
       "backend/check_lab/__init__.py": "ab268e7c57c72fe2c50ae07f3e30f0438094c411ac886bfa98ff9ab60dccb3a3",
       "backend/check_lab/code_parser.py": "faf5bcd85d40b7ee96fc4468d09a4a78f22718d64b51a49a737a1923eacea99f",
@@ -26,7 +26,7 @@
       "backend/graduation_lab/models.py": "4c47b6eabc2dd4227ec34fe80e86f9f7a935f67891ad1bbe9e14394487980fca",
       "backend/graduation_lab/paulice_adapter.py": "4525878c1fb1d70e251c1abf4c0af0ade50b27abcfdd47377c59a37cd0dc66cc",
       "backend/graduation_lab/scheduler.py": "7048b1f3669472a478349eb556f64597d76fa7204254fd69fc2c1fd59b4ef2a7",
-      "backend/graduation_lab/service.py": "ee10628f56a7534d2c46b9cc1cfcef6c66167d3b0fd2eb342b245a59a9f25cfb",
+      "backend/graduation_lab/service.py": "c3318344462106012f783a85357f80971cff813380408e1428e2edbc49347dfe",
       "backend/learning/__init__.py": "6bf1417f6d82e39366cdde05b89c8285d97fa862862ffaee000045fe892a7a83",
       "backend/learning/common.py": "99d49525a5b3ec7c197f980bbba7559f20c99dcf59afde41550571c1ecbb2016",
       "backend/learning/noise_targets.py": "774bc53e14099e2411ad58071e7a2ec5d4f889ac379e6a3b225ff90202f3b358",
@@ -37,14 +37,14 @@
       "backend/missions/__init__.py": "377e9d3fd05af0b00682e3eee2b91a110f268dded58291127daeee1cc10828b1",
       "backend/missions/levels.py": "35ccb9800f3c6a46f71af4fb62fdac9c55ddc00c62dd60f897e7bfe9ab04adb6",
       "backend/missions/models.py": "b6f465322baac422fceb29a7bbaf53579e996989694846c5218ff3f7942a01b4",
-      "backend/missions/reference.py": "8ea20d3180da219e3f2ead2942430d7a707cde65cf60305c3f9b6359d1dc7eef",
+      "backend/missions/reference.py": "d712b06e4476176801bb9132e84e2b539ac2f9db4f958126350e5acc474f8458",
       "backend/missions/service.py": "4b74fb4b3a41a0c14622c6198bc7f7fdedf5b1a51da53a38a4b2fb0a16dbee66",
       "backend/missions/simulation.py": "5b051ee3f8e2a96594c3081d55d16ed61d1c1402d2a57756be54c0ea134e7de6",
       "backend/models.py": "4ed8876c840a0fa95c3b9f856f5ad6372e5857eeaa229742a3cd65c92a8c69e4",
       "backend/noise_lab/__init__.py": "1bbf238f5272f4a3a2eaf5121c5f936f38b20816a67661299ea5ee62f43f8a38",
       "backend/noise_lab/code_parser.py": "386fa2c7ffa333db8e9b5813ac4c65cff7e3fb8b893ba68138a19b0c0deecd62",
       "backend/noise_lab/models.py": "17558e6b9bc425a5c8f9bd8d2378ecad6587e195237939e2ab5a6fd1e7ceb960",
-      "backend/noise_lab/simulator.py": "2e3128703b603132831692d8f80462e3b07181c660eb4b7f6d7868300ed408e9",
+      "backend/noise_lab/simulator.py": "11d3663f5ff83c51bf4bcc4c66c10f0517d218fb38598a1818652a04f9bb4049",
       "backend/protection_lab/__init__.py": "249ec1d48ebb60fff43d8a9114a683d010059c82d15559776f7604dc7c4c2c5f",
       "backend/protection_lab/code_parser.py": "a4bff6447e349a667185dcc6718f786e4dabfa4e6c481d66c111803aa08ddaf9",
       "backend/protection_lab/models.py": "dbb78b3a945f402dfe900c4eec24476372a998d46353d5f65d9d33d0af22477b",
@@ -60,8 +60,8 @@
       "backend/timeline_lab/capstone_config.py": "75eb4afa83c8c51c65e7ec1f430387c94e898f8c077801476c40492e9722150b",
       "backend/timeline_lab/capstone_examples.py": "8b7d66e5d34a5b50123fc27876a6c1f22d79e385d634dddb9738ff5bc01712f0",
       "backend/timeline_lab/models.py": "f929e900b991f2a7ce84a7acc0b87bac21d48897b58e17fea4a81dbb6326567a",
-      "backend/timeline_lab/service.py": "b64dc5d7189068b253a55abf19f296b5109df472c36588619458113148ea6261",
-      "backend/tutorial.py": "70edd19f35a6fae0fb2a3b9cc86e2abd2b88ca7db1ba5ca3e9081997c18577f1",
+      "backend/timeline_lab/service.py": "2093aed4e1f026eb1cd11faf3a7a41f80926092f9445504b363b4ba4fd6362d4",
+      "backend/tutorial.py": "04fe0c9216a3baf6949457e5f9028ff5c2743a1d1af4a97ff3e4f9e69fe06ea2",
       "backend/missions/references.json": "9ee9fe95bafe4359d40cd77c719c2a45b946dcffaa1b948bb28078620e0d0033",
       "backend/reference_solutions/capstone.json": "6d979d856752d63b9f77b5e38a7b7fca46395a296b2546cb296ede5354811b6f",
       "backend/reference_solutions/tutorials.json": "451475f2576ee39c7073922b0ba25e19dd2cee5d2ca5f350bf19f37283fcf0fd"
@@ -77,7 +77,7 @@
   "results": [
     {
       "level": 1,
-      "seconds": 2.4141885000281036,
+      "seconds": 3.6270849000138696,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -159,7 +159,7 @@
     },
     {
       "level": 2,
-      "seconds": 13.349392000003718,
+      "seconds": 15.809156299976166,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -241,7 +241,7 @@
     },
     {
       "level": 3,
-      "seconds": 19.2193949999928,
+      "seconds": 19.843660000013188,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -323,7 +323,7 @@
     },
     {
       "level": 4,
-      "seconds": 19.209620000008726,
+      "seconds": 18.726580899994588,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -395,7 +395,7 @@
     },
     {
       "level": 5,
-      "seconds": 20.274627600010717,
+      "seconds": 20.376193199976115,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -467,7 +467,7 @@
     },
     {
       "level": 6,
-      "seconds": 21.90173079998931,
+      "seconds": 21.855289900006028,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -539,7 +539,7 @@
     },
     {
       "level": 7,
-      "seconds": 23.781015499989735,
+      "seconds": 22.823152600001777,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -611,7 +611,7 @@
     },
     {
       "level": 8,
-      "seconds": 95.35839199999464,
+      "seconds": 101.63644529998419,
       "result": {
         "kind": "custom-t-pauli-search",
         "pauliceUsed": false,
@@ -683,7 +683,7 @@
     },
     {
       "level": 9,
-      "seconds": 83.57492320000893,
+      "seconds": 94.38093800001661,
       "result": {
         "kind": "custom-t-pauli-search",
         "pauliceUsed": false,
@@ -755,7 +755,7 @@
     },
     {
       "level": 10,
-      "seconds": 82.94851359998574,
+      "seconds": 104.422511199984,
       "result": {
         "kind": "custom-t-pauli-search",
         "pauliceUsed": false,

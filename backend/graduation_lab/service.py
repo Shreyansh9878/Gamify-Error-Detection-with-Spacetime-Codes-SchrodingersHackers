@@ -7,7 +7,7 @@ import numpy as np
 from qiskit.quantum_info import DensityMatrix, Statevector, partial_trace
 from ..learning.common import circuit_from, evolve, branches, sample_joint, stats, resources, native_export, fingerprint
 from ..learning.visualization import joint_frames
-from .fixture import manifest, FIXTURE, NOISE, SCHEDULER, METRIC
+from .fixture import manifest, FIXTURE, METRIC
 from .models import Strategy
 from .scheduler import schedule, construction, canonical
 

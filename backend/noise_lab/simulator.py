@@ -6,7 +6,7 @@ import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import DensityMatrix, Pauli, partial_trace, purity, state_fidelity
 from qiskit_aer.noise import thermal_relaxation_error
-from .models import Circuit, LabRunRequest, ordered
+from .models import LabRunRequest, ordered
 from ..learning.visualization import state_visualization
 
 VERSION = 'noise-lab-1.0.0'

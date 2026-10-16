@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 from qiskit import QuantumCircuit
-from backend.missions.simulation import ideal_reference,accepted_metrics,execution_schedule,simulate
+from backend.missions.simulation import ideal_reference,accepted_metrics,execution_schedule
 from backend.missions.levels import get_level
 from backend.missions.reference import shell
 from backend.missions.service import validate

@@ -6,7 +6,6 @@ five meaningful windows, plus the full-register comparison strategy. Every
 candidate is an actual player draft, processed by the ordinary auto-closer.
 """
 import itertools
-import numpy as np
 from .levels import get_level
 from .models import Draft, Gate
 from .service import _run, validate, single_term, qc_for, payload

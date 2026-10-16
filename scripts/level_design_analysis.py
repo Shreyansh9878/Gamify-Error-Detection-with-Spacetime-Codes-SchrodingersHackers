@@ -3,13 +3,11 @@
 The drawing adapters add labels/barriers for readability; they never score a
 circuit. No channel evolution, check validation, optimizer or decoder is copied.
 """
-from collections import defaultdict
 from copy import deepcopy
 import html
 import io
 import json
 from pathlib import Path
-import time
 import warnings
 
 from IPython.display import HTML, Image, display
@@ -29,7 +27,6 @@ from backend.timeline_lab.capstone_examples import example
 from backend.missions.models import Draft as MissionDraft
 from backend.missions.levels import get_level
 from backend.missions import service as missions
-from backend.missions.reference import optimize
 from backend.quantum_core.pauli import opening_factor, propagate
 from backend.quantum_core.paulice import optimize_clifford
 

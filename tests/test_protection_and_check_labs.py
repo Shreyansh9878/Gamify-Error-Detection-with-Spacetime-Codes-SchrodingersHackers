@@ -1,6 +1,5 @@
 import ast
 import math
-import numpy as np
 import pytest
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
@@ -10,7 +9,7 @@ from backend.protection_lab.models import ProtectionRequest, Experiment, Compile
 from backend.protection_lab.code_parser import parse as pparse, compile_source as pcompile
 from backend.protection_lab.service import run as prun, preview as ppreview, generated, correct
 from backend.check_lab.models import Draft, CheckRequest, TraceRequest, CompileRequest as CC
-from backend.check_lab.code_parser import compile_source as ccompile, parse as cparse
+from backend.check_lab.code_parser import compile_source as ccompile
 from backend.check_lab.service import run as crun, validate, coverage, trace
 from backend.learning.common import evolve
 

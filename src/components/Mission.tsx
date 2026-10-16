@@ -344,7 +344,7 @@ export function Mission({
               <strong className="mission-combined" data-testid="combined-score">
                 {outcome.combinedScore.toFixed(4)}
               </strong>
-              <span>Trusted Fidelity</span>
+              <span>Trusted Fidelity</span>{" "}
               <span
                 className={outcome.passed ? "mission-pass" : "mission-fail"}
               >

@@ -24,6 +24,12 @@ def calibrate():
                 optimal=Draft.model_validate(comparison['best']['draft']),misplaced=by_label['IZ'],
                 tooSmall=by_label['ZI'],overchecked=by_label['YX'])
     metrics={k:service.evaluate(d,visuals=False) for k,d in drafts.items()}
+    payload=service.circuit(service.fixed_payload(6),2)
+    two=lambda qc:sum(len(g.qubits)==2 for g in qc.data)
+    for kind,draft in drafts.items():
+        qc=service.circuit(service.operations(draft),3)
+        metrics[kind].update(addedAncillas=int(bool(draft.operations)),
+                             addedTwoQubit=two(qc)-two(payload),addedDepth=qc.depth()-payload.depth())
     row=dict(id='FS6',qubits=2,ancillas=1,tCount=0,minimumKept=service.CAPSTONE_MINIMUM_KEPT,initialMinimumKept=.60,
              target=service.CAPSTONE_GOAL,spread=0.,metrics=metrics)
     row.update({k:v['score'] for k,v in metrics.items()})

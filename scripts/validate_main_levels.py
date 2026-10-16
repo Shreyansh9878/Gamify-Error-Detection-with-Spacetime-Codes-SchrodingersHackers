@@ -27,6 +27,16 @@ def value(result,budget):
     return trusted_fidelity(result['fidelity'],result['retention'],budget)
 
 
+def resource_metrics(level,draft):
+    """Count resources from the same generated operations the player executes."""
+    from backend.missions.service import qc_for,payload
+    base=qc_for(payload(level),level['qubits'])
+    checked=qc_for(validate(draft)['operations'],level['qubits']+level['ancillas'])
+    two=lambda circuit:sum(len(g.qubits)==2 for g in circuit.data)
+    active={q for g in draft.operations for q in g.qubits if q>=level['qubits']}
+    return dict(addedAncillas=len(active),addedTwoQubit=two(checked)-two(base),addedDepth=checked.depth()-base.depth())
+
+
 def calibrate():
     rows=[]
     for number,target in enumerate(TARGETS,1):
@@ -60,7 +70,8 @@ def calibrate():
         row=dict(id=number,qubits=level['qubits'],ancillas=level['ancillas'],tCount=sum(g['name'] in ('t','tdg') for g in level['payload']),
                  minimumKept=budget,target=target,spread=0.,initialMinimumKept=.60 if number<=3 else .50,
                  optimizer=dict(kind='custom-t-pauli-search' if number>=8 else 'clifford-pauli-reference-search',pauliceUsed=False,candidateCount=len(candidates),scope=SCOPE),
-                 metrics={k:dict(fidelity=v['fidelity'],retention=v['retention'],correct_shot_yield=v['correct_shot_yield'],score=value(v,budget)) for k,v in metrics.items()})
+                 metrics={k:dict(fidelity=v['fidelity'],retention=v['retention'],correct_shot_yield=v['correct_shot_yield'],score=value(v,budget),
+                                 **resource_metrics(level,Draft.model_validate(drafts[k]))) for k,v in metrics.items()})
         row.update({k:value(v,budget) for k,v in metrics.items()})
         row.update({k+'Draft':v for k,v in drafts.items()})
         rows.append(row)

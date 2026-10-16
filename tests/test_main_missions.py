@@ -27,6 +27,7 @@ def test_reachable_mission_references_and_stable_scores(number):
         assert result['passed']==(kind in ('reasonable','optimal'))
         _run.cache_clear()
         assert run(draft)['combinedScore']==result['combinedScore']
+        assert all(key in row['metrics'][kind] for key in ('addedAncillas','addedTwoQubit','addedDepth','fidelity','retention','correct_shot_yield'))
         compiled=compile_source(CompileRequest(levelId=number,code=generate(draft)))
         assert not compiled['diagnostics']
         assert run(Draft.model_validate(compiled['draft']))['combinedScore']==pytest.approx(result['combinedScore'])

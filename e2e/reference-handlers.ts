@@ -5,7 +5,7 @@ import type { Draft as MissionDraft } from "../src/lib/missions/contracts";
 import type { Draft as TutorialDraft } from "../src/lib/timeline/contracts";
 
 export function tutorialReferences(){return JSON.parse(readFileSync("backend/reference_solutions/tutorials.json","utf8")).flightSchools;}
-export function missionReferences(){return JSON.parse(readFileSync("backend/missions/references.json","utf8")).levels as {id:number;reasonableDraft:MissionDraft;reasonable:number}[];}
+export function missionReferences(){return JSON.parse(readFileSync("backend/missions/references.json","utf8")).levels as {id:number;reasonableDraft:MissionDraft;reasonable:number;minimumKept:number}[];}
 
 async function gate(page:Page,name:string,key:string,wires:string[]){
   const label=name==="bit_flip"?"Bit flip · X error":name==="phase_flip"?"Phase flip · Z error":name.toUpperCase();

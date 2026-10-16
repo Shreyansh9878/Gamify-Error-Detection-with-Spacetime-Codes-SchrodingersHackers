@@ -13,6 +13,13 @@ def test_invalid_metric_inputs(f,k,b):
     with pytest.raises(ValueError):trusted_fidelity(f,k,b)
 
 
+def test_metric_bounds_over_physical_grid():
+    for fidelity in np.linspace(0,1,11):
+        for kept in np.linspace(0,1,11):
+            for budget in (.01,.5,.6,.99,1.):
+                assert 0<=trusted_fidelity(float(fidelity),float(kept),budget)<=1
+
+
 def test_projected_block_retains_correct_shot_yield():
     result=accepted_metrics(np.diag([.6,.1,.2,.1]),np.diag([1,0]),1,.6)
     assert result['fidelity']==pytest.approx(6/7)

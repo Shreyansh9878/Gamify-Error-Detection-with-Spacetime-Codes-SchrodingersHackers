@@ -26,6 +26,9 @@
       "minimumKept": 0.99,
       "correct_shot_yield": 0.49413216168796986,
       "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0,
       "validCheck": false,
       "operations": []
     },
@@ -39,6 +42,9 @@
       "minimumKept": 0.99,
       "correct_shot_yield": 0.6681363656473422,
       "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 5,
       "validCheck": true,
       "operations": [
         {
@@ -128,6 +134,9 @@
       "minimumKept": 0.99,
       "correct_shot_yield": 0.4569802140413314,
       "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4,
       "validCheck": true,
       "operations": [
         {

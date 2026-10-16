@@ -53,6 +53,14 @@ def check(base,timeout=60):
                     capstone=json.loads((ROOT/'backend/reference_solutions/capstone.json').read_text())
                     assert abs(result['score']-capstone['reasonable'])<1e-9
                     assert result['minimumKept']==capstone['minimumKept']
+                    for kind in ('baseline','everywhere','optimal','misplaced','tooSmall','overchecked'):
+                        trial=call('/api/tutorial/timeline/run',dict(draft=capstone[kind+'Draft'],shots=1024,seed=2026)).json()
+                        assert abs(trial['score']-capstone[kind])<1e-9,(kind,trial['score'])
+                        assert trial['minimumKept']==capstone['minimumKept']
+                        assert abs(trial['fidelity']-capstone['metrics'][kind]['fidelity'])<1e-9
+                        assert abs(trial['retention']-capstone['metrics'][kind]['retention'])<1e-9
+                        qualified=trial['validation']['valid'] and trial['score']>=trial['qualificationThreshold']
+                        assert qualified==(kind!='baseline' and capstone[kind]>=capstone['target'])
         references=json.loads((ROOT/'backend/missions/references.json').read_text())
         for row in references['levels']:
             for kind in ('baseline','everywhere','reasonable','optimal','misplaced','tooSmall','overchecked'):

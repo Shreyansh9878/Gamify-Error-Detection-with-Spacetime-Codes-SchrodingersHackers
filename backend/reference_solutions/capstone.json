@@ -17,7 +17,10 @@
       "samplingOverhead": 1.0,
       "minimumKept": 0.99,
       "correct_shot_yield": 0.49413216168796986,
-      "scoreVersion": "trusted-fidelity-v1"
+      "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0
     },
     "everywhere": {
       "baselineScore": 0.4941321616879697,
@@ -28,7 +31,10 @@
       "samplingOverhead": 1.0472857934895816,
       "minimumKept": 0.99,
       "correct_shot_yield": 0.4569802140413314,
-      "scoreVersion": "trusted-fidelity-v1"
+      "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4
     },
     "reasonable": {
       "baselineScore": 0.4941321616879697,
@@ -39,7 +45,10 @@
       "samplingOverhead": 1.2215866647874667,
       "minimumKept": 0.99,
       "correct_shot_yield": 0.6681363656473422,
-      "scoreVersion": "trusted-fidelity-v1"
+      "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 5
     },
     "optimal": {
       "baselineScore": 0.4941321616879697,
@@ -50,7 +59,10 @@
       "samplingOverhead": 1.2062166559814205,
       "minimumKept": 0.99,
       "correct_shot_yield": 0.6861194292789656,
-      "scoreVersion": "trusted-fidelity-v1"
+      "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 1,
+      "addedTwoQubit": 2,
+      "addedDepth": 3
     },
     "misplaced": {
       "baselineScore": 0.4941321616879697,
@@ -61,7 +73,10 @@
       "samplingOverhead": 1.0342033787938993,
       "minimumKept": 0.99,
       "correct_shot_yield": 0.4719378054638723,
-      "scoreVersion": "trusted-fidelity-v1"
+      "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 1,
+      "addedTwoQubit": 2,
+      "addedDepth": 5
     },
     "tooSmall": {
       "baselineScore": 0.4941321616879697,
@@ -72,7 +87,10 @@
       "samplingOverhead": 2.008786293826515,
       "minimumKept": 0.99,
       "correct_shot_yield": 0.4665075582171291,
-      "scoreVersion": "trusted-fidelity-v1"
+      "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4
     },
     "overchecked": {
       "baselineScore": 0.4941321616879697,
@@ -83,7 +101,10 @@
       "samplingOverhead": 2.003171289986013,
       "minimumKept": 0.99,
       "correct_shot_yield": 0.44955810704990756,
-      "scoreVersion": "trusted-fidelity-v1"
+      "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 1,
+      "addedTwoQubit": 4,
+      "addedDepth": 6
     }
   },
   "baseline": 0.49413216168796986,

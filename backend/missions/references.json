@@ -29,43 +29,64 @@
           "fidelity": 0.4666646815850889,
           "retention": 1.0,
           "correct_shot_yield": 0.4666646815850889,
-          "score": 0.4666646815850889
+          "score": 0.4666646815850889,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
         },
         "everywhere": {
           "fidelity": 0.4546009803652649,
           "retention": 0.9585885070779094,
           "correct_shot_yield": 0.4357752750844933,
-          "score": 0.44017704553989223
+          "score": 0.44017704553989223,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "reasonable": {
           "fidelity": 0.8223690455156564,
           "retention": 0.821266480857143,
           "correct_shot_yield": 0.6753841319764908,
-          "score": 0.6822061939156473
+          "score": 0.6822061939156473,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 5
         },
         "optimal": {
           "fidelity": 0.8274532685611461,
           "retention": 0.8237501131009537,
           "correct_shot_yield": 0.6816147235629979,
-          "score": 0.6884997207707049
+          "score": 0.6884997207707049,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "misplaced": {
           "fidelity": 0.45970736424112546,
           "retention": 0.9736515985953138,
           "correct_shot_yield": 0.44759481007941,
-          "score": 0.4521159697771818
+          "score": 0.4521159697771818,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 3
         },
         "tooSmall": {
           "fidelity": 0.9397352163622812,
           "retention": 0.4706859864072551,
           "correct_shot_yield": 0.4423201972751156,
-          "score": 0.4467880780556724
+          "score": 0.4467880780556724,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "overchecked": {
           "fidelity": 0.813636879178886,
           "retention": 0.8125776268145035,
           "correct_shot_yield": 0.6611431243719381,
-          "score": 0.6678213377494325
+          "score": 0.6678213377494325,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 4
         }
       },
       "baseline": 0.4666646815850889,
@@ -501,43 +522,64 @@
           "fidelity": 0.45594358412173425,
           "retention": 1.0,
           "correct_shot_yield": 0.45594358412173425,
-          "score": 0.45594358412173425
+          "score": 0.45594358412173425,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
         },
         "everywhere": {
           "fidelity": 0.4370084277046908,
           "retention": 0.9292397616967594,
           "correct_shot_yield": 0.4060856072197824,
-          "score": 0.41437306859161466
+          "score": 0.41437306859161466,
+          "addedAncillas": 1,
+          "addedTwoQubit": 5,
+          "addedDepth": 6
         },
         "reasonable": {
           "fidelity": 0.8193110857524656,
           "retention": 0.8203685005107728,
           "correct_shot_yield": 0.6721370068706034,
-          "score": 0.6858540886434729
+          "score": 0.6858540886434729,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "optimal": {
           "fidelity": 0.8194288053407247,
           "retention": 0.8205287456518735,
           "correct_shot_yield": 0.6723648897972381,
-          "score": 0.6860866222420796
+          "score": 0.6860866222420796,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "misplaced": {
           "fidelity": 0.44869335075147454,
           "retention": 0.9736515985953141,
           "correct_shot_yield": 0.4368709982382612,
-          "score": 0.4457867328961849
+          "score": 0.4457867328961849,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 3
         },
         "tooSmall": {
           "fidelity": 0.9325889826562053,
           "retention": 0.4621584954815352,
           "correct_shot_yield": 0.43100392112704733,
-          "score": 0.4397999195173953
+          "score": 0.4397999195173953,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "overchecked": {
           "fidelity": 0.8018535347052178,
           "retention": 0.8057755156782813,
           "correct_shot_yield": 0.6461139454255496,
-          "score": 0.6592999443117852
+          "score": 0.6592999443117852,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 5
         }
       },
       "baseline": 0.45594358412173425,
@@ -993,43 +1035,64 @@
           "fidelity": 0.44538478594480574,
           "retention": 1.0,
           "correct_shot_yield": 0.44538478594480574,
-          "score": 0.44538478594480574
+          "score": 0.44538478594480574,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
         },
         "everywhere": {
           "fidelity": 0.41200357506117674,
           "retention": 0.8156887865993838,
           "correct_shot_yield": 0.3360666962162594,
-          "score": 0.3575177619321909
+          "score": 0.3575177619321909,
+          "addedAncillas": 2,
+          "addedTwoQubit": 12,
+          "addedDepth": 7
         },
         "reasonable": {
           "fidelity": 0.8144163987124963,
           "retention": 0.817022209309674,
           "correct_shot_yield": 0.665396285374112,
-          "score": 0.7078683886958639
+          "score": 0.7078683886958639,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "optimal": {
           "fidelity": 0.8145333377734423,
           "retention": 0.8171807806691624,
           "correct_shot_yield": 0.6656209888427601,
-          "score": 0.7081074349391067
+          "score": 0.7081074349391067,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "misplaced": {
           "fidelity": 0.4383035273620752,
           "retention": 0.9736515985953147,
           "correct_shot_yield": 0.42675493008604976,
-          "score": 0.4383035273620752
+          "score": 0.4383035273620752,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 3
         },
         "tooSmall": {
           "fidelity": 0.9288227100349525,
           "retention": 0.45407602744092923,
           "correct_shot_yield": 0.42175612636958937,
-          "score": 0.44867673018041426
+          "score": 0.44867673018041426,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "overchecked": {
           "fidelity": 0.7993134610668075,
           "retention": 0.8012831721372791,
           "correct_shot_yield": 0.640476425615639,
-          "score": 0.6813578995911054
+          "score": 0.6813578995911054,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 4
         }
       },
       "baseline": 0.44538478594480574,
@@ -1565,43 +1628,64 @@
           "fidelity": 0.436065661456261,
           "retention": 1.0,
           "correct_shot_yield": 0.436065661456261,
-          "score": 0.436065661456261
+          "score": 0.436065661456261,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
         },
         "everywhere": {
           "fidelity": 0.4078660005751065,
           "retention": 0.8137981377776745,
           "correct_shot_yield": 0.3319205917308496,
-          "score": 0.36078325188135824
+          "score": 0.36078325188135824,
+          "addedAncillas": 2,
+          "addedTwoQubit": 12,
+          "addedDepth": 7
         },
         "reasonable": {
           "fidelity": 0.8100216735416745,
           "retention": 0.8138677856218363,
           "correct_shot_yield": 0.6592505457510566,
-          "score": 0.716576680164192
+          "score": 0.716576680164192,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "optimal": {
           "fidelity": 0.8101376810277944,
           "retention": 0.8140247791699347,
           "correct_shot_yield": 0.6594721468958933,
-          "score": 0.716817550973797
+          "score": 0.716817550973797,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "misplaced": {
           "fidelity": 0.4291329153816674,
           "retention": 0.9736515985953144,
           "correct_shot_yield": 0.4178259490712283,
-          "score": 0.4291329153816674
+          "score": 0.4291329153816674,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 3
         },
         "tooSmall": {
           "fidelity": 0.9260622117359145,
           "retention": 0.44589108919237713,
           "correct_shot_yield": 0.4129228882508287,
-          "score": 0.44882922635959643
+          "score": 0.44882922635959643,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "overchecked": {
           "fidelity": 0.797132712498669,
           "retention": 0.7969459122602495,
           "correct_shot_yield": 0.635271656754739,
-          "score": 0.6905126703855857
+          "score": 0.6905126703855857,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 5
         }
       },
       "baseline": 0.436065661456261,
@@ -2007,43 +2091,64 @@
           "fidelity": 0.4244327819552206,
           "retention": 1.0,
           "correct_shot_yield": 0.4244327819552206,
-          "score": 0.4244327819552206
+          "score": 0.4244327819552206,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
         },
         "everywhere": {
           "fidelity": 0.39245349564137266,
           "retention": 0.8103636366232763,
           "correct_shot_yield": 0.31803004193345985,
-          "score": 0.3533667132593998
+          "score": 0.3533667132593998,
+          "addedAncillas": 2,
+          "addedTwoQubit": 12,
+          "addedDepth": 10
         },
         "reasonable": {
           "fidelity": 0.79183992628869,
           "retention": 0.8022497596496027,
           "correct_shot_yield": 0.6352533905460607,
-          "score": 0.7058371006067341
+          "score": 0.7058371006067341,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "optimal": {
           "fidelity": 0.8008642797619691,
           "retention": 0.8107447489741189,
           "correct_shot_yield": 0.6492965094579561,
-          "score": 0.7214405660643957
+          "score": 0.7214405660643957,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "misplaced": {
           "fidelity": 0.4176931491926475,
           "retention": 0.9736515985953157,
           "correct_shot_yield": 0.4066876024337329,
-          "score": 0.4176931491926475
+          "score": 0.4176931491926475,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 3
         },
         "tooSmall": {
           "fidelity": 0.9167220224503396,
           "retention": 0.43816006103137894,
           "correct_shot_yield": 0.40167097730564993,
-          "score": 0.4463010858951666
+          "score": 0.4463010858951666,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "overchecked": {
           "fidelity": 0.7725803589658974,
           "retention": 0.7849550491356627,
           "correct_shot_yield": 0.6064408536333239,
-          "score": 0.6738231707036932
+          "score": 0.6738231707036932,
+          "addedAncillas": 1,
+          "addedTwoQubit": 4,
+          "addedDepth": 7
         }
       },
       "baseline": 0.4244327819552206,
@@ -2459,43 +2564,64 @@
           "fidelity": 0.41498159114065014,
           "retention": 1.0,
           "correct_shot_yield": 0.41498159114065014,
-          "score": 0.41498159114065014
+          "score": 0.41498159114065014,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
         },
         "everywhere": {
           "fidelity": 0.38586394948109487,
           "retention": 0.8332322425930776,
           "correct_shot_yield": 0.3215142839619547,
-          "score": 0.3695566482321318
+          "score": 0.3695566482321318,
+          "addedAncillas": 2,
+          "addedTwoQubit": 10,
+          "addedDepth": 9
         },
         "reasonable": {
           "fidelity": 0.7838269777236881,
           "retention": 0.7993620661240461,
           "correct_shot_yield": 0.6265615523969741,
-          "score": 0.720185692410315
+          "score": 0.720185692410315,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 4
         },
         "optimal": {
           "fidelity": 0.7956390162147299,
           "retention": 0.8076527870602541,
           "correct_shot_yield": 0.6426000689397053,
-          "score": 0.738620768896213
+          "score": 0.738620768896213,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "misplaced": {
           "fidelity": 0.4083949375249719,
           "retention": 0.9736515985953156,
           "correct_shot_yield": 0.39763438377942295,
-          "score": 0.4083949375249719
+          "score": 0.4083949375249719,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 3
         },
         "tooSmall": {
           "fidelity": 0.912869310424418,
           "retention": 0.4303039130191701,
           "correct_shot_yield": 0.39281123635073856,
-          "score": 0.4515071682192397
+          "score": 0.4515071682192397,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "overchecked": {
           "fidelity": 0.7676882868586593,
           "retention": 0.7803477005169015,
           "correct_shot_yield": 0.5990637893639142,
-          "score": 0.6885790682343842
+          "score": 0.6885790682343842,
+          "addedAncillas": 1,
+          "addedTwoQubit": 4,
+          "addedDepth": 7
         }
       },
       "baseline": 0.41498159114065014,
@@ -2911,43 +3037,64 @@
           "fidelity": 0.40538232392733997,
           "retention": 1.0,
           "correct_shot_yield": 0.40538232392733997,
-          "score": 0.40538232392733997
+          "score": 0.40538232392733997,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
         },
         "everywhere": {
           "fidelity": 0.36680045788980864,
           "retention": 0.7529760175138953,
           "correct_shot_yield": 0.2761919480041414,
-          "score": 0.3211534279117923
+          "score": 0.3211534279117923,
+          "addedAncillas": 3,
+          "addedTwoQubit": 15,
+          "addedDepth": 10
         },
         "reasonable": {
           "fidelity": 0.7779881470071973,
           "retention": 0.7962351898980224,
           "correct_shot_yield": 0.6194615399706863,
-          "score": 0.7203041162449841
+          "score": 0.7203041162449841,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "optimal": {
           "fidelity": 0.789773556603663,
           "retention": 0.8044393131616275,
           "correct_shot_yield": 0.6353248974274665,
-          "score": 0.7387498807296121
+          "score": 0.7387498807296121,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 1
         },
         "misplaced": {
           "fidelity": 0.3989526940964047,
           "retention": 0.9736515985953165,
           "correct_shot_yield": 0.38844092837087274,
-          "score": 0.3989526940964047
+          "score": 0.3989526940964047,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "tooSmall": {
           "fidelity": 0.9073228767871362,
           "retention": 0.42291016128037545,
           "correct_shot_yield": 0.383716064155422,
-          "score": 0.4461814699481651
+          "score": 0.4461814699481651,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 2
         },
         "overchecked": {
           "fidelity": 0.7612168636687514,
           "retention": 0.776782015930046,
           "correct_shot_yield": 0.5912995699205598,
-          "score": 0.6875576394425114
+          "score": 0.6875576394425114,
+          "addedAncillas": 1,
+          "addedTwoQubit": 4,
+          "addedDepth": 7
         }
       },
       "baseline": 0.40538232392733997,
@@ -3420,43 +3567,64 @@
           "fidelity": 0.3907487267704999,
           "retention": 1.0,
           "correct_shot_yield": 0.3907487267704999,
-          "score": 0.3907487267704999
+          "score": 0.3907487267704999,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
         },
         "everywhere": {
           "fidelity": 0.3325289057220995,
           "retention": 0.6373425326045046,
           "correct_shot_yield": 0.21193481493712743,
-          "score": 0.25534315052665957
+          "score": 0.25534315052665957,
+          "addedAncillas": 3,
+          "addedTwoQubit": 24,
+          "addedDepth": 11
         },
         "reasonable": {
           "fidelity": 0.7588407569983342,
           "retention": 0.7916787292188064,
           "correct_shot_yield": 0.6007580861798784,
-          "score": 0.7238049231082871
+          "score": 0.7238049231082871,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 2
         },
         "optimal": {
           "fidelity": 0.770559692986463,
           "retention": 0.8014100913823816,
           "correct_shot_yield": 0.6175343139718612,
-          "score": 0.7440172457492304
+          "score": 0.7440172457492304,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "misplaced": {
           "fidelity": 0.3841686969613713,
           "retention": 0.9736515985953172,
           "correct_shot_yield": 0.37404646592671914,
-          "score": 0.3841686969613713
+          "score": 0.3841686969613713,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 3
         },
         "tooSmall": {
           "fidelity": 0.8865915644739706,
           "retention": 0.4153695940641999,
           "correct_shot_yield": 0.36826317823629706,
-          "score": 0.4436905761883097
+          "score": 0.4436905761883097,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "overchecked": {
           "fidelity": 0.7444910381780301,
           "retention": 0.7676358264068501,
           "correct_shot_yield": 0.571497993344286,
-          "score": 0.6885517992099831
+          "score": 0.6885517992099831,
+          "addedAncillas": 1,
+          "addedTwoQubit": 4,
+          "addedDepth": 6
         }
       },
       "baseline": 0.3907487267704999,
@@ -3959,43 +4127,64 @@
           "fidelity": 0.3811990330345677,
           "retention": 1.0,
           "correct_shot_yield": 0.3811990330345677,
-          "score": 0.3811990330345677
+          "score": 0.3811990330345677,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
         },
         "everywhere": {
           "fidelity": 0.3229922347842689,
           "retention": 0.6321481576761343,
           "correct_shot_yield": 0.204178946162573,
-          "score": 0.24899871483240615
+          "score": 0.24899871483240615,
+          "addedAncillas": 3,
+          "addedTwoQubit": 24,
+          "addedDepth": 13
         },
         "reasonable": {
           "fidelity": 0.751839572103775,
           "retention": 0.7886321064591516,
           "correct_shot_yield": 0.5929248254675472,
-          "score": 0.7230790554482284
+          "score": 0.7230790554482284,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 2
         },
         "optimal": {
           "fidelity": 0.7633985244840413,
           "retention": 0.7982618232626771,
           "correct_shot_yield": 0.6093918980306683,
-          "score": 0.7431608512569126
+          "score": 0.7431608512569126,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "misplaced": {
           "fidelity": 0.3747916134959662,
           "retention": 0.9736515985953176,
           "correct_shot_yield": 0.3649164536204659,
-          "score": 0.3747916134959662
+          "score": 0.3747916134959662,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 3
         },
         "tooSmall": {
           "fidelity": 0.8793077977667241,
           "retention": 0.40829952462428826,
           "correct_shot_yield": 0.3590209558265832,
-          "score": 0.4378304339348576
+          "score": 0.4378304339348576,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "overchecked": {
           "fidelity": 0.7428806781756577,
           "retention": 0.7809101426410301,
           "correct_shot_yield": 0.5801230563594181,
-          "score": 0.7074671419017293
+          "score": 0.7074671419017293,
+          "addedAncillas": 1,
+          "addedTwoQubit": 4,
+          "addedDepth": 4
         }
       },
       "baseline": 0.3811990330345677,
@@ -4500,43 +4689,64 @@
           "fidelity": 0.3719583256414559,
           "retention": 1.0,
           "correct_shot_yield": 0.3719583256414559,
-          "score": 0.3719583256414559
+          "score": 0.3719583256414559,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
         },
         "everywhere": {
           "fidelity": 0.327538393365561,
           "retention": 0.6637487181774289,
           "correct_shot_yield": 0.2174031887502856,
-          "score": 0.271753985937857
+          "score": 0.271753985937857,
+          "addedAncillas": 3,
+          "addedTwoQubit": 21,
+          "addedDepth": 11
         },
         "reasonable": {
           "fidelity": 0.7447778084101793,
           "retention": 0.7857601690145553,
           "correct_shot_yield": 0.5852167366146726,
-          "score": 0.7315209207683406
+          "score": 0.7315209207683406,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 2
         },
         "optimal": {
           "fidelity": 0.7562971049794116,
           "retention": 0.7952940685349386,
           "correct_shot_yield": 0.6014786016402718,
-          "score": 0.7518482520503397
+          "score": 0.7518482520503397,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
         },
         "misplaced": {
           "fidelity": 0.3657112608468525,
           "retention": 0.9736515985953182,
           "correct_shot_yield": 0.3560753537478474,
-          "score": 0.3657112608468525
+          "score": 0.3657112608468525,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 3
         },
         "tooSmall": {
           "fidelity": 0.8728183250980566,
           "retention": 0.4010618595405919,
           "correct_shot_yield": 0.35005414050493144,
-          "score": 0.43756767563116433
+          "score": 0.43756767563116433,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
         },
         "overchecked": {
           "fidelity": 0.7358896025970726,
           "retention": 0.7781150400202079,
           "correct_shot_yield": 0.5726067675752761,
-          "score": 0.715758459469095
+          "score": 0.715758459469095,
+          "addedAncillas": 1,
+          "addedTwoQubit": 4,
+          "addedDepth": 4
         }
       },
       "baseline": 0.3719583256414559,

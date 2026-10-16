@@ -23,16 +23,13 @@ from backend.protection_lab.models import ProtectionRequest
 from backend.protection_lab.service import run as protection_run, generated, pieces
 from backend.timeline_lab.models import Draft as TutorialDraft, fixed_payload
 from backend.timeline_lab import service as timeline
-from backend.timeline_lab.capstone_examples import example
 from backend.missions.models import Draft as MissionDraft
 from backend.missions.levels import get_level
 from backend.missions import service as missions
 from backend.quantum_core.pauli import opening_factor, propagate
-from backend.quantum_core.paulice import optimize_clifford
 
 ROOT = Path(__file__).resolve().parents[1]
 TUTORIALS = json.loads((ROOT / 'backend/reference_solutions/tutorials.json').read_text(encoding='utf-8'))['flightSchools']
-REFERENCES = json.loads((ROOT / 'backend/missions/references.json').read_text(encoding='utf-8'))
 SEED = TUTORIALS[0]['request']['sampleSeed']
 SHOTS = TUTORIALS[0]['request']['shots']
 STRATEGIES = ('baseline', 'everywhere', 'reasonable', 'optimal', 'misplaced', 'tooSmall', 'overchecked')
@@ -133,16 +130,16 @@ def tutorial_picture(draft):
     return circuit_picture(timeline.schedule(draft, noise=False), draft.dataQubits, draft.ancillas)
 
 
-def noise_school():
-    reference = LabRunRequest.model_validate(TUTORIALS[0]['request'])
+def noise_school(request):
+    reference = LabRunRequest.model_validate(request)
     result = run_lab(reference)
     # The drawing record is the service's actual error operator; no simulation
     # is performed in this drawing adapter.
     picture = [dict(name={'bit_flip': 'x', 'phase_flip': 'z'}.get(g.name, g.name), qubits=g.qubits)
                for g in reference.circuit.operations]
-    draw(circuit_picture(picture, reference.circuit.qubits), 'FS1 stored reference: actual authored operations')
+    draw(circuit_picture(picture, reference.circuit.qubits), 'FS1: explicit preparation and error operations')
     rows = []
-    scenarios = [('stored X error', reference)]
+    scenarios = [('explicit X error', reference)]
     for basis in ('Z', 'X'):
         raw = reference.model_dump()
         raw['basis'] = basis
@@ -174,8 +171,7 @@ def noise_school():
     return unscored_row(1, reference.circuit.qubits, 0, result['fidelity'])
 
 
-def protection_school():
-    ref = TUTORIALS[1]
+def protection_school(ref):
     rows = []
     pictures = []
     first_request = ProtectionRequest(experiment=ref['experiment'], technique=ref['methods'][0], sampleSeed=SEED, shotsPerVariant=SHOTS)
@@ -237,15 +233,16 @@ def trace_tutorial(draft, *, axis=None):
     return rows
 
 
-def check_school(number):
-    ref = TutorialDraft.model_validate(TUTORIALS[number-1]['draft'])
+def check_school(number, design, draft):
+    ref = TutorialDraft.model_validate(draft)
+    assert_same_circuit(design, timeline.circuit(fixed_payload(number), ref.dataQubits))
     validation = timeline.validation(ref)
     assert validation['valid']
-    panels([('Locked data payload', timeline.circuit(fixed_payload(number), ref.dataQubits)),
-            ('Stored reference shell; M is terminal readout', tutorial_picture(ref))])
+    panels([('Explicit data payload', design),
+            ('Explicit reference shell; M is terminal readout', tutorial_picture(ref))])
     table(trace_tutorial(ref))
     clean = ref.model_copy(update={'operations': [g for g in ref.operations if g.name not in timeline.FAULTS]})
-    trials = [('stored reference', ref), ('without explicit fault', clean)]
+    trials = [('explicit reference', ref), ('without explicit fault', clean)]
     bound = max(g.column for g in fixed_payload(number))
     if number == 4:
         closing = [g for g in ref.operations if g.name in timeline.CP and g.column > bound]
@@ -278,13 +275,17 @@ def check_school(number):
     return row
 
 
-def capstone():
-    draft = example('sensible')
+def capstone(design, drafts):
+    draft = TutorialDraft.model_validate(drafts['reasonable'])
+    assert_same_circuit(design, timeline.circuit(fixed_payload(6), draft.dataQubits))
+    # Fresh enumeration, not the memoized comparison result from a previous run.
+    timeline.comparison.cache_clear()
     comparison = timeline.comparison(json.dumps(draft.hardware.model_dump(), sort_keys=True))
-    drafts = {'baseline': example('unchecked'), 'everywhere': example('everywhere'),
-              'reasonable': draft, 'optimal': TutorialDraft.model_validate(comparison['best']['draft'])}
+    drafts = {key: TutorialDraft.model_validate(value) for key, value in drafts.items()}
+    drafts['optimal'] = TutorialDraft.model_validate(comparison['best']['draft'])
     rows = []
-    for name, sample in drafts.items():
+    for name in ('baseline', 'everywhere', 'reasonable', 'optimal'):
+        sample = drafts[name]
         repeats = [timeline.evaluate(sample, visuals=False) for _ in range(3)]
         result = repeats[0]
         rows.append(dict(strategy=name, fidelity=result['fidelity'], kept=result['retention'],
@@ -293,11 +294,10 @@ def capstone():
                          valid=timeline.validation(sample)['valid']))
     target = rows[2]['target']
     assert max(rows[0]['score'], rows[1]['score']) < target < rows[2]['score'] < rows[3]['score']
-    panels([('FS6 locked payload', timeline.circuit(fixed_payload(6), draft.dataQubits)),
+    panels([('FS6 explicit payload', design),
             ('Reasonable single-helper reference', tutorial_picture(draft))])
     table(rows)
-    extra=json.loads((ROOT/'backend/reference_solutions/capstone.json').read_text())
-    table([dict(strategy=k,**timeline.evaluate(TutorialDraft.model_validate(extra[k+'Draft']),visuals=False)) for k in ('misplaced','tooSmall','overchecked')])
+    table([dict(strategy=k,**timeline.evaluate(drafts[k],visuals=False)) for k in ('misplaced','tooSmall','overchecked')])
     score_plot(rows, target, 'FS6: Trusted Fidelity and qualification target')
     with warnings.catch_warnings(record=True) as caught:
         native = timeline.paulice_search(json.dumps(draft.hardware.model_dump(), sort_keys=True))
@@ -316,15 +316,48 @@ def score_plot(rows, target, title):
     ax.legend(); figure(fig)
 
 
-def main_level(number, cache):
+def assert_same_circuit(design, actual):
+    """Compare gate order and wires, not only an equivalent final unitary."""
+    def gates(qc):
+        return [(g.operation.name, [qc.find_bit(q).index for q in g.qubits],
+                 list(g.operation.params)) for g in qc.data]
+    assert design.num_qubits == actual.num_qubits
+    assert gates(design) == gates(actual), 'Notebook design differs from the game payload.'
+
+
+def paulice_path(design, targets, ancilla_limit):
+    """Display the real add-on's zero-to-many-check insertion path."""
+    from qiskit import transpile
+    from qiskit.quantum_info import Clifford
+    from qiskit_paulice import add_pauli_checks
+    from qiskit_paulice.noise_models import NoiseModel
+    Clifford(design)  # Reject non-Clifford input before calling the add-on.
+    assert len(targets) <= ancilla_limit
+    measured = design.copy()
+    measured.measure_all()
+    native = transpile(measured, basis_gates=['h','s','sdg','x','z','cx','cz'],
+                       optimization_level=0, seed_transpiler=SEED)
+    path = add_pauli_checks(native, targets, NoiseModel(gate_noise=.01, readout_noise=0),
+                            cost='gamma', method='windowed', seed=SEED)
+    table([dict(stage=i, checks=len(c.check_qubits), nativeGamma=float(c.cost),
+                targets=list(c.target_qubits), support=[list(s) for s in c.check_support],
+                addedAncillas=c.circuit.num_qubits-design.num_qubits,
+                depth=c.circuit.depth()) for i, c in enumerate(path)])
+    assert all(c.circuit.num_qubits-design.num_qubits <= ancilla_limit for c in path)
+    draw(path[-1].circuit, 'Paulice gamma/windowed suggestion; not a game-score optimum')
+    return path
+
+
+def main_level(number, design, drafts, search):
     level = get_level(number)
-    stored = REFERENCES['levels'][number-1]
-    search = next(row for row in cache['results'] if row['level'] == number)
+    # Published values are comparison evidence, not circuit-design inputs.
+    stored = json.loads((ROOT / 'backend/missions/references.json').read_text(encoding='utf-8'))['levels'][number-1]
+    assert_same_circuit(design, missions.qc_for(missions.payload(level), level['qubits']))
     assert search['result']['best']['draft'] == stored['optimalDraft']
     assert not search['result']['pauliceUsed']
     results = []
     for name in STRATEGIES:
-        draft = MissionDraft.model_validate(stored[name+'Draft'])
+        draft = MissionDraft.model_validate(drafts[name])
         repeats = []
         for _ in range(3):
             missions._run.cache_clear()
@@ -338,9 +371,9 @@ def main_level(number, cache):
                             score=result['combinedScore'], correct_shot_yield=result['correct_shot_yield'],minimumKept=result['minimumKept'],target=result['target'], spread=spread,
                             valid=check['valid'], passed=result['passed'], checkLoops=len(check['checks']),
                             controlledPaulis=sum(g['owner'] != 'fixed-fixture' and g['name'] in ('cx','cy','cz') for g in check['operations'])))
-    reasonable = MissionDraft.model_validate(stored['reasonableDraft'])
+    reasonable = MissionDraft.model_validate(drafts['reasonable'])
     check = missions.validate(reasonable)
-    draw(missions.qc_for(missions.payload(level), level['qubits']), f'Main {number}: {level["title"]} — locked payload')
+    draw(design, f'Main {number}: {level["title"]} — explicit design')
     draw(circuit_picture(check['operations'], level['qubits'], level['ancillas'], bands=reasonable.bands),
          'Reasonable reference; barriers label inserted bands, auto P′ is locked (hardware channels omitted)')
     table(results)
@@ -353,16 +386,10 @@ def main_level(number, cache):
     if level['assisted']:
         print('Locked auto P′:',json.dumps([dict(operator=g['name'], wires=g['qubits'], location=g['column'], locked=g['owner']=='generated-method')
                for g in check['generated']]))
-    if number <= 7:
-        qc = missions.qc_for(missions.payload(level), level['qubits'])
-        qc.measure_all()
-        with warnings.catch_warnings(record=True) as caught:
-            native = optimize_clifford(qc, list(range(min(level['ancillas'], level['qubits']))), level['ancillas'])
-        print('Separate native Paulice gamma:',float(native.cost),'added helpers:',native.circuit.num_qubits-level['qubits'])
     print('Search:',search['result']['kind'],'candidates:',search['result']['candidateCount'],
           'best opening:',search['result']['best']['label'],
           'interval:',(search['result']['best']['start'],search['result']['best']['end']),
-          'cached search seconds:',round(search['seconds'],3))
+          'live search seconds:',round(search['seconds'],3))
     print('Scope:',search['result']['scope'])
     print('Scorer: Aer density_matrix;', 'statevector ideal; no Paulice' if number>=8 else 'stabilizer ideal')
     row = dict(level=f'Main{number}', data=level['qubits'], ancillas=level['ancillas'],minimumKept=level['minimumKept'],

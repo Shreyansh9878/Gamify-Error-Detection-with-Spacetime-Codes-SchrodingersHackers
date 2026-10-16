@@ -1,0 +1,43 @@
+{
+  "assembledAtUtc": "2026-10-16T17:34:18.597333+00:00",
+  "backend": {
+    "command": "python -m pytest tests -q",
+    "tests": 240,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 56.324,
+    "scope": "Fresh execution after submission documentation edits"
+  },
+  "frontend": {
+    "command": "pnpm exec vitest run",
+    "passed": 43,
+    "failed": 0,
+    "startTime": 1792171930037,
+    "scope": "Fresh execution after submission documentation edits"
+  },
+  "browser": {
+    "command": "pnpm exec playwright test",
+    "scope": "Earlier cleanup execution against the local production build; not rerun for documentation-only changes",
+    "startTime": "2026-10-16T16:53:12.601Z",
+    "duration": 266413.81299999997,
+    "expected": 64,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "hostedApi": {
+    "command": "python scripts/smoke_deployment.py <live-url>",
+    "scope": "Earlier independent hosted cleanup execution, not a fresh hosted browser run",
+    "origin": "https://gamify-error-detection-with-spaceti-sand.vercel.app/",
+    "requests": 114,
+    "maximumSeconds": 2.1298180000158027,
+    "tolerance": 1e-09
+  },
+  "physicsSources": [
+    "backend/missions/references.json",
+    "backend/reference_solutions/capstone.json",
+    "docs/TRACK_EXPERIMENTS.json",
+    "docs/T_SCORING_VERIFICATION.json"
+  ],
+  "note": "No test timings or execution counts were invented or backdated. Browser and hosted API records retain their distinct earlier scope."
+}

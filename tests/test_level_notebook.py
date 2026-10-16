@@ -1,5 +1,6 @@
 """Check notebook evidence and failure behavior without adding Jupyter to runtime."""
 from copy import deepcopy
+import ast
 import json
 from pathlib import Path
 import re
@@ -63,3 +64,30 @@ def test_analysis_cache_rejects_changed_physics_or_simulator_versions(monkeypatc
     monkeypatch.setattr(cache_level_searches, 'source_signature', lambda: {'files': {}, 'packages': {}})
     with pytest.raises(ValueError, match='cache is stale'):
         cache_level_searches.load_searches()
+
+
+def test_notebooks_build_circuits_and_run_searches_without_cached_results():
+    level = json.loads((ROOT / 'notebooks/level_design_and_validation.ipynb').read_text(encoding='utf-8'))
+    sources = [''.join(c['source']) for c in level['cells'] if c['cell_type'] == 'code']
+    main_cells = [s for s in sources if 'lab.main_level(' in s]
+    assert len(main_cells) == 10
+    for source in main_cells:
+        tree = ast.parse(source)
+        assignment = next(node for node in tree.body if isinstance(node, ast.Assign)
+                          and any(isinstance(t, ast.Name) and t.id == 'design' for t in node.targets))
+        assert isinstance(assignment.value, ast.Call)
+        assert assignment.value.func.id == 'QuantumCircuit'
+        assert 'search_now(' in source and 'trials =' in source
+    joined = '\n'.join(sources)
+    assert 'load_searches' not in joined and 'CACHE' not in joined
+    assert 'lab.REFERENCES' not in joined and 'lab.TUTORIALS' not in joined
+    track = json.loads((ROOT / 'notebooks/track_experiments.ipynb').read_text(encoding='utf-8'))
+    joined = '\n'.join(''.join(c['source']) for c in track['cells'] if c['cell_type'] == 'code')
+    assert 'def design(' in joined and 'add_pauli_checks(' in joined
+    assert 'candidate.get_postselection_method()' in joined
+    assert 'metrics = score(circuit, base)' in joined
+    assert joined.index('metrics = score(circuit, base)') < joined.index('published = json.loads')
+    for notebook in (level, track):
+        executed = [c for c in notebook['cells'] if c['cell_type'] == 'code']
+        assert [c['execution_count'] for c in executed] == list(range(1, len(executed)+1))
+        assert not any(o['output_type'] == 'error' for c in executed for o in c['outputs'])

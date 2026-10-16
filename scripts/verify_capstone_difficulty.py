@@ -2,11 +2,8 @@
 from pathlib import Path
 import sys
 import json
-from importlib.metadata import version
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-from backend.timeline_lab.capstone_examples import example
-from backend.timeline_lab.service import evaluate, validation, comparison, PROTOCOL
 
 def main():
     from scripts.validate_capstone import calibrate, verify

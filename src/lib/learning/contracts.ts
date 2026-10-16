@@ -32,7 +32,6 @@ export const gateSchema = z
   })
   .strict();
 export type Gate = z.infer<typeof gateSchema>;
-export type GateName = Gate["name"];
 const gates = z.array(gateSchema).max(64);
 function validateGates(
   values: Gate[],
@@ -424,60 +423,5 @@ export interface ProtectionResult extends TechniquePreview {
   estimationError: number | null;
   baselineError: number;
   improvement: number | null;
-  durationMs: number;
-}
-export interface CheckValidation {
-  structureComplete: boolean;
-  localOperatorMatch: boolean;
-  scheduleValid: boolean;
-  valid: boolean;
-  residual: number | null;
-  classification: string;
-  message: string;
-  checks: {
-    id: string;
-    missing: string[];
-    complete: boolean;
-    expected: string | null;
-    expectedTaps: Tap[];
-    sign: 1 | -1;
-    match: boolean;
-    steps: { label: string; operator: string; column: number }[];
-  }[];
-  instructions: Instruction[];
-  nativeCode: string;
-  wireLabels: string[];
-  resources: Resources;
-  fingerprint: string;
-}
-export interface CheckResult extends CheckValidation {
-  frames?: Record<string, StateVisualization>;
-  draft: CheckDraft;
-  observable: { qubit: number; basis: "X" | "Z" };
-  traceSteps?: { boundary: number; operator: string; gate: string }[];
-  runId: string;
-  settingsFingerprint: string;
-  flagProbability: number;
-  noiselessFlagProbability: number;
-  retention: number;
-  samplingOverhead: number | null;
-  keptShots: number;
-  discardedShots: number;
-  shots: number;
-  guidedSuccess: boolean;
-  sandboxSuccess: boolean;
-  states: {
-    ideal: StateStats;
-    unprotected: StateStats;
-    unfiltered: StateStats;
-    retained: StateStats | null;
-  };
-  syndrome: {
-    probabilities: Record<string, number>;
-    counts: Record<string, number>;
-    noiselessProbabilities: Record<string, number>;
-    noiselessCounts: Record<string, number>;
-    ordering: string;
-  };
   durationMs: number;
 }

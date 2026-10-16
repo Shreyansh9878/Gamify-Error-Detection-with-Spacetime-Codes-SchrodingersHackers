@@ -10,9 +10,9 @@ import itertools
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import DensityMatrix, Operator, Clifford, Pauli, partial_trace, state_fidelity, SparsePauliOp
-from ..learning.common import channel, instruction, evolve, stats, Observable, fingerprint
+from ..learning.common import instruction, evolve, stats, Observable, fingerprint
 from ..learning.visualization import state_visualization
-from .models import Draft, Request, Operation, fixed_payload, CompileRequest
+from .models import Draft, Operation, fixed_payload
 from ..quantum_core.noise import hardware_items
 from ..quantum_core.scoring import trusted_fidelity
 from .capstone_config import TARGET_SCORE as CAPSTONE_GOAL, MINIMUM_KEPT as CAPSTONE_MINIMUM_KEPT

@@ -240,7 +240,7 @@ export function ComparisonTelemetry({
                   </tr>
                 </thead>
                 <tbody>
-                  {result.states[0].qubits.map((q, i) => (
+                  {result.states[0].qubits.map((_, i) => (
                     <tr key={i}>
                       <th>q{i}</th>
                       {result.states.map((s, j) => (

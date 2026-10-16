@@ -4,11 +4,10 @@ Illustrations of resource footprints are explicitly distinguished from simulated
 state metrics. No historical code is claimed to have universally failed.
 """
 import math
-import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector, DensityMatrix, Pauli, Operator, SparsePauliOp, partial_trace, state_fidelity
 from qiskit_aer.noise import pauli_error, depolarizing_error, amplitude_damping_error
-from .engine import evaluate, payload, check_paths, checked_circuit, condition
+from .engine import evaluate, check_paths, checked_circuit
 from .levels import get_level, gate
 from .models import RunRequest, Check, Gate, PauliTap
 

@@ -6,7 +6,6 @@ import {
   draftSchema,
   draftCode,
   initialDraft,
-  type Draft,
   type Validation,
   type Result,
   type Reveal,

@@ -170,16 +170,6 @@ export function block(
     ...(name === "decoherence" ? { timeUs: 50, t1Us: 100, t2Us: 80 } : {}),
   };
 }
-export const blockLabel = (o: Operation) =>
-  o.name === "decoherence"
-    ? `Wait ${o.timeUs} μs`
-    : o.name === "bit_flip"
-      ? "X error"
-      : o.name === "phase_flip"
-        ? "Z error"
-        : o.name === "sdg"
-          ? "S†"
-          : o.name.toUpperCase();
 export const DRAFT_KEY = "quantum-shield.flight-school-1.draft.v1";
 export const PROGRESS_KEY = "quantum-shield.flight-school-1.progress.v1";
 export const CONTENT_VERSION = "noise-basics-v1";

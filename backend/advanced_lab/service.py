@@ -1,7 +1,6 @@
 """Exact small-system check physics with explicit, independent transport policy."""
 from functools import lru_cache
 from uuid import uuid4
-import json
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Clifford, Operator, Pauli, partial_trace

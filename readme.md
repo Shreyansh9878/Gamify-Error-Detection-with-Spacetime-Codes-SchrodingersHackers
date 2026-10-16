@@ -2,7 +2,7 @@
 
 **[Play the live game](https://gamify-error-detection-with-spaceti-sand.vercel.app/)**
 
-[Project report](docs/submission/report.docx) · [Presentation script and shot list](docs/submission/presentation_script.pdf) · [Level analysis](notebooks/level_design_and_validation.ipynb)
+[Project report](submission/report.docx) · [Recorded presentation](<submission/Video Presentation.mp4>) · [Speaking script](output/pdf/presentation_script_revised.pdf) · [Level analysis](notebooks/level_design_and_validation.ipynb)
 
 A Next.js / React game with a Qiskit 2 backend. Six Flight Schools teach quantum noise and coherent Pauli checks; ten main missions use locked payloads and localized spacetime checks. No account, database, paid API or quantum hardware is required.
 
@@ -57,7 +57,7 @@ All main missions share that workspace and drag/drop renderer. The left panel ha
 
 Missions 1–3 require manual closing products. Missions 4–10 generate signed closing products immediately before the player's final H. Inserting editable columns inside the payload permits short check windows; removing occupied columns requires moving their gates first. Invalid propagation, including X/Y at a T/Tdg crossing, turns the connector red and blocks scoring. Main missions permit Clifford checks and H/M readout; arbitrary rotations belong to the tutorials.
 
-The score is **Trusted Fidelity = F_ps · min(1, S_keep / S_min)**. The per-level shot budget S_min is shown beside kept-shot fidelity and shots kept. This is a game design choice using simulation-only full-state fidelity, not a fidelity estimator obtainable from hardware counts alone. Detailed artifacts always report F_ps and S_keep together; their product remains the secondary `correct_shot_yield`. Noise and targets are server-owned. Changing a draft invalidates its displayed result. Scores do not fluctuate with sampled counts. See [mission physics](docs/submission/report.docx) and [reference validation](docs/LEVEL_VALIDATION.md).
+The score is **Trusted Fidelity = F_ps · min(1, S_keep / S_min)**. The per-level shot budget S_min is shown beside kept-shot fidelity and shots kept. This is a game design choice using simulation-only full-state fidelity, not a fidelity estimator obtainable from hardware counts alone. Detailed artifacts always report F_ps and S_keep together; their product remains the secondary `correct_shot_yield`. Noise and targets are server-owned. Changing a draft invalidates its displayed result. Scores do not fluctuate with sampled counts. See [mission physics](submission/report.docx) and [reference validation](docs/LEVEL_VALIDATION.md).
 
 Progress is device-local under `quantum-shield-qed-v2`. Tutorial completion and sound preferences survive the redesign. Mission bests use `missionVersion: 3`; previous bests are archived under `quantum-shield.archived-missions-v1` or `v2` and cleared so old-metric scores/stars never masquerade as Trusted Fidelity records. `unlockedThrough` preserves previously earned access; tutorial completion/skip, lesson evidence and sound preferences remain. FS6 results are not persisted as score records, so its next run computes the new metric. Complete Flight School 6 to open Main1, then pass each mission to unlock the next. The explicit tutorial skip still unlocks every mission. Scores store Trusted Fidelity multiplied by 1000. One star means passing; two/three stars mean exceeding the target by 0.025/0.05. Local storage is not a trusted leaderboard.
 
@@ -82,6 +82,8 @@ scripts/                                       Development, figure generation, v
 ```
 
 The older Python teaching/research endpoints remain compatibility APIs for existing physics regressions. Their fixtures and score format are separate from the main mission registry. They are not used by the current main screens.
+
+For the physics implementation, start with `tests/test_quantum_core.py` and `backend/quantum_core/`. `pauli.py` transports signed operators as U P U†; `checks.py` builds the inverse closure and compensates relative phases on the helper. `noise.py` supplies physical channels, and `scoring.py` computes the all-zero-helper density block, paired fidelity/retention, and Trusted Fidelity. Mission and timeline services certify the complete noiseless input isometry, including interacting checks. A green connector certifies closure, not coverage of every error. Native Paulice suggestions use a separately disclosed objective and noise protocol.
 
 ## API
 
@@ -126,9 +128,9 @@ Keep the generator, drawing requirements and `public/tutorial-circuits` assets t
 
 ## Noise, science and submission
 
-The organizer authorized a participant-selected model. **All models are explicitly synthetic**, with parameters and channel placement in [the report](docs/submission/report.docx). FS6 and Main1 have exactly two data qubits and one fixed helper. Main8–10 contain 1/3/5 T or Tdg gates. Local Aer density matrices score every mission, including T circuits; Paulice is restricted to separate Clifford gamma/windowed suggestions and observable benchmarks. RuntimeService is not used to execute circuits or required for setup. Any future RuntimeService adapter must only fetch calibration data.
+The organizer authorized a participant-selected model. **All models are explicitly synthetic**, with parameters and channel placement in [the report](submission/report.docx). FS6 and Main1 have exactly two data qubits and one fixed helper. Main8–10 contain 1/3/5 T or Tdg gates. Local Aer density matrices score every mission, including T circuits; Paulice is restricted to separate Clifford gamma/windowed suggestions and observable benchmarks. RuntimeService is not used to execute circuits or required for setup. Any future RuntimeService adapter must only fetch calibration data.
 
-See [level validation](docs/LEVEL_VALIDATION.md), [core physics guide](docs/CORE_GUIDE.md) and the contribution disclosure in the report. The best reference scores are finite-family optima, not global guarantees over arbitrary circuits. The game-score search and Paulice's native measurement-parity cost are deliberately reported separately.
+See [level validation](docs/LEVEL_VALIDATION.md), [complete level solutions](docs/COMPLETE_LEVEL_SOLUTIONS.md), [software credits](docs/SOFTWARE_CREDITS.md), and the contribution disclosure in the report. The best reference scores are finite-family optima, not global guarantees over arbitrary circuits. The game-score search and Paulice's native measurement-parity cost are deliberately reported separately.
 
 Reproduce the matched Clifford/T study and notebook:
 
@@ -139,7 +141,7 @@ artifacts/notebook-env/Scripts/python.exe scripts/execute_track_notebook.py
 .venv/Scripts/python.exe scripts/generate_validation_report.py
 ```
 
-[The executed notebook](notebooks/track_experiments.ipynb) builds its matched Clifford/T family explicitly, executes the coherent checks, and shows direct Paulice insertion stages, support, native gamma, generated circuits and Aer execution with Paulice's post-selection filter. The complete stabilizer-observable benchmark runs separately; its estimator and noise protocol are not conflated with game fidelity. T circuits use the custom search, not Paulice. [The editable report](docs/submission/report.docx) and [presentation script](docs/submission/presentation_script.pdf) use the current metrics. An actual recorded walkthrough, confirmation of public repository visibility and final repository-link submission remain team actions. No demo video URL is claimed before a real recording is published.
+[The executed notebook](notebooks/track_experiments.ipynb) builds its matched Clifford/T family explicitly, executes the coherent checks, and shows direct Paulice insertion stages, support, native gamma, generated circuits and Aer execution with Paulice's post-selection filter. The complete stabilizer-observable benchmark runs separately; its estimator and noise protocol are not conflated with game fidelity. T circuits use the custom search, not Paulice. The report and recorded walkthrough are linked at the top of this README. Confirm public repository access and submit its link through the event form.
 
 ## Vercel deployment
 
@@ -162,6 +164,8 @@ The function config caps execution at 60 seconds; requests are limited to 16 KiB
 
 ## Submission materials
 
-The [verification record](docs/submission/verification.json) separates fresh backend/frontend tests from the earlier local browser and hosted API runs. Regenerate the submission figures and numeric extract with `.venv/Scripts/python.exe scripts/generate_report_figures.py`; it reads the stored simulation evidence and does not implement a second scorer.
+The [verification record](submission/verification.json) separates backend/frontend tests from local browser and hosted API runs. Regenerate the submission figures and numeric extract in `submission/` with `.venv/Scripts/python.exe scripts/generate_report_figures.py`; it reads the stored simulation evidence and does not implement a second scorer.
 
-The supplied Advanced Track brief asks for complete code, a written report and a recorded walkthrough in a public GitHub repository. Submit the repository link through the organizers' form. The team-supplied deadline is **17 October 2026, 10:00 IST**. The recording is still to be supplied; the script is not a recording. Review the report, credits and AI disclosure before submitting.
+Final review on 17 October 2026: 241 backend tests, 43 frontend tests, 64 local production desktop/mobile browser tests, strict TypeScript and the production build passed. All level-reference checks and real Clifford Paulice suggestions passed. The level notebook was re-executed successfully with 24 code cells and all 16 summaries matching. Both local and hosted API smoke checks passed 114 requests each; hosted API checks are separate from the local browser suite. Details are in `finalReview` in the verification record.
+
+The supplied Advanced Track brief asks for complete code, a written report and a recorded walkthrough in a public GitHub repository. All three are included here. Submit the repository link through the organizers' form. The team-supplied deadline is **17 October 2026, 10:00 IST**. Review the report, credits and AI disclosure before submitting. The recorded presentation is approximately 5 minutes 41 seconds; confirm any separate event duration requirement.

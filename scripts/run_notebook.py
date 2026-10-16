@@ -24,10 +24,12 @@ def analysis_inputs():
     notebook = json.loads(NOTEBOOK.read_text(encoding='utf-8'))
     sources = [''.join(c['source']) for c in notebook['cells']]
     result = {'notebookSources': hashlib.sha256(json.dumps(sources).encode()).hexdigest()}
-    for name in ('scripts/level_design_analysis.py', 'scripts/cache_level_searches.py', 'scripts/run_notebook.py',
+    for name in ('scripts/level_design_analysis.py', 'scripts/run_notebook.py',
                  'scripts/validate_main_levels.py','scripts/validate_capstone.py','scripts/validate_t_scoring.py',
-                 'notebooks/requirements.txt', 'notebooks/data/level_search_results.json'):
+                 'notebooks/requirements.txt'):
         result[name] = hashlib.sha256((ROOT / name).read_text(encoding='utf-8').encode('utf-8')).hexdigest()
+    from scripts.cache_level_searches import source_signature
+    result['physics'] = source_signature()
     return result
 
 
@@ -109,10 +111,8 @@ def extract_manifest(notebook):
     if len(found) != 1:
         raise ValueError('Expected exactly one computed JSON validation manifest.')
     validate_manifest(found[0])
-    from scripts.cache_level_searches import load_searches
-    load_searches()
     if found[0].get('inputs') != analysis_inputs():
-        raise ValueError('Notebook sources, helpers, pins or cache changed after execution; rerun the notebook.')
+        raise ValueError('Notebook sources, helpers, pins or physics changed after execution; rerun the notebook.')
     return found[0], len(execution_counts)
 
 
@@ -153,10 +153,13 @@ def main():
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     from nbclient import NotebookClient
     started = time.perf_counter()
+    def progress(cell, cell_index, **kwargs):
+        if cell.cell_type == 'code':
+            print(f'Executing cell {cell_index}: {cell.source.splitlines()[0][:80]}', flush=True)
     with project_kernel():
         client = NotebookClient(nb, timeout=180, kernel_name='quantum-shield-analysis',
                                 resources={'metadata': {'path': str(ROOT)}},
-                                allow_errors=False, record_timing=True)
+                                allow_errors=False, record_timing=True, on_cell_start=progress)
         client.execute()
     manifest, cells = extract_manifest(nb)
     # Reject accidental path disclosure instead of silently relabeling output.

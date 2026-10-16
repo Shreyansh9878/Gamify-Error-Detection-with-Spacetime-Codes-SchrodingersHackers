@@ -27,4 +27,6 @@ def test_recorded_study_has_actual_paulice_and_paired_metrics():
     assert any(row['checks']>0 for row in data['pauliceObservableBenchmarks'])
     for row in data['rows']:
         assert abs(row['score']-row['fidelity']*row['retention'])<1e-10
+        assert row['score']==row['correct_shot_yield']
+        assert row['minimumKept'] is None and row['trusted_fidelity'] is None
         assert all(key in row for key in ('uncheckedFidelity','addedAncillas','addedTwoQubit','addedDepth'))

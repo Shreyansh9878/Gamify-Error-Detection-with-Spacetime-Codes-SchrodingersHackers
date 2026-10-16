@@ -23,6 +23,7 @@ import { StateCard } from "./StateCard";
 import { ShotHistogram } from "./ShotHistogram";
 import { QuantumStateView } from "../state-visualization/QuantumStateView";
 import type { MobilePane } from "../workspace/LearningWorkspace";
+import { TrustedFidelityMetrics } from "../TrustedFidelityMetrics";
 type Number = 3 | 4 | 5 | 6;
 interface Props {
   number: Number;
@@ -568,28 +569,40 @@ function TimelineSession({
                 </p>
               )}
               <div className="ql-settings">
-                <p>
-                  Fidelity{" "}
-                  <b>
-                    {result.fidelity === null
-                      ? "undefined"
-                      : result.fidelity.toFixed(5)}
-                  </b>
-                </p>
-                <p>
-                  Kept fraction <b>{result.retention.toFixed(5)}</b>
-                </p>
+                {number !== 6 && (
+                  <>
+                    <p>
+                      Fidelity{" "}
+                      <b>
+                        {result.fidelity === null
+                          ? "undefined"
+                          : result.fidelity.toFixed(5)}
+                      </b>
+                    </p>
+                    <p>
+                      Kept fraction <b>{result.retention.toFixed(5)}</b>
+                    </p>
+                  </>
+                )}
                 <p>
                   Sampling overhead{" "}
                   <b>{result.samplingOverhead?.toFixed(3) ?? "∞"}×</b>
                 </p>
                 <p>
-                  Combined score <b>{result.score.toFixed(5)}</b>{" "}
+                  {number === 6 ? "Trusted Fidelity" : "Combined score"}{" "}
+                  <b>{result.score.toFixed(5)}</b>{" "}
                   {number === 6
                     ? `/ target ${result.qualificationThreshold?.toFixed(3) ?? "0.620"}`
                     : ""}
                 </p>
               </div>
+              {number === 6 && result.minimumKept !== undefined && (
+                <TrustedFidelityMetrics
+                  fidelity={result.fidelity}
+                  retention={result.retention}
+                  minimumKept={result.minimumKept}
+                />
+              )}
               {number === 6 && (
                 <p>
                   Unchecked score: {result.baselineScore.toFixed(5)}.

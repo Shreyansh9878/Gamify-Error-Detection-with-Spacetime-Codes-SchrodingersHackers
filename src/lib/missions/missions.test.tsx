@@ -21,6 +21,7 @@ const level: MissionLevel = {
   fixed: true,
   assisted: true,
   targetScore: 0.6,
+  minimumKept: 0.5,
   allowed: ["h", "cx"],
   protocol: "main-missions-v1",
   payload: [

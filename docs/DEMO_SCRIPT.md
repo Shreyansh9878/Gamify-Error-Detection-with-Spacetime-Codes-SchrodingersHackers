@@ -1,5 +1,7 @@
 # Recorded walkthrough plan
 
+**Metric update:** the older wording in item 4 that calls F_ps × S_keep the game score is superseded. Show Trusted Fidelity with its shot-budget marker; the product is now secondary correct_shot_yield. See TRUSTED_FIDELITY_MIGRATION.md and the regenerated LEVEL_VALIDATION.md. This note updates an existing planning aid; it is not a new recorded presentation or finished team narration.
+
 Record the local app and terminal at 1080p with readable zoom. Run README setup and all validation first. Keep docs/LEVEL_VALIDATION.md and the notebook open. No IBM credentials or hardware are needed. Target length: five minutes; shorten only after checking event rules.
 
 1. **0:00–0:30 — Problem and mechanic.** “Quantum errors are not all visible in ordinary measurement counts. We protect a fixed computation with low-overhead spacetime Pauli checks. Players trade conditional fidelity against the fraction of usable shots.” Show the level map and distinguish the tutorials from immutable main payloads.

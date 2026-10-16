@@ -40,4 +40,4 @@ def simulate(level,operations,noisy=True,reference_method='auto'):
     for gate in level['payload']:getattr(payload,gate['name'])(*gate['qubits'])
     ideal=ideal_reference(payload,reference_method)
     items,width=execution_schedule(level,operations,noisy)
-    return accepted_metrics(exact_density(items,width),ideal,level['qubits'])
+    return accepted_metrics(exact_density(items,width),ideal,level['qubits'],level['minimumKept'])

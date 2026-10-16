@@ -23,14 +23,14 @@
     },
     {
       "level": 6,
-      "maxMetricDifference": 5.551115123125783e-16
+      "maxMetricDifference": 6.661338147750939e-16
     },
     {
       "level": 7,
-      "maxMetricDifference": 7.771561172376096e-16
+      "maxMetricDifference": 9.992007221626409e-16
     }
   ],
-  "smallCliffordDensityDifference": 2.7755575615628914e-16,
+  "smallCliffordDensityDifference": 3.3306690738754696e-16,
   "tLevels": [
     {
       "level": 8,
@@ -39,16 +39,17 @@
       "noiselessZ": {
         "fidelity": 1.0,
         "retention": 1.0,
-        "score": 1.0
+        "score": 1.0,
+        "correct_shot_yield": 1.0
       },
       "invalidXYRejected": true,
       "smallTDensityDifference": 2.220446049250313e-16,
       "coldRunSeconds": [
-        0.2359979999891948,
-        0.23263620000216179,
-        0.23222089998307638
+        0.12078160000964999,
+        0.10586519999196753,
+        0.11171110000577755
       ],
-      "maxRunSeconds": 0.2359979999891948,
+      "maxRunSeconds": 0.12078160000964999,
       "interactiveTwoSecondGoalMet": true,
       "scoreSpread": 0.0
     },
@@ -59,16 +60,17 @@
       "noiselessZ": {
         "fidelity": 1.0,
         "retention": 1.0,
-        "score": 1.0
+        "score": 1.0,
+        "correct_shot_yield": 1.0
       },
       "invalidXYRejected": true,
       "smallTDensityDifference": 2.220446049250313e-16,
       "coldRunSeconds": [
-        0.26891689997864887,
-        0.2552583000215236,
-        0.279779900010908
+        0.1299445999902673,
+        0.11821700001019053,
+        0.12444380001397803
       ],
-      "maxRunSeconds": 0.279779900010908,
+      "maxRunSeconds": 0.1299445999902673,
       "interactiveTwoSecondGoalMet": true,
       "scoreSpread": 0.0
     },
@@ -79,16 +81,17 @@
       "noiselessZ": {
         "fidelity": 1.0,
         "retention": 1.0,
-        "score": 1.0
+        "score": 1.0,
+        "correct_shot_yield": 1.0
       },
       "invalidXYRejected": true,
       "smallTDensityDifference": 2.220446049250313e-16,
       "coldRunSeconds": [
-        0.28792020000400953,
-        0.333408899983624,
-        0.28828429998247884
+        0.12093799997819588,
+        0.13802160002524033,
+        0.16784479998750612
       ],
-      "maxRunSeconds": 0.333408899983624,
+      "maxRunSeconds": 0.16784479998750612,
       "interactiveTwoSecondGoalMet": true,
       "scoreSpread": 0.0
     }

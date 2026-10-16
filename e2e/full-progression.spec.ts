@@ -36,6 +36,8 @@ test("stored references complete Flight Schools 1–6 then Main 1–10 by real d
   await page.getByRole("button",{name:"Run mission",exact:true}).click();await pane(page,"Results");
   await expect(page.getByText("PASS",{exact:true})).toBeVisible();
   await expect(page.getByTestId("combined-score")).toHaveText(row.reasonable.toFixed(4));
+  if(row.id===2)await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem("quantum-shield-qed-v2")!).best["2"]?.stars)).toBe(3);
+  await expect(page.getByRole("img",{name:new RegExp(`Shots kept .*minimum shot budget ${Math.round(row.minimumKept*100)} percent`)})).toBeVisible();
   await page.getByRole("button",{name:"Mission control",exact:true}).click();
   if(row.id<10)await expect(page.locator(".mission-card").nth(index+1)).toBeEnabled();
   if(row.id<9)await expect(page.locator(".mission-card").nth(index+2)).toBeDisabled();

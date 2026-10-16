@@ -1,5 +1,6 @@
 {
   "protocol": "timeline-hardware-layers-v3-two-data-one-helper",
+  "scoreVersion": "trusted-fidelity-v1",
   "qiskitVersion": "2.5.2",
   "hardware": {
     "enabled": true,
@@ -10,8 +11,9 @@
     "t1Us": 100,
     "t2Us": 80
   },
+  "minimumKept": 0.99,
   "threshold": 0.62,
-  "exactReferenceMaximum": 0.6861194292789656,
+  "exactReferenceMaximum": 0.6930499285646118,
   "referenceScope": "Exact maximum over 15 single-ancilla full-payload Pauli-product shells; fixed tap order and terminal readout. Arbitrary placements and multi-check circuits are outside this certificate.",
   "results": {
     "unchecked": {
@@ -21,6 +23,12 @@
       "retention": 1.0,
       "score": 0.49413216168796986,
       "samplingOverhead": 1.0,
+      "minimumKept": 0.99,
+      "correct_shot_yield": 0.49413216168796986,
+      "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0,
       "validCheck": false,
       "operations": []
     },
@@ -29,8 +37,14 @@
       "qualificationThreshold": 0.62,
       "fidelity": 0.8161864745343561,
       "retention": 0.8186074953380253,
-      "score": 0.6681363656473422,
+      "score": 0.6748852178255983,
       "samplingOverhead": 1.2215866647874667,
+      "minimumKept": 0.99,
+      "correct_shot_yield": 0.6681363656473422,
+      "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 5,
       "validCheck": true,
       "operations": [
         {
@@ -40,6 +54,7 @@
             2
           ],
           "column": 0,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -52,6 +67,7 @@
             0
           ],
           "column": 1,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -64,6 +80,7 @@
             0
           ],
           "column": 9,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -76,6 +93,7 @@
             1
           ],
           "column": 10,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -87,6 +105,7 @@
             2
           ],
           "column": 13,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -98,6 +117,7 @@
             2
           ],
           "column": 14,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -109,8 +129,14 @@
       "qualificationThreshold": 0.62,
       "fidelity": 0.47858888607131456,
       "retention": 0.9548491980092424,
-      "score": 0.4569802140413314,
+      "score": 0.4615961757993246,
       "samplingOverhead": 1.0472857934895816,
+      "minimumKept": 0.99,
+      "correct_shot_yield": 0.4569802140413314,
+      "scoreVersion": "trusted-fidelity-v1",
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4,
       "validCheck": true,
       "operations": [
         {
@@ -120,6 +146,7 @@
             2
           ],
           "column": 0,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -132,6 +159,7 @@
             0
           ],
           "column": 1,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -144,6 +172,7 @@
             1
           ],
           "column": 2,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -156,6 +185,7 @@
             0
           ],
           "column": 9,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -167,6 +197,7 @@
             2
           ],
           "column": 13,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
@@ -178,6 +209,7 @@
             2
           ],
           "column": 14,
+          "angleRadians": null,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80

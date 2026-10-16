@@ -90,11 +90,15 @@ The hardware controls below the canvas apply independent bit flips, phase flips,
 
 ![Four-gate capstone workload; the CX interaction is the noise hotspot](/tutorial-circuits/school-6.png)
 
-### Fidelity is different from useful yield
+### Trusted Fidelity and your shot budget
 
 Post-selection retains only runs whose measured helper bits are all zero. Fidelity Fps compares the full retained data state with the noiseless target. Retention Skeep is the exact probability of retaining a run. The finite histogram estimates it as N_kept/N.
 
-The exact combined score is Fps × Skeep. Qualification requires a complete valid check and score ≥ max(0.62, the current unchecked score + 0.01). The default threshold is 0.62. This keeps qualification above the unchecked result even when you change the noise sliders; some extreme settings can leave no passing strategy. Reset restores the calibrated lesson. If no shots can survive, retained fidelity is undefined, score is zero, and sampling overhead diverges. There is no hidden minimum fidelity requirement. A green check need not improve the score: more noise exposure and discarded shots can outweigh cleaner accepted data.
+Trusted Fidelity rewards how accurate the kept shots are. Keep at least the shot budget Smin = 99% and your score equals Fps. Below that budget, the score is reduced in proportion to how many shots survive: score = Fps · min(1, Skeep / Smin). This explicit budget is a game design choice. The simulator can inspect the full state to compute fidelity; ordinary hardware counts alone cannot supply it.
+
+Compare three strategies: no checks retains everything but misses the noisy crossing; checks everywhere adds noisy interactions and can reject useful shots; a targeted check focuses on the noisy region. A green invariant guarantees correct noiseless construction, not a higher score. In this lesson blanket checking has both poor fidelity and a retention penalty; it does not necessarily discard more than a targeted check.
+
+Qualification requires a complete valid check and Trusted Fidelity ≥ max(0.62, the current unchecked fidelity + 0.01). The default target is 0.62. Some extreme slider settings leave no passing strategy; reset restores the calibrated lesson. If no shots survive, retained fidelity is undefined and score is zero. The research artifacts also record correct-shot yield Fps · Skeep separately, together with both fidelity and retention.
 
 ### A reproducible reference, with a stated scope
 

@@ -27,6 +27,7 @@ def test_reachable_mission_references_and_stable_scores(number):
         assert result['passed']==(kind in ('reasonable','optimal'))
         _run.cache_clear()
         assert run(draft)['combinedScore']==result['combinedScore']
+        assert all(key in row['metrics'][kind] for key in ('addedAncillas','addedTwoQubit','addedDepth','fidelity','retention','correct_shot_yield'))
         compiled=compile_source(CompileRequest(levelId=number,code=generate(draft)))
         assert not compiled['diagnostics']
         assert run(Draft.model_validate(compiled['draft']))['combinedScore']==pytest.approx(result['combinedScore'])
@@ -103,7 +104,7 @@ def test_mission_api_is_bounded_authoritative_and_returns_compact_outcome():
     d=shell(4,'IXI',1,3)
     response=client.post('/api/missions/run',json={'draft':d.model_dump()})
     assert response.status_code==200,response.text
-    assert set(response.json())=={'levelId','combinedScore','passed','target','status','configHash','protocol'}
+    assert set(response.json())=={'levelId','combinedScore','passed','target','status','configHash','protocol','fidelity','retention','minimumKept'}
     body=d.model_dump();body['ancillas']=4
     assert client.post('/api/missions/run',json={'draft':body}).status_code==422
     assert client.post('/api/missions/run',json={'draft':d.model_dump(),'score':1}).status_code==422

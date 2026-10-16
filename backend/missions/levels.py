@@ -43,6 +43,7 @@ def build(number):
                 checkBudget=ancillas, chapter='MANUAL' if number <= 3 else 'ASSISTED',
                 subtitle='Close an invariant and protect the noisy crossing.',
                 fixed=True, assisted=number >= 4, allowed=CLIFFORD + (['t', 'tdg'] if t_count else []),
+                minimumKept=.60 if number<=3 else .50,
                 targetScore=target, payload=[dict(id=f'u{i}', name=g, qubits=q, column=i, fixed=True) for i, (g,q) in enumerate(pairs)],
                 noise=dict(hotspotColumn=hotspot, qubit=1, timeUs=74.+number*2,
                            t1Us=100., t2Us=200., checkStrength=.025,
@@ -62,8 +63,10 @@ def get_level(number):
     import json
     path = Path(__file__).with_name('references.json')
     if path.exists():
-        item['targetScore'] = json.loads(path.read_text(encoding='utf-8'))['levels'][number-1]['target']
+        reference = json.loads(path.read_text(encoding='utf-8'))['levels'][number-1]
+        item['targetScore'] = reference['target']
+        item['minimumKept'] = reference.get('minimumKept', item['minimumKept'])
     item['overview'] = (f'Protect the noisy crossing while keeping useful shots. You have {item["ancillas"]} fixed ancilla'
-                        f'{"s" if item["ancillas"] != 1 else ""}; reach a combined score of {item["targetScore"]:.2f}. '
+                        f'{"s" if item["ancillas"] != 1 else ""}; reach Trusted Fidelity {item["targetScore"]:.2f} with a {item["minimumKept"]:.0%} shot budget. '
                         + ('Place both opening and closing checks.' if number <= 3 else 'Place opening checks; closing operators are generated before your final H.'))
     return item

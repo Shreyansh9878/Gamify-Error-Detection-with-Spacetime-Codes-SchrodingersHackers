@@ -77,8 +77,10 @@ def test_capstone_difficulty_exact_scores_and_same_noise_protocol():
     assert baseline['score']<threshold<sensible['score']
     assert everywhere['score']<threshold
     assert baseline['score']==pytest.approx(.4941321617,abs=1e-8)
-    assert sensible['score']==pytest.approx(.6681363656,abs=1e-8)
-    assert everywhere['score']==pytest.approx(.4569802140,abs=1e-8)
+    # Physical yield is unchanged; the game objective now applies its budget.
+    assert sensible['correct_shot_yield']==pytest.approx(.6681363656,abs=1e-8)
+    assert everywhere['correct_shot_yield']==pytest.approx(.4569802140,abs=1e-8)
+    assert sensible['score']==pytest.approx(.6681363656/service.CAPSTONE_MINIMUM_KEPT,abs=1e-8)
     # Finite sampling never changes exact qualification.
     a=service.run(Request(draft=example(),shots=256,seed=3))
     b=service.run(Request(draft=example(),shots=4096,seed=97))

@@ -4,7 +4,10 @@ const schema = z.object({
   tutorial: z.enum(["new", "complete", "skipped"]),
   step: z.number().int().min(0).max(5),
   sound: z.boolean(),
-  missionVersion: z.union([z.literal(1), z.literal(2)]).optional(),
+  missionVersion: z
+    .union([z.literal(1), z.literal(2), z.literal(3)])
+    .optional(),
+  unlockedThrough: z.number().int().min(1).max(10).optional(),
   best: z.record(
     z.string(),
     z.object({
@@ -48,7 +51,26 @@ export function recordBest(
   };
 }
 
-export const MISSION_VERSION = 2;
+export const MISSION_VERSION = 3;
+export function migrateProgress(p: Progress): Progress {
+  if (p.missionVersion === MISSION_VERSION) return p;
+  const passed = Object.entries(p.best)
+    .filter(([, result]) => result.stars > 0)
+    .map(([id]) => +id + 1);
+  return {
+    ...p,
+    best: {},
+    missionVersion: MISSION_VERSION,
+    unlockedThrough: Math.min(
+      10,
+      Math.max(p.unlockedThrough || 1, ...passed.filter(Number.isFinite)),
+    ),
+  };
+}
 export function missionUnlocked(p: Progress, id: number): boolean {
-  return p.tutorial === "skipped" || (p.tutorial === "complete" && (id === 1 || (p.best[id-1]?.stars || 0) > 0));
+  return (
+    p.tutorial === "skipped" ||
+    (p.tutorial === "complete" &&
+      (id <= (p.unlockedThrough || 1) || (p.best[id - 1]?.stars || 0) > 0))
+  );
 }

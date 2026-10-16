@@ -212,6 +212,8 @@ export interface Validation {
   wholeCircuitIdentity: boolean;
 }
 export interface Result {
+  minimumKept?: number;
+  correct_shot_yield?: number;
   baselineScore: number;
   qualificationThreshold: number | null;
   validation: Validation;

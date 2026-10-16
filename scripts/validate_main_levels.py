@@ -1,81 +1,128 @@
-"""Calibrate or verify every reachable main mission reference solution.
+"""Calibrate/verify player-reachable Trusted Fidelity references.
 
-Run: python scripts/validate_main_levels.py --calibrate (explicit fixture update)
-     python scripts/validate_main_levels.py             (regression validation)
-     python scripts/validate_main_levels.py --optimize  (recompute finite search)
+python scripts/validate_main_levels.py --calibrate
+python scripts/validate_main_levels.py --optimize
 """
 import argparse
 import json
-import math
 from pathlib import Path
 import sys
 from importlib.metadata import version
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from backend.missions.levels import get_level
 from backend.missions.models import Draft
-from backend.missions.reference import empty,shell,optimize,overcheck
+from backend.missions.reference import empty,shell,optimize,overcheck,scored_candidates
 from backend.missions.service import _run,_validate,validate,PROTOCOL
-from backend.learning.common import fingerprint
+from backend.quantum_core.scoring import trusted_fidelity
 
 PATH=Path(__file__).resolve().parents[1]/'backend/missions/references.json'
+KINDS=('baseline','everywhere','reasonable','optimal','misplaced','tooSmall','overchecked')
+# Rounded targets gently plateau to retain the T-level headroom. Calibration
+# changes no circuit, noise parameter or helper resource.
+TARGETS=(.63,.64,.65,.66,.66,.67,.67,.67,.67,.67)
+SCOPE='Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits.'
+
+
+def value(result,budget):
+    return trusted_fidelity(result['fidelity'],result['retention'],budget)
+
+
+def resource_metrics(level,draft):
+    """Count resources from the same generated operations the player executes."""
+    from backend.missions.service import qc_for,payload
+    base=qc_for(payload(level),level['qubits'])
+    checked=qc_for(validate(draft)['operations'],level['qubits']+level['ancillas'])
+    two=lambda circuit:sum(len(g.qubits)==2 for g in circuit.data)
+    active={q for g in draft.operations for q in g.qubits if q>=level['qubits']}
+    return dict(addedAncillas=len(active),addedTwoQubit=two(checked)-two(base),addedDepth=checked.depth()-base.depth())
 
 
 def calibrate():
     rows=[]
-    for number in range(1,11):
-        l=get_level(number)
-        cache=PATH.parent/f'.optimizer-{number}.json'
-        physics=fingerprint({k:v for k,v in l.items() if k not in ('targetScore','overview')})
-        if cache.exists() and json.loads(cache.read_text())['physics']==physics:
-            best=json.loads(cache.read_text())['result']
-        else:
-            best=optimize(number)
-            cache.write_text(json.dumps(dict(physics=physics,result=best)),encoding='utf-8')
-        unchecked=empty(number); baseline=_run(unchecked.model_dump_json())['combinedScore']
-        everywhere=overcheck(number)
-        # A longer, easy-to-find window with a single X on the hot q1.
-        h=l['noise']['hotspotColumn']
-        reasonable=shell(number,'I'*(l['qubits']-2)+'XI',max(0,h-1),h+(4 if number>=8 else 1))
-        r=_run(reasonable.model_dump_json())['combinedScore']; e=_run(everywhere.model_dump_json())['combinedScore']
-        o=best['best']['score']
-        target=math.floor((baseline+(.65+.013*number)*(o-baseline))*100)/100
-        assert max(baseline,e)+.005<target<r-.005<o, (number,baseline,e,r,o,target)
-        row=dict(id=number,qubits=l['qubits'],ancillas=l['ancillas'],tCount=sum(g['name'] in ('t','tdg') for g in l['payload']),
-                 baseline=baseline,everywhere=e,reasonable=r,optimal=o,target=target,spread=0.,
-                 baselineDraft=unchecked.model_dump(),everywhereDraft=everywhere.model_dump(),reasonableDraft=reasonable.model_dump(),
-                 optimalDraft=best['best']['draft'],optimizer={k:v for k,v in best.items() if k!='best'})
-        rows.append(row);print(f'{number}: baseline={baseline:.6f} everywhere={e:.6f} reasonable={r:.6f} optimum={o:.6f} target={target:.2f}',flush=True)
-    PATH.write_text(json.dumps(dict(protocol=PROTOCOL,score='F_ps * S_keep; exact density-matrix expectation',
+    for number,target in enumerate(TARGETS,1):
+        level=get_level(number)
+        candidates=list(scored_candidates(number))
+        unchecked=empty(number);blanket=overcheck(number)
+        baseline=_run(unchecked.model_dump_json());everywhere=_run(blanket.model_dump_json())
+        selected=None
+        for cents in range(99,0,-1):
+            budget=cents/100
+            if budget<=everywhere['retention']:continue
+            ordered=sorted(candidates,key=lambda c:value(c,budget),reverse=True)
+            best=ordered[0];maximum=value(best,budget)
+            position=(target-baseline['fidelity'])/(maximum-baseline['fidelity'])
+            plausible=[c for c in ordered if target+.030001<=value(c,budget)<maximum-1e-8]
+            # Preserve the existing third-star rule (target + 0.05).
+            if .60<=position<=.80 and plausible and maximum>=target+.05:
+                reasonable=min(plausible,key=lambda c:(sum(g['name'] in ('cx','cy','cz') for g in c['draft']['operations']),abs(value(c,budget)-target-.05)))
+                selected=budget,best,reasonable
+                break
+        if selected is None:raise AssertionError(f'No noise-preserving calibration satisfies level {number}.')
+        budget,best,reasonable=selected
+        misplaced=shell(number,'I'*(level['qubits']-1)+'X',0,1)
+        h=level['noise']['hotspotColumn']
+        too_small=shell(number,'I'*(level['qubits']-2)+'ZI',h,h+1)
+        rc=sum(g['name'] in ('cx','cy','cz') for g in validate(Draft.model_validate(reasonable['draft']))['operations'])
+        bigger=[c for c in candidates if sum(g['name'] in ('cx','cy','cz') for g in validate(Draft.model_validate(c['draft']))['operations'])>rc]
+        overchecked=min(bigger,key=lambda c:(sum(g['name'] in ('cx','cy','cz') for g in validate(Draft.model_validate(c['draft']))['operations']),abs(value(c,budget)-target)))
+        drafts=dict(baseline=unchecked.model_dump(),everywhere=blanket.model_dump(),reasonable=reasonable['draft'],optimal=best['draft'],
+                    misplaced=misplaced.model_dump(),tooSmall=too_small.model_dump(),overchecked=overchecked['draft'])
+        metrics={k:_run(Draft.model_validate(d).model_dump_json()) for k,d in drafts.items()}
+        row=dict(id=number,qubits=level['qubits'],ancillas=level['ancillas'],tCount=sum(g['name'] in ('t','tdg') for g in level['payload']),
+                 minimumKept=budget,target=target,spread=0.,initialMinimumKept=.60 if number<=3 else .50,
+                 optimizer=dict(kind='custom-t-pauli-search' if number>=8 else 'clifford-pauli-reference-search',pauliceUsed=False,candidateCount=len(candidates),scope=SCOPE),
+                 metrics={k:dict(fidelity=v['fidelity'],retention=v['retention'],correct_shot_yield=v['correct_shot_yield'],score=value(v,budget),
+                                 **resource_metrics(level,Draft.model_validate(drafts[k]))) for k,v in metrics.items()})
+        row.update({k:value(v,budget) for k,v in metrics.items()})
+        row.update({k+'Draft':v for k,v in drafts.items()})
+        rows.append(row)
+        print(f'{number}: budget={budget:.2f} target={target:.2f} reasonable={row["reasonable"]:.6f} best={row["optimal"]:.6f}',flush=True)
+    PATH.write_text(json.dumps(dict(protocol=PROTOCOL,score='Trusted Fidelity; backend.quantum_core.scoring.trusted_fidelity',
+        calibration='Noise unchanged. Highest two-decimal budget below 1 satisfying retention penalty, 60–80% target position, safe margins and the existing third-star threshold; targets gently plateau.',
         packages={name:version(name) for name in ('qiskit','qiskit-aer','qiskit-paulice','numpy')},levels=rows),indent=2)+'\n',encoding='utf-8')
 
 
+def assert_target_validity(row,metrics):
+    t=row['target'];b=row['minimumKept']
+    assert metrics['baseline']['fidelity']<t, 'Baseline must fail on fidelity itself.'
+    assert row['baseline']<=t-.05 and row['everywhere']<=t-.05
+    assert row['reasonable']>=t+.03 and row['optimal']>row['reasonable']
+    assert row['optimal']>=t+.05, 'The stored winner must reach the existing third-star threshold.'
+    assert row['misplaced']<t
+    assert .60<=(t-row['baseline'])/(row['optimal']-row['baseline'])<=.80
+    # Retention contributes a real penalty; fidelity can also contribute.
+    assert metrics['everywhere']['retention']<b
+    assert row['everywhere']<metrics['everywhere']['fidelity']
+    assert row['everywhere']<row['reasonable']
+
+
 def verify(reoptimize=False):
-    data=json.loads(PATH.read_text(encoding='utf-8'));last_size=4;last_depth=3
+    data=json.loads(PATH.read_text(encoding='utf-8'));last_size=4;last_depth=3;last_target=.62
     assert data['protocol']==PROTOCOL
     for row in data['levels']:
-        number=row['id'];l=get_level(number);size=len(l['payload'])
+        number=row['id'];level=get_level(number);size=len(level['payload'])
         assert size>last_size;last_size=size
         from backend.missions.service import qc_for,payload
-        depth=qc_for(payload(l),l['qubits']).depth()
-        assert depth>last_depth;last_depth=depth
-        assert l['qubits']>=(2 if number==1 else 3) and l['ancillas']==row['ancillas']
+        depth=qc_for(payload(level),level['qubits']).depth();assert depth>last_depth;last_depth=depth
+        assert level['qubits']>=(2 if number==1 else 3) and level['ancillas']==row['ancillas']
         assert row['tCount']==({8:1,9:3,10:5}.get(number,0))
-        scores={}
-        for kind in ('baseline','everywhere','reasonable','optimal'):
-            d=Draft.model_validate(row[kind+'Draft']);assert d.levelId==number
-            if kind!='baseline':assert validate(d)['valid'],(number,kind,validate(d))
+        assert row['target']>=last_target;last_target=row['target']
+        metrics={}
+        for kind in KINDS:
+            draft=Draft.model_validate(row[kind+'Draft']);assert draft.levelId==number
+            if kind!='baseline':assert validate(draft)['valid'],(number,kind,validate(draft))
             samples=[]
             for _ in range(3):
-                _run.cache_clear(); result=_run(d.model_dump_json());samples.append(result['combinedScore'])
-            spread=max(samples)-min(samples);assert spread<1e-12
+                _run.cache_clear();result=_run(draft.model_dump_json());samples.append(result['combinedScore'])
+            assert max(samples)-min(samples)<1e-12
             assert abs(samples[0]-row[kind])<1e-9,(number,kind,samples[0],row[kind])
-            assert result['passed']==(kind in ('reasonable','optimal'))
-            scores[kind]=samples[0]
-        assert max(scores['baseline'],scores['everywhere'])+.005<row['target']<scores['reasonable']-.005
-        assert scores['reasonable']<scores['optimal']
-        assert .60<=(row['target']-scores['baseline'])/(scores['optimal']-scores['baseline'])<=.80
+            assert result['passed']==(kind!='baseline' and row[kind]>=row['target'])
+            for metric in ('fidelity','retention','correct_shot_yield'):
+                assert abs(result[metric]-row['metrics'][kind][metric])<1e-9
+            metrics[kind]=result
+        assert_target_validity(row,metrics)
         if reoptimize:assert abs(optimize(number)['best']['score']-row['optimal'])<1e-9
-        print(f'Mission {number}: all references valid, exact spread 0',flush=True)
+        print(f'Mission {number}: seven references valid, required margins and exact spread 0',flush=True)
     return data
 
 

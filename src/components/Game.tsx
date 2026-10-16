@@ -18,11 +18,13 @@ import {
   STORAGE_KEY,
   MISSION_VERSION,
   missionUnlocked,
+  migrateProgress,
   type Progress,
 } from "@/lib/progress";
 import type { MissionLevel as Level, Outcome } from "@/lib/missions/contracts";
 import { Tutorial } from "./Tutorial";
 import { Mission } from "./Mission";
+import { TeamCredits } from "./TeamCredits";
 export function Game() {
   const [levels, setLevels] = useState<Level[]>([]),
     [progress, setProgress] = useState<Progress>(initial),
@@ -58,7 +60,7 @@ export function Game() {
               "Previous mission scores could not be archived; tutorial progress is retained.",
             );
           }
-        saved = { ...saved, best: {}, missionVersion: MISSION_VERSION };
+        saved = migrateProgress(saved);
       }
       setProgress(saved);
       const link = readDeepLink(window.location.search);
@@ -410,13 +412,9 @@ export function Game() {
                   </a>
                 </div>
               </div>
+              <TeamCredits />
             </>
           )}
-          <footer>
-            Quantum Shield · Stage 1 · Personal progress stays on this device.
-            <br />
-            Simulation is educational; no quantum hardware account is required.
-          </footer>
         </main>
       </div>
     </div>

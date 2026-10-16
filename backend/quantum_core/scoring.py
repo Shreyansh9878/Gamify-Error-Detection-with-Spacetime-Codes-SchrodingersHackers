@@ -1,5 +1,6 @@
 """Exact local Aer evolution and pure-reference postselection metrics."""
 import json
+import math
 from functools import lru_cache
 import numpy as np
 from qiskit import QuantumCircuit
@@ -46,7 +47,24 @@ def ideal_reference(circuit, method='auto'):
     return projector
 
 
-def accepted_metrics(joint, ideal, data_qubits):
+def trusted_fidelity(fidelity, kept, minimum_kept):
+    """Reward kept-shot fidelity, penalizing retention below the shot budget.
+
+    score = F_ps * min(1, S_keep / S_min). This is a game objective,
+    not an estimator available from hardware measurements alone.
+    """
+    if not math.isfinite(minimum_kept) or not 0 < minimum_kept <= 1:
+        raise ValueError('The minimum kept-shot fraction must be in (0, 1].')
+    if not math.isfinite(kept) or not 0 <= kept <= 1:
+        raise ValueError('The kept-shot fraction must be in [0, 1].')
+    if kept <= 1e-12:
+        return 0.
+    if fidelity is None or not math.isfinite(fidelity) or not 0 <= fidelity <= 1:
+        raise ValueError('A nonempty accepted state needs fidelity in [0, 1].')
+    return fidelity * min(1., kept / minimum_kept)
+
+
+def accepted_metrics(joint, ideal, data_qubits, minimum_kept=None):
     # Ancillas are higher-order bits. Their all-zero outcome is this block.
     block = joint[:2**data_qubits, :2**data_qubits]
     kept = float(np.trace(block).real)
@@ -54,4 +72,7 @@ def accepted_metrics(joint, ideal, data_qubits):
     kept = max(0., min(1., kept))
     score = max(0., min(kept, score))
     fidelity = score / kept if kept > 1e-12 else None
-    return dict(fidelity=fidelity, retention=kept, score=score)
+    # Unbudgeted research retains its original correct-shot-yield objective.
+    value = score if minimum_kept is None else trusted_fidelity(fidelity, kept, minimum_kept)
+    return dict(fidelity=fidelity, retention=kept, score=value,
+                correct_shot_yield=score)

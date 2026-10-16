@@ -50,15 +50,28 @@ def check(base,timeout=60):
                     assert result['score']>=result['qualificationThreshold']
                     reveal=call('/api/tutorial/timeline/reveal',dict(draft=ref['draft'],shots=1024,seed=2026)).json()
                     assert reveal['paulice']['available'] and reveal['paulice']['addedAncillas']<=1
-                    assert abs(result['score']-.6681363656473422)<1e-9
+                    capstone=json.loads((ROOT/'backend/reference_solutions/capstone.json').read_text())
+                    assert abs(result['score']-capstone['reasonable'])<1e-9
+                    assert result['minimumKept']==capstone['minimumKept']
+                    for kind in ('baseline','everywhere','optimal','misplaced','tooSmall','overchecked'):
+                        trial=call('/api/tutorial/timeline/run',dict(draft=capstone[kind+'Draft'],shots=1024,seed=2026)).json()
+                        assert abs(trial['score']-capstone[kind])<1e-9,(kind,trial['score'])
+                        assert trial['minimumKept']==capstone['minimumKept']
+                        assert abs(trial['fidelity']-capstone['metrics'][kind]['fidelity'])<1e-9
+                        assert abs(trial['retention']-capstone['metrics'][kind]['retention'])<1e-9
+                        qualified=trial['validation']['valid'] and trial['score']>=trial['qualificationThreshold']
+                        assert qualified==(kind!='baseline' and capstone[kind]>=capstone['target'])
         references=json.loads((ROOT/'backend/missions/references.json').read_text())
         for row in references['levels']:
-            for kind in ('baseline','everywhere','reasonable','optimal'):
+            for kind in ('baseline','everywhere','reasonable','optimal','misplaced','tooSmall','overchecked'):
                 body=dict(draft=row[kind+'Draft'])
                 result=call('/api/missions/run',body).json()
-                assert result['passed']==(kind in ('reasonable','optimal')),(row['id'],kind,result)
+                assert result['passed']==(kind!='baseline' and row[kind]>=row['target']),(row['id'],kind,result)
                 assert abs(result['combinedScore']-row[kind])<1e-9,(row['id'],kind,result)
                 assert result['protocol']==references['protocol']
+                assert result['minimumKept']==row['minimumKept']
+                assert abs(result['fidelity']-row['metrics'][kind]['fidelity'])<1e-9
+                assert abs(result['retention']-row['metrics'][kind]['retention'])<1e-9
             print(f'Main {row["id"]}: passing references and failing controls match local scores',flush=True)
     return dict(origin=base,liveHost=base.startswith('https://'),requests=rows,
                 maxSeconds=max(r['seconds'] for r in rows),scoreTolerance=1e-9,

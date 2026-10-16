@@ -52,6 +52,7 @@ export type MissionLevel = {
   fixed: true;
   assisted: boolean;
   targetScore: number;
+  minimumKept: number;
   allowed: string[];
   protocol: string;
   payload: {
@@ -97,6 +98,9 @@ export type Validation = {
 export type Outcome = {
   levelId: number;
   combinedScore: number;
+  fidelity: number | null;
+  retention: number;
+  minimumKept: number;
   passed: boolean;
   target: number;
   status: string;

@@ -18,6 +18,7 @@ import {
   STORAGE_KEY,
   MISSION_VERSION,
   missionUnlocked,
+  migrateProgress,
   type Progress,
 } from "@/lib/progress";
 import type { MissionLevel as Level, Outcome } from "@/lib/missions/contracts";
@@ -59,7 +60,7 @@ export function Game() {
               "Previous mission scores could not be archived; tutorial progress is retained.",
             );
           }
-        saved = { ...saved, best: {}, missionVersion: MISSION_VERSION };
+        saved = migrateProgress(saved);
       }
       setProgress(saved);
       const link = readDeepLink(window.location.search);

@@ -1,6 +1,28 @@
 import { describe, it, expect } from "vitest";
-import { initial, parseProgress, recordBest, missionUnlocked } from "./progress";
+import {
+  initial,
+  parseProgress,
+  recordBest,
+  missionUnlocked,
+  migrateProgress,
+  MISSION_VERSION,
+} from "./progress";
 describe("local progression", () => {
+  it("archives metric meaning by clearing old scores while preserving unlocks", () => {
+    const legacy = {
+      ...initial,
+      tutorial: "complete" as const,
+      missionVersion: 2 as const,
+      best: { "1": { score: 800, stars: 3 }, "2": { score: 750, stars: 1 } },
+    };
+    const migrated = migrateProgress(legacy);
+    expect(migrated.best).toEqual({});
+    expect(migrated.missionVersion).toBe(MISSION_VERSION);
+    expect(missionUnlocked(migrated, 3)).toBe(true);
+    expect(missionUnlocked(migrated, 4)).toBe(false);
+    expect(migrateProgress(migrated)).toEqual(migrated);
+    expect(legacy.best["1"].score).toBe(800);
+  });
   it("rejects corrupt or incompatible storage", () => {
     expect(parseProgress("broken")).toEqual(initial);
     expect(parseProgress('{"version":2}')).toEqual(initial);

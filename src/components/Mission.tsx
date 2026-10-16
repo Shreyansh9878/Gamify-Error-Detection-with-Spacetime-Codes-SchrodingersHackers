@@ -19,6 +19,7 @@ import {
 } from "./workspace/LearningWorkspace";
 import { CodeEditor, LabFeedback } from "./learning/LabFrame";
 import { MissionCanvas } from "./circuit-workspace/MissionCanvas";
+import { TrustedFidelityMetrics } from "./TrustedFidelityMetrics";
 
 export function Mission({
   level: l,
@@ -160,8 +161,9 @@ export function Mission({
           <p>{l.overview}</p>
           <h2>Objective</h2>
           <p>
-            Combined score = post-selected fidelity × kept-shot fraction. Close
-            the green invariant loop and reach {l.targetScore.toFixed(2)}.
+            Reach Trusted Fidelity {l.targetScore.toFixed(2)} with a{" "}
+            {(l.minimumKept * 100).toFixed(0)}% shot budget. Close the green
+            invariant loop; falling below the budget reduces your score.
           </p>
           {l.id === 1 && (
             <p>
@@ -172,8 +174,8 @@ export function Mission({
           )}
           <p>
             Drag H, controlled Pauli checks, final H and M from the palette. The
-            orange crossing is noisier. Discarded shots reduce your combined
-            score.
+            orange crossing is noisier. Preserve fidelity while keeping enough
+            shots.
           </p>
           <p>
             {l.assisted
@@ -253,7 +255,11 @@ export function Mission({
                   >
                     {Array.from({ length: l.payload.length + 1 }, (_, i) => (
                       <option key={i} value={i}>
-                        {i === 0 ? "Before payload" : i === l.payload.length ? "After payload" : `After gate ${i}`}
+                        {i === 0
+                          ? "Before payload"
+                          : i === l.payload.length
+                            ? "After payload"
+                            : `After gate ${i}`}
                       </option>
                     ))}
                   </select>
@@ -311,7 +317,7 @@ export function Mission({
                   {[
                     "from qiskit import QuantumCircuit",
                     `qc = QuantumCircuit(${l.qubits + l.ancillas}, ${l.ancillas})`,
-                    "# Score includes the authoritative mission noise model.",
+                    "# Trusted Fidelity and the shot budget use the authoritative mission model.",
                     ...(validation?.operations || []).map((g) =>
                       g.name === "m"
                         ? `qc.measure(${g.qubits[0]}, ${g.qubits[0] - l.qubits})`
@@ -338,12 +344,18 @@ export function Mission({
               <strong className="mission-combined" data-testid="combined-score">
                 {outcome.combinedScore.toFixed(4)}
               </strong>
+              <span>Trusted Fidelity</span>
               <span
                 className={outcome.passed ? "mission-pass" : "mission-fail"}
               >
                 {outcome.passed ? "PASS" : "FAIL"}
               </span>
               <p>{outcome.status}</p>
+              <TrustedFidelityMetrics
+                fidelity={outcome.fidelity}
+                retention={outcome.retention}
+                minimumKept={outcome.minimumKept}
+              />
             </>
           )}
         </div>

@@ -118,6 +118,12 @@ print('\n'.join(early))
 
 ## C. Project facts for the report
 
+Supporting material added after the initial snapshot: [the executed per-level design/validation notebook](notebooks/level_design_and_validation.ipynb). It covers all sixteen lessons/missions, calls the real game functions, draws circuits using Qiskit, rescales no targets, and produces fresh score/propagation/noise/T-validation evidence. Its cached finite-family searches were actually regenerated with `scripts/cache_level_searches.py`; the source/version-fingerprinted data lives in `notebooks/data/level_search_results.json`. The cache avoids repeating the expensive search during ordinary reading/execution; winners are freshly scored on every notebook execution. This is supporting analysis, not the final report or video.
+
+Reproduce in a separate environment: `python -m venv artifacts/notebook-env`, then `artifacts/notebook-env/Scripts/python.exe -m pip install -r notebooks/requirements.txt` and `artifacts/notebook-env/Scripts/python.exe scripts/run_notebook.py`. `--check-saved` checks saved execution/summary/source evidence without executing. The runner rejects errors, unexecuted cells and disagreement with the level validation JSON/document. Notebook/Jupyter/drawing tools are pinned separately and already excluded from deployment. Python 3.10 was clean-install tested; use `bin/python` on Linux/macOS. Runtime and package versions are measured in the notebook itself, not inserted into its outputs by hand.
+
+Additional development-only dependencies for this analysis are completely pinned in `notebooks/requirements.txt`; section D's earlier 44-package Python inventory describes the pre-notebook environment, not this expanded analysis environment. Section D1a adds the exact 41 extra analysis distributions, including nbformat, nbclient, nbconvert, IPython/ipykernel and Jupyter client/core, with observed licenses and purposes. Inspect installed `License-Expression`/`License` metadata and upstream notices as described in section D. They are not deployed application dependencies. The notebook work is AI-generated/assisted as recorded in PROVENANCE.md; no new final report, narration, video or slides were authored by this task.
+
 ### C1. Problem interpretation and game structure
 
 - Brief pp.1–3: engage students with genuine low-overhead spacetime error detection, not decorative QEC vocabulary. Our interpretation is a circuit-protection game where controlled Pauli checks trade conditional output fidelity against usable-shot yield. It is **detection**, not general fault-tolerant correction or a claim of quantum advantage.
@@ -379,6 +385,54 @@ pnpm list --depth Infinity --json
 | typing-extensions | 4.16.0 | PSF-2.0 | Backported and Experimental Type Hints for Python 3.9+ |
 | typing-inspection | 0.4.4 | MIT | Runtime typing introspection tools |
 | uvicorn | 0.54.0 | BSD-3-Clause | Local ASGI server |
+
+### D1a. Additional notebook-only Python packages
+
+These 41 additional distributions complete the 85-package analysis environment alongside D1. Versions are pinned in `notebooks/requirements.txt`; licenses/purposes below come from the independently installed distribution metadata. A family label where metadata omits an SPDX variant is intentionally not a guess at that variant. Keep bundled notices. No notebook package was added to deployed requirements.
+
+| Distribution | Pinned version | Declared license / notice | Purpose |
+|---|---|---|---|
+| asttokens | 3.0.2 | Apache-2.0 | Annotate AST trees with source code positions |
+| attrs | 26.1.0 | MIT | Classes Without Boilerplate |
+| beautifulsoup4 | 4.15.0 | MIT | Screen-scraping library |
+| bleach | 6.4.0 | Apache-2.0 | An easy safelist-based HTML-sanitizing tool. |
+| comm | 0.2.3 | BSD-3-Clause (distribution notice) | Jupyter Python Comm implementation, for usage in ipykernel, xeus-python etc. |
+| debugpy | 1.8.22 | MIT | An implementation of the Debug Adapter Protocol for Python |
+| decorator | 5.3.1 | BSD-2-Clause | Decorators for Humans |
+| defusedxml | 0.7.1 | PSF license (distribution metadata) | XML bomb protection for Python stdlib modules |
+| executing | 2.3.0 | MIT | Get the currently executing AST node of a frame, and other information |
+| fastjsonschema | 2.22.2 | BSD-3-Clause | Fastest Python implementation of JSON schema |
+| ipykernel | 6.30.1 | BSD-3-Clause (distribution notice) | IPython Kernel for Jupyter |
+| ipython | 8.39.0 | BSD-3-Clause | IPython: Productive Interactive Computing |
+| jedi | 0.20.1 | MIT | An autocompletion tool for Python that can be used for text editors. |
+| Jinja2 | 3.1.6 | BSD License | A very fast and expressive template engine. |
+| jsonschema | 4.26.0 | MIT | An implementation of JSON Schema validation for Python |
+| jsonschema-specifications | 2025.9.1 | MIT | The JSON Schema meta-schemas and vocabularies, exposed as a Registry |
+| jupyter_client | 8.10.0 | BSD-3-Clause (distribution notice) | Jupyter protocol implementation and client libraries |
+| jupyter_core | 5.9.1 | BSD-3-Clause | Jupyter core package. A base package on which Jupyter projects rely. |
+| jupyterlab_pygments | 0.3.0 | BSD-3-Clause (distribution notice) | Pygments theme using JupyterLab CSS variables |
+| MarkupSafe | 3.0.4 | BSD-3-Clause | Safely add untrusted strings to HTML/XML markup. |
+| matplotlib-inline | 0.2.2 | BSD-3-Clause | Inline Matplotlib backend for Jupyter |
+| mistune | 3.3.4 | BSD-3-Clause | A sane and fast Markdown parser with useful plugins and renderers |
+| nbclient | 0.10.2 | BSD-3-Clause (distribution notice) | A client library for executing notebooks. Formerly nbconvert's ExecutePreprocessor. |
+| nbconvert | 7.16.6 | BSD-3-Clause (distribution notice) | Converting Jupyter Notebooks (.ipynb files) to other formats. Output formats include asciidoc, html, latex, markdown, pdf, py, rst, script. nbconvert can be used both as a Python library (`import nbconvert`) or as a command line tool (invoked as `jupyter nbconvert ...`). |
+| nbformat | 5.10.4 | BSD-3-Clause (distribution notice) | The Jupyter Notebook format |
+| nest-asyncio | 1.6.0 | BSD | Patch asyncio to allow nested event loops |
+| pandocfilters | 1.5.1 | BSD-3-Clause | Utilities for writing pandoc filters in python |
+| parso | 0.8.7 | MIT | A Python Parser |
+| platformdirs | 4.12.4 | MIT | A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`. |
+| prompt_toolkit | 3.0.53 | BSD License | Library for building powerful interactive command lines in Python |
+| pure_eval | 0.2.4 | MIT | Safely evaluate AST nodes without side effects |
+| pyzmq | 27.2.0 | BSD-3-Clause | Python bindings for 0MQ |
+| referencing | 0.37.0 | MIT | JSON Referencing + Python |
+| rpds-py | 0.30.0 | MIT | Python bindings to Rust's persistent data structures (rpds) |
+| soupsieve | 2.10 | MIT | A modern CSS selector implementation for Beautiful Soup. |
+| stack-data | 0.6.3 | MIT | Extract data from python stack frames and tracebacks for informative displays |
+| tinycss2 | 1.5.1 | BSD License | A tiny CSS parser |
+| tornado | 6.5.10 | Apache-2.0 | Tornado is a Python web framework and asynchronous networking library, originally developed at FriendFeed. |
+| traitlets | 5.16.1 | BSD-3-Clause (distribution notice) | Traitlets Python configuration system |
+| wcwidth | 0.9.2 | MIT | Measures the displayed width of unicode strings in a terminal |
+| webencodings | 0.6.1 | BSD License | Character encoding aliases for legacy web content |
 
 ### D2. JavaScript packages, including transitive/platform dependencies
 

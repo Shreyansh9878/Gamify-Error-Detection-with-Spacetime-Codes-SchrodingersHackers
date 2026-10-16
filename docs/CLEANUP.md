@@ -1,5 +1,7 @@
 # Final repository cleanup
 
+Protected supporting analysis added after this historical cleanup: retain `notebooks/level_design_and_validation.ipynb` with executed outputs, `notebooks/requirements.txt`, `notebooks/data/level_search_results.json`, `scripts/level_design_analysis.py`, `scripts/cache_level_searches.py`, `scripts/run_notebook.py` and `tests/test_level_notebook.py`. The search JSON is reproducible scientific evidence, not a disposable `backend/missions/.optimizer-*.json` cache. Existing Vercel exclusions intentionally keep notebook material out of deployment; they do not authorize deleting it from the repository.
+
 Feature checkpoint: `696ce5e`. Cleanup follows that feature commit and is committed separately. The pre-cleanup production build, TypeScript, 208 Python tests plus the three new study tests, 34 frontend tests and all 56 desktop/mobile browser tests passed. Searches found no source/setup/test reference to the three obsolete documents before removal. Their current replacements are linked from README.
 
 Deleted tracked documents:

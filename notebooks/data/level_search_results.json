@@ -1,0 +1,797 @@
+{
+  "schemaVersion": 1,
+  "generator": "python scripts/cache_level_searches.py",
+  "implementation": "backend.missions.reference.optimize",
+  "generatedAtUtc": "2026-10-16T11:43:12.654167+00:00",
+  "seconds": 390.014906299999,
+  "seed": 2026,
+  "signature": {
+    "files": {
+      "backend/__init__.py": "c4153e49842f497a7a8c116701ebedb54cfb7eec52c81c1e335501862f22289e",
+      "backend/advanced_lab/__init__.py": "b17a28796a2b702dbf173aaf6943b796e8c0bef8cadc2c49812b3f0f10bca3fd",
+      "backend/advanced_lab/code_parser.py": "f13915d85d65db96b2b626326d796a86c9810501bd0e3ef66497c61c6f593f6e",
+      "backend/advanced_lab/models.py": "316baf7a5665fe986a3828b206f4166af298dcbf187ee0319a6f59be71df4e63",
+      "backend/advanced_lab/service.py": "333ec2359f1168feed437b6151eab2fc612337aa2684038c4b61e93baee3c2b7",
+      "backend/app.py": "e1d03ebe7a2d78dfa13eef382acd568c2dbb0c21e8d0e15756d5ed2539d3cbbb",
+      "backend/check_lab/__init__.py": "ab268e7c57c72fe2c50ae07f3e30f0438094c411ac886bfa98ff9ab60dccb3a3",
+      "backend/check_lab/code_parser.py": "faf5bcd85d40b7ee96fc4468d09a4a78f22718d64b51a49a737a1923eacea99f",
+      "backend/check_lab/models.py": "f5489889f936a28039ad752c871d1f480d774fdfb028846cfd2813cf93dc68e4",
+      "backend/check_lab/service.py": "d6be0c34f280e47d0e01ffc01594b14ea941b2afa93b61265d0eaea8757ad9dc",
+      "backend/deployment_security.py": "5800b61433454a6e49a3b080e7f488e190f30a33609eedf550eaa7352c86ab5d",
+      "backend/engine.py": "836d8934c80985d5a902bcced0dc011000666b09168c9d507623586db4ad6d46",
+      "backend/graduation_lab/__init__.py": "7d5489a8a7bdeaed13b72e581d575bd46046032c704032bdb7bb51ecfb298053",
+      "backend/graduation_lab/benchmark.py": "1fd09e2205ecc5cd681aab3e23606e49627f99a90ff384c6225e8e6497bd72fa",
+      "backend/graduation_lab/code_parser.py": "b64f94ef4fb3ce486726de8e1793ff40c9cd8432c2ac80876f03816c374f153c",
+      "backend/graduation_lab/fixture.py": "a9e9881aeb3e3304255deb878a27dd29d01ff46c73452bbaeebba5eff5f30ac0",
+      "backend/graduation_lab/models.py": "4c47b6eabc2dd4227ec34fe80e86f9f7a935f67891ad1bbe9e14394487980fca",
+      "backend/graduation_lab/paulice_adapter.py": "4525878c1fb1d70e251c1abf4c0af0ade50b27abcfdd47377c59a37cd0dc66cc",
+      "backend/graduation_lab/scheduler.py": "7048b1f3669472a478349eb556f64597d76fa7204254fd69fc2c1fd59b4ef2a7",
+      "backend/graduation_lab/service.py": "ee10628f56a7534d2c46b9cc1cfcef6c66167d3b0fd2eb342b245a59a9f25cfb",
+      "backend/learning/__init__.py": "6bf1417f6d82e39366cdde05b89c8285d97fa862862ffaee000045fe892a7a83",
+      "backend/learning/common.py": "99d49525a5b3ec7c197f980bbba7559f20c99dcf59afde41550571c1ecbb2016",
+      "backend/learning/noise_targets.py": "774bc53e14099e2411ad58071e7a2ec5d4f889ac379e6a3b225ff90202f3b358",
+      "backend/learning/portable_frames.py": "280ffeeba4331363578e4d8486003a8eb9f8fbf4145a549560cca26e91cbd6f2",
+      "backend/learning/source.py": "bb8ae5d8b1e93521b4a9e5a85f511f63259137f8f4dda90e4d96943c1b709bae",
+      "backend/learning/visualization.py": "f5042f6d1bf0a13fa42c1887bd7e79e917b603f4254f57bd543e9e5e6cc5eece",
+      "backend/levels.py": "48d64b38ae6b14e8c4e9352f33452e646159501a992a13eb9383941af42a91c6",
+      "backend/missions/__init__.py": "377e9d3fd05af0b00682e3eee2b91a110f268dded58291127daeee1cc10828b1",
+      "backend/missions/levels.py": "83b8a0b5865edd2d9baccff9e0e6ff066b56127d0413b5c6ad6c49c71d372f34",
+      "backend/missions/models.py": "b6f465322baac422fceb29a7bbaf53579e996989694846c5218ff3f7942a01b4",
+      "backend/missions/reference.py": "999222ee2a40fc01bf3b4b1977b039fc4f6cc2c123befb9e1c58494c4036d9c6",
+      "backend/missions/service.py": "0f321f8a40d6820e9bd8cf5921badb2f8ce76b7665be49e16c4fe15f62aec55f",
+      "backend/missions/simulation.py": "42b5fa9ecf0b962cfb469eb0d52764be89722e317e543f02bba470329a23928c",
+      "backend/models.py": "4ed8876c840a0fa95c3b9f856f5ad6372e5857eeaa229742a3cd65c92a8c69e4",
+      "backend/noise_lab/__init__.py": "1bbf238f5272f4a3a2eaf5121c5f936f38b20816a67661299ea5ee62f43f8a38",
+      "backend/noise_lab/code_parser.py": "386fa2c7ffa333db8e9b5813ac4c65cff7e3fb8b893ba68138a19b0c0deecd62",
+      "backend/noise_lab/models.py": "17558e6b9bc425a5c8f9bd8d2378ecad6587e195237939e2ab5a6fd1e7ceb960",
+      "backend/noise_lab/simulator.py": "2e3128703b603132831692d8f80462e3b07181c660eb4b7f6d7868300ed408e9",
+      "backend/protection_lab/__init__.py": "249ec1d48ebb60fff43d8a9114a683d010059c82d15559776f7604dc7c4c2c5f",
+      "backend/protection_lab/code_parser.py": "a4bff6447e349a667185dcc6718f786e4dabfa4e6c481d66c111803aa08ddaf9",
+      "backend/protection_lab/models.py": "dbb78b3a945f402dfe900c4eec24476372a998d46353d5f65d9d33d0af22477b",
+      "backend/protection_lab/service.py": "1d121a6b422a64fe06453033c3d23c88b6e3818800a3277f46d5287ca291e54a",
+      "backend/quantum_core/__init__.py": "756462b4a30f4ce2364b9dd3d2dacfe9f2adcb87159582a38cbf8b8fc8cce6e8",
+      "backend/quantum_core/checks.py": "32f3ef062c13679bf458de91e7585ab561847f8514f72395316b6475cd1c8e22",
+      "backend/quantum_core/noise.py": "42c3f93ebe193d72a3c601ad78d1be965fdb883e052a0a0d09e79f923203338f",
+      "backend/quantum_core/pauli.py": "a2e8079315107eb797b6297bcb3706594b4e2ca09f5915245db76c39715399da",
+      "backend/quantum_core/paulice.py": "5e1299beb32ee3ab95b5adb26aeb76181cd3fd7297382fc35ee963240d009c5c",
+      "backend/quantum_core/scoring.py": "2ada5c0ada70b032518deef68e05277d21812ca2ec7012da20945e322880f4c0",
+      "backend/research.py": "5ba4a0fa4b8074859f9a5bfc47adae54cc2d2b79cfa8ca8400ca9daf2965be2a",
+      "backend/timeline_lab/__init__.py": "dba8add215b5c3b75163b83658c1ffc6fb09960f0b7eb3c865e277ae7f2c098e",
+      "backend/timeline_lab/capstone_examples.py": "8b7d66e5d34a5b50123fc27876a6c1f22d79e385d634dddb9738ff5bc01712f0",
+      "backend/timeline_lab/models.py": "f929e900b991f2a7ce84a7acc0b87bac21d48897b58e17fea4a81dbb6326567a",
+      "backend/timeline_lab/service.py": "9109f32421eef946d6f787c8238b2e0a6abcb5bfb74863277decdb9a47be7fd6",
+      "backend/tutorial.py": "70edd19f35a6fae0fb2a3b9cc86e2abd2b88ca7db1ba5ca3e9081997c18577f1",
+      "backend/missions/references.json": "9c1dda879eb3427cb6afef406eb0626616845007514bd24a6cebb65f9ea1d131",
+      "backend/reference_solutions/tutorials.json": "451475f2576ee39c7073922b0ba25e19dd2cee5d2ca5f350bf19f37283fcf0fd"
+    },
+    "packages": {
+      "qiskit": "2.5.2",
+      "qiskit-aer": "0.17.2",
+      "qiskit-paulice": "0.2.1",
+      "numpy": "2.2.6",
+      "scipy": "1.15.3"
+    }
+  },
+  "results": [
+    {
+      "level": 1,
+      "seconds": 2.51353029999882,
+      "result": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "best": {
+          "label": "XI",
+          "start": 1,
+          "end": 2,
+          "score": 0.6816147235629979,
+          "draft": {
+            "version": 1,
+            "levelId": 1,
+            "bands": {
+              "0": 4,
+              "6": 8,
+              "1": 8,
+              "2": 8
+            },
+            "operations": [
+              {
+                "id": "g0",
+                "name": "h",
+                "qubits": [
+                  2
+                ],
+                "boundary": 1,
+                "slot": 0
+              },
+              {
+                "id": "g1",
+                "name": "cx",
+                "qubits": [
+                  2,
+                  1
+                ],
+                "boundary": 1,
+                "slot": 2
+              },
+              {
+                "id": "g2",
+                "name": "cx",
+                "qubits": [
+                  2,
+                  1
+                ],
+                "boundary": 2,
+                "slot": 1
+              },
+              {
+                "id": "g3",
+                "name": "h",
+                "qubits": [
+                  2
+                ],
+                "boundary": 2,
+                "slot": 6
+              },
+              {
+                "id": "g4",
+                "name": "m",
+                "qubits": [
+                  2
+                ],
+                "boundary": 2,
+                "slot": 7
+              }
+            ]
+          }
+        },
+        "broadest": {
+          "label": "XY",
+          "cost": 6
+        },
+        "candidateCount": 75,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "level": 2,
+      "seconds": 15.494791000004625,
+      "result": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "best": {
+          "label": "IXI",
+          "start": 1,
+          "end": 2,
+          "score": 0.6723648897972381,
+          "draft": {
+            "version": 1,
+            "levelId": 2,
+            "bands": {
+              "0": 4,
+              "10": 8,
+              "1": 8,
+              "2": 8
+            },
+            "operations": [
+              {
+                "id": "g0",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 1,
+                "slot": 0
+              },
+              {
+                "id": "g1",
+                "name": "cx",
+                "qubits": [
+                  3,
+                  1
+                ],
+                "boundary": 1,
+                "slot": 2
+              },
+              {
+                "id": "g2",
+                "name": "cx",
+                "qubits": [
+                  3,
+                  1
+                ],
+                "boundary": 2,
+                "slot": 1
+              },
+              {
+                "id": "g3",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 2,
+                "slot": 6
+              },
+              {
+                "id": "g4",
+                "name": "m",
+                "qubits": [
+                  3
+                ],
+                "boundary": 2,
+                "slot": 7
+              }
+            ]
+          }
+        },
+        "broadest": {
+          "label": "XXY",
+          "cost": 10
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "level": 3,
+      "seconds": 15.980655899998965,
+      "result": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "best": {
+          "label": "IXI",
+          "start": 2,
+          "end": 3,
+          "score": 0.6656209888427601,
+          "draft": {
+            "version": 1,
+            "levelId": 3,
+            "bands": {
+              "0": 4,
+              "13": 8,
+              "2": 8,
+              "3": 8
+            },
+            "operations": [
+              {
+                "id": "g0",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 2,
+                "slot": 0
+              },
+              {
+                "id": "g1",
+                "name": "cx",
+                "qubits": [
+                  3,
+                  1
+                ],
+                "boundary": 2,
+                "slot": 2
+              },
+              {
+                "id": "g2",
+                "name": "cx",
+                "qubits": [
+                  3,
+                  1
+                ],
+                "boundary": 3,
+                "slot": 1
+              },
+              {
+                "id": "g3",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 3,
+                "slot": 6
+              },
+              {
+                "id": "g4",
+                "name": "m",
+                "qubits": [
+                  3
+                ],
+                "boundary": 3,
+                "slot": 7
+              }
+            ]
+          }
+        },
+        "broadest": {
+          "label": "XXX",
+          "cost": 11
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "level": 4,
+      "seconds": 17.226983700005803,
+      "result": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "best": {
+          "label": "IXI",
+          "start": 2,
+          "end": 3,
+          "score": 0.6594721468958933,
+          "draft": {
+            "version": 1,
+            "levelId": 4,
+            "bands": {
+              "0": 4,
+              "15": 8,
+              "2": 8,
+              "3": 8
+            },
+            "operations": [
+              {
+                "id": "g0",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 2,
+                "slot": 0
+              },
+              {
+                "id": "g1",
+                "name": "cx",
+                "qubits": [
+                  3,
+                  1
+                ],
+                "boundary": 2,
+                "slot": 2
+              },
+              {
+                "id": "g2",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 3,
+                "slot": 6
+              },
+              {
+                "id": "g3",
+                "name": "m",
+                "qubits": [
+                  3
+                ],
+                "boundary": 3,
+                "slot": 7
+              }
+            ]
+          }
+        },
+        "broadest": {
+          "label": "XXX",
+          "cost": 12
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "level": 5,
+      "seconds": 21.154443200008245,
+      "result": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "best": {
+          "label": "IXI",
+          "start": 3,
+          "end": 4,
+          "score": 0.6492965094579561,
+          "draft": {
+            "version": 1,
+            "levelId": 5,
+            "bands": {
+              "0": 4,
+              "18": 8,
+              "3": 8,
+              "4": 8
+            },
+            "operations": [
+              {
+                "id": "g0",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 3,
+                "slot": 0
+              },
+              {
+                "id": "g1",
+                "name": "cx",
+                "qubits": [
+                  3,
+                  1
+                ],
+                "boundary": 3,
+                "slot": 2
+              },
+              {
+                "id": "g2",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 4,
+                "slot": 6
+              },
+              {
+                "id": "g3",
+                "name": "m",
+                "qubits": [
+                  3
+                ],
+                "boundary": 4,
+                "slot": 7
+              }
+            ]
+          }
+        },
+        "broadest": {
+          "label": "XXX",
+          "cost": 13
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "level": 6,
+      "seconds": 21.487257499975385,
+      "result": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "best": {
+          "label": "IXI",
+          "start": 3,
+          "end": 4,
+          "score": 0.6426000689397053,
+          "draft": {
+            "version": 1,
+            "levelId": 6,
+            "bands": {
+              "0": 4,
+              "20": 8,
+              "3": 8,
+              "4": 8
+            },
+            "operations": [
+              {
+                "id": "g0",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 3,
+                "slot": 0
+              },
+              {
+                "id": "g1",
+                "name": "cx",
+                "qubits": [
+                  3,
+                  1
+                ],
+                "boundary": 3,
+                "slot": 2
+              },
+              {
+                "id": "g2",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 4,
+                "slot": 6
+              },
+              {
+                "id": "g3",
+                "name": "m",
+                "qubits": [
+                  3
+                ],
+                "boundary": 4,
+                "slot": 7
+              }
+            ]
+          }
+        },
+        "broadest": {
+          "label": "XXZ",
+          "cost": 14
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "level": 7,
+      "seconds": 24.37597970000934,
+      "result": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
+        "best": {
+          "label": "IXI",
+          "start": 4,
+          "end": 5,
+          "score": 0.6353248974274665,
+          "draft": {
+            "version": 1,
+            "levelId": 7,
+            "bands": {
+              "0": 4,
+              "23": 8,
+              "4": 8,
+              "5": 8
+            },
+            "operations": [
+              {
+                "id": "g0",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 4,
+                "slot": 0
+              },
+              {
+                "id": "g1",
+                "name": "cx",
+                "qubits": [
+                  3,
+                  1
+                ],
+                "boundary": 4,
+                "slot": 2
+              },
+              {
+                "id": "g2",
+                "name": "h",
+                "qubits": [
+                  3
+                ],
+                "boundary": 5,
+                "slot": 6
+              },
+              {
+                "id": "g3",
+                "name": "m",
+                "qubits": [
+                  3
+                ],
+                "boundary": 5,
+                "slot": 7
+              }
+            ]
+          }
+        },
+        "broadest": {
+          "label": "XXY",
+          "cost": 15
+        },
+        "candidateCount": 315,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "level": 8,
+      "seconds": 126.52603129998897,
+      "result": {
+        "kind": "custom-t-pauli-search",
+        "pauliceUsed": false,
+        "best": {
+          "label": "IIXI",
+          "start": 4,
+          "end": 5,
+          "score": 0.6175343139718612,
+          "draft": {
+            "version": 1,
+            "levelId": 8,
+            "bands": {
+              "0": 4,
+              "30": 8,
+              "4": 8,
+              "5": 8
+            },
+            "operations": [
+              {
+                "id": "g0",
+                "name": "h",
+                "qubits": [
+                  4
+                ],
+                "boundary": 4,
+                "slot": 0
+              },
+              {
+                "id": "g1",
+                "name": "cx",
+                "qubits": [
+                  4,
+                  1
+                ],
+                "boundary": 4,
+                "slot": 2
+              },
+              {
+                "id": "g2",
+                "name": "h",
+                "qubits": [
+                  4
+                ],
+                "boundary": 5,
+                "slot": 6
+              },
+              {
+                "id": "g3",
+                "name": "m",
+                "qubits": [
+                  4
+                ],
+                "boundary": 5,
+                "slot": 7
+              }
+            ]
+          }
+        },
+        "broadest": {
+          "label": "XXXZ",
+          "cost": 19
+        },
+        "candidateCount": 891,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "level": 9,
+      "seconds": 70.32741430000169,
+      "result": {
+        "kind": "custom-t-pauli-search",
+        "pauliceUsed": false,
+        "best": {
+          "label": "IIXI",
+          "start": 5,
+          "end": 6,
+          "score": 0.6093918980306683,
+          "draft": {
+            "version": 1,
+            "levelId": 9,
+            "bands": {
+              "0": 4,
+              "35": 8,
+              "5": 8,
+              "6": 8
+            },
+            "operations": [
+              {
+                "id": "g0",
+                "name": "h",
+                "qubits": [
+                  4
+                ],
+                "boundary": 5,
+                "slot": 0
+              },
+              {
+                "id": "g1",
+                "name": "cx",
+                "qubits": [
+                  4,
+                  1
+                ],
+                "boundary": 5,
+                "slot": 2
+              },
+              {
+                "id": "g2",
+                "name": "h",
+                "qubits": [
+                  4
+                ],
+                "boundary": 6,
+                "slot": 6
+              },
+              {
+                "id": "g3",
+                "name": "m",
+                "qubits": [
+                  4
+                ],
+                "boundary": 6,
+                "slot": 7
+              }
+            ]
+          }
+        },
+        "broadest": {
+          "label": "YXXY",
+          "cost": 20
+        },
+        "candidateCount": 699,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    },
+    {
+      "level": 10,
+      "seconds": 74.47854989999905,
+      "result": {
+        "kind": "custom-t-pauli-search",
+        "pauliceUsed": false,
+        "best": {
+          "label": "IIXI",
+          "start": 5,
+          "end": 6,
+          "score": 0.6014786016402718,
+          "draft": {
+            "version": 1,
+            "levelId": 10,
+            "bands": {
+              "0": 4,
+              "39": 8,
+              "5": 8,
+              "6": 8
+            },
+            "operations": [
+              {
+                "id": "g0",
+                "name": "h",
+                "qubits": [
+                  4
+                ],
+                "boundary": 5,
+                "slot": 0
+              },
+              {
+                "id": "g1",
+                "name": "cx",
+                "qubits": [
+                  4,
+                  1
+                ],
+                "boundary": 5,
+                "slot": 2
+              },
+              {
+                "id": "g2",
+                "name": "h",
+                "qubits": [
+                  4
+                ],
+                "boundary": 6,
+                "slot": 6
+              },
+              {
+                "id": "g3",
+                "name": "m",
+                "qubits": [
+                  4
+                ],
+                "boundary": 6,
+                "slot": 7
+              }
+            ]
+          }
+        },
+        "broadest": {
+          "label": "ZIXY",
+          "cost": 19
+        },
+        "candidateCount": 651,
+        "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      }
+    }
+  ]
+}

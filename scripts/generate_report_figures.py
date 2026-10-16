@@ -6,7 +6,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'docs/submission'
+OUT = ROOT / 'submission'
 
 
 def main():

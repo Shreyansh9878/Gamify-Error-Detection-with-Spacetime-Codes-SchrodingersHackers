@@ -7,7 +7,7 @@
   "functions": {
     "api/index.py": {
       "maxDuration": 60,
-      "excludeFiles": "{node_modules/**,src/**,public/**,.next/**,.venv/**,.pnpm-store/**,docs/**,tests/**,e2e/**,notebooks/**,scripts/**,artifacts/**,test-results/**,backend/reference_solutions/**,**/__pycache__/**,**/*.pdf,**/*.md}"
+      "excludeFiles": "{node_modules/**,src/**,public/**,.next/**,.venv/**,.pnpm-store/**,docs/**,submission/**,output/**,tmp/**,tests/**,e2e/**,notebooks/**,scripts/**,artifacts/**,test-results/**,backend/reference_solutions/**,**/__pycache__/**,**/*.pdf,**/*.md}"
     }
   },
   "rewrites": [{ "source": "/api/:path*", "destination": "/api" }]

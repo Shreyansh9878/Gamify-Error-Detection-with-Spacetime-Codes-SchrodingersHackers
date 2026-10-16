@@ -5,6 +5,9 @@
 .pnpm-store
 artifacts
 docs
+submission
+output
+tmp
 tests
 e2e
 notebooks
@@ -22,6 +25,5 @@ backend/reference_solutions
 tsconfig.tsbuildinfo
 requirements.lock.txt
 requirements-draw.txt
-PROVENANCE.md
 playwright*.config.ts
 vitest.config.ts

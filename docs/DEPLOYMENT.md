@@ -80,6 +80,7 @@ Optional CLI after **your** login: `npx vercel@64.2.0 login`, `npx vercel@64.2.0
 ```powershell
 .venv/Scripts/python.exe -m pip install -r requirements.lock.txt
 pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
 pnpm build
 # Terminal 1:
 .venv/Scripts/python.exe -m uvicorn api.index:app --host 127.0.0.1 --port 8000
@@ -93,10 +94,13 @@ pnpm exec playwright test --config playwright.deployment.config.ts
 After deploying, use the actual origin:
 
 ```powershell
-.venv/Scripts/python.exe scripts/smoke_deployment.py https://YOUR-PROJECT.vercel.app --output artifacts/live-smoke.json
-$env:DEPLOYMENT_URL='https://YOUR-PROJECT.vercel.app'
+.venv/Scripts/python.exe scripts/smoke_deployment.py https://gamify-error-detection-with-spaceti-sand.vercel.app/ --output artifacts/live-smoke.json
+$env:DEPLOYMENT_URL='https://gamify-error-detection-with-spaceti-sand.vercel.app/'
+pnpm exec playwright install chromium
 pnpm exec playwright test --config playwright.deployment.config.ts
 ```
+
+Install Chromium once on each test machine, and repeat after a Playwright update changes the required browser revision. Both deployment projects use Chromium, including the mobile viewport. Browser downloads are local test dependencies, not part of the Vercel bundle. An `Executable doesn't exist` launch error means no browser assertions ran; it is separate from an application or API failure.
 
 The Python smoke performs 78 checks: health, registry, all sixteen HTML URLs, all circuit PNGs, tutorial experiments/methods/reveal, and four strategies per main mission. It asserts local-score agreement within 1e-9 and the correct passing/failing controls. FS1–5 use learning evidence rather than numeric thresholds; the browser journey proves their completion and ordered unlocks. Browser deployment tests also check all direct links/refreshes on desktop and mobile, console/request errors, storage persistence and mixed-state pagination with server callbacks blocked.
 
@@ -104,17 +108,41 @@ Direct links are `/?school=1` through `/?school=6` and `/?mission=1` through `/?
 
 Progress remains under `quantum-shield-qed-v2`, scoped to the browser origin. Redeploying the same domain preserves it; localhost, preview domains, devices and other origins do not automatically share it. This remains local progress, not a trusted leaderboard.
 
-Pending live acceptance: actual Linux/Vercel bundle size and imports; actual hosted cold-start latency; stable-domain localStorage; public HTTPS, routing and images; all reference scores against the cloud API. Local results must not be relabeled as cloud results.
+Pending live acceptance: dashboard bundle/runtime details; actual hosted cold-start latency; browser console, rendering and ordered progression; stable-domain localStorage across redeploys. Local results must not be relabeled as cloud results.
+
+## Connection timeout before tests start
+
+`httpx.ConnectTimeout` in `connect_tcp` and Chromium `ERR_CONNECTION_TIMED_OUT` at the first navigation mean no HTTP response was received. A Python execution timeout, quota error or application exception has not been established. Increasing function duration or reinstalling Chromium does not resolve that connection stage.
+
+Before rerunning all browser tests, check the origin:
+
+```powershell
+$origin='https://gamify-error-detection-with-spaceti-sand.vercel.app'
+Resolve-DnsName ([uri]$origin).Host -Type A
+curl.exe --fail --show-error --connect-timeout 10 --max-time 20 "$origin/api/health"
+if ($LASTEXITCODE -ne 0) { throw 'Origin is unreachable. Diagnose connectivity before running the test suites.' }
+```
+
+1. Open the origin on a phone using mobile data with Wi-Fi off. If it opens, connect the test laptop to that phone's hotspot and repeat the health check. A successful comparison points to the original network path; it does not prove which router, resolver or provider is responsible.
+2. If the origin fails on independent networks, open the Vercel dashboard, confirm the latest production deployment is Ready, and use its Visit link. Compare that deployment's exact URL with the project alias above. A working deployment URL and failing alias narrow the issue to the alias/domain path. Keep these URLs distinct in test evidence; changing origins also changes localStorage scope.
+3. Compare DNS answers without changing system settings: `nslookup gamify-error-detection-with-spaceti-sand.vercel.app` and `nslookup gamify-error-detection-with-spaceti-sand.vercel.app 8.8.8.8`. DNS resolution alone does not prove TCP reachability; a public resolver query can also be blocked. Do not hard-code IPs, disable TLS validation or change DNS/firewall settings automatically.
+4. If unresolved, follow [Vercel's official connectivity diagnostics](https://vercel.com/kb/guide/troubleshooting-connectivity-issues). Include the exact hostname, time/timezone, cross-network results and diagnostic output in a support/community request. Do not publish secrets or authentication headers.
+
+Once the health endpoint responds with status `ready`, rerun the 78-request smoke and browser suite. The earlier passing report is historical evidence, not evidence that the current connection attempt passed. PowerShell continues to later commands after many native-command failures, so check the health result before starting the full suites.
 
 ## Verification status for this checkout
 
 Local production verification passed: 214 Python tests, 39 frontend tests, TypeScript, the production build and 60 desktop/mobile browser tests. The 78-request API smoke passed with a maximum observed request of 1.096 seconds and 1e-9 score agreement. Portable-state tests succeeded with cache callbacks blocked. These results apply to the local production equivalent, not an unpublished cloud URL.
 
-Live checklist after account linking:
+Live verification on 2026-10-16: the owner's `artifacts/live-smoke.json` records 78 successful HTTPS requests against `https://gamify-error-detection-with-spaceti-sand.vercel.app/`, maximum 2.414 seconds, and all main reference/control scores matching within 1e-9. This verifies the API, HTML links and static assets covered by the script; it does not verify browser rendering or classify the maximum as a cold start.
+
+The first browser attempt failed before launch because the matching Chromium executable was missing. Chromium was then installed and a local launch/render check passed. The subsequent six-test live browser attempt failed at initial navigation with `ERR_CONNECTION_TIMED_OUT`; an independent HTTP client also timed out connecting to the deployment. No live UI assertions passed in that attempt. Rerun the commands above once the origin is reachable from the test machine; do not weaken the assertions or change game logic to bypass a connection failure.
+
+Live checklist:
 
 - [ ] Dashboard reports the actual Python bundle below 500 MB and the expected runtime/duration.
 - [ ] First request after an idle period completes acceptably; retry messages preserve the circuit if it does not.
-- [ ] The 78-request smoke passes against the actual HTTPS origin.
+- [x] The 78-request smoke passes against the actual HTTPS origin (owner's saved report, 2026-10-16).
 - [ ] The deployment Playwright suite passes on desktop/mobile, including all level refreshes, console checks and progression.
 - [ ] Existing browser progress survives another deployment to the same production domain.
 - [ ] README contains the verified production URL; no localhost or preview URL is presented as the public demo.

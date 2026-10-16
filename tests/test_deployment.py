@@ -1,5 +1,6 @@
 import base64
 import json
+import re
 from pathlib import Path
 import struct
 import numpy as np
@@ -46,3 +47,16 @@ def test_deployment_config_preserves_runtime_references_and_uses_no_paid_setting
     packages={line.split('==')[0] for line in requirements.splitlines() if line and not line.startswith('#')}
     assert packages.isdisjoint({'matplotlib','pytest','jupyter','notebook','httpx'})
     assert all(name in requirements for name in ('qiskit==','qiskit-aer==','qiskit-paulice=='))
+
+
+def test_vercel_requirements_are_flat_and_match_the_runtime_pins():
+    root = Path(__file__).resolve().parents[1]
+    manifests = []
+    for filename in ('requirements.txt', 'requirements-deploy.txt'):
+        lines = [line.strip() for line in (root / filename).read_text().splitlines()
+                 if line.strip() and not line.lstrip().startswith('#')]
+        # Vercel's manifest analysis failed on a nested -r include before installation.
+        assert all(re.fullmatch(r'[A-Za-z0-9_-]+==[0-9]+(?:\.[0-9]+)*(?:\.post[0-9]+)?', line) for line in lines)
+        assert len(lines) == len(set(lines))
+        manifests.append(lines)
+    assert manifests[0] == manifests[1]

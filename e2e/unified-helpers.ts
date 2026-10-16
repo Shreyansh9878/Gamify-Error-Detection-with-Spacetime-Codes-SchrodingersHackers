@@ -100,12 +100,12 @@ export async function completeAdvancedSchools(page: Page) {
   });
   await page
     .getByRole("button", {
-      name: "Unlock Main Game Missions 1–10",
+      name: "Start Main Mission 1",
       exact: true,
     })
     .last()
     .click();
   await expect(
-    page.getByText("All missions unlocked", { exact: true }),
+    page.getByText("Next mission ready", { exact: true }),
   ).toBeVisible();
 }

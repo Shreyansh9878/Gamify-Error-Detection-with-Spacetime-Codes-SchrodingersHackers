@@ -251,9 +251,9 @@ export function Mission({
                     value={gap}
                     onChange={(e) => setGap(+e.target.value)}
                   >
-                    {Array.from({ length: l.payload.length - 1 }, (_, i) => (
-                      <option key={i + 1} value={i + 1}>
-                        After gate {i + 1}
+                    {Array.from({ length: l.payload.length + 1 }, (_, i) => (
+                      <option key={i} value={i}>
+                        {i === 0 ? "Before payload" : i === l.payload.length ? "After payload" : `After gate ${i}`}
                       </option>
                     ))}
                   </select>

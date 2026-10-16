@@ -8,31 +8,18 @@ import json
 from functools import lru_cache
 import numpy as np
 from qiskit import QuantumCircuit
-from qiskit_aer import AerSimulator
-from qiskit.quantum_info import Operator, Clifford, Pauli, SparsePauliOp, DensityMatrix
-from ..learning.common import instruction, channel, fingerprint
+from qiskit.quantum_info import Operator, Pauli
+from ..learning.common import fingerprint
+from ..quantum_core.pauli import single_term, gate_operator as payload_operator, opening_factor, propagate
+from ..quantum_core.checks import closing_factors
 from .models import Draft, Gate
 from .levels import get_level
 
 CP = ('cx', 'cy', 'cz')
-PROTOCOL = 'main-missions-exact-v1'
+PROTOCOL = 'main-missions-exact-v2-all-wire'
 
 
-@lru_cache(maxsize=32)
-def noise_instruction(spec):
-    return channel(json.loads(spec)).to_instruction()
-
-
-def exact_density(items,width):
-    """Aer applies channels to a density matrix, without sampled trajectories."""
-    qc=QuantumCircuit(width)
-    for item in items:
-        if item['name']=='noise':
-            qc.append(noise_instruction(json.dumps(item['noise'],sort_keys=True)),item['qubits'])
-        else:getattr(qc,item['name'])(*item['qubits'])
-    qc.save_density_matrix()
-    simulator=AerSimulator(method='density_matrix',max_parallel_threads=1)
-    return np.asarray(simulator.run(qc,shots=1,seed_simulator=2026).result().data(0)['density_matrix'])
+from .simulation import exact_density, simulate
 
 
 def rank(g):
@@ -53,17 +40,6 @@ def qc_for(ops, width):
     for g in sorted(ops, key=lambda g:(g['rank'], g['id'])):
         if g['name'] != 'm': getattr(qc,g['name'])(*g['qubits'])
     return qc
-
-
-def single_term(matrix):
-    terms=SparsePauliOp.from_operator(Operator(matrix),atol=1e-8).to_list()
-    return terms[0] if len(terms)==1 else None
-
-
-@lru_cache(maxsize=128)
-def payload_operator(name, qubits, width):
-    qc=QuantumCircuit(width);getattr(qc,name)(*qubits)
-    return Operator(qc).data, Clifford(qc) if name not in ('t','tdg') else None
 
 
 @lru_cache(maxsize=256)
@@ -95,25 +71,15 @@ def _validate(serialized):
         events=sorted(inside+opening,key=lambda g:g['rank'])
         for event in events:
             if event in opening:
-                target=event['qubits'][1]; label=['I']*n;label[n-1-target]=event['name'][1:].upper()
-                frame=frame.compose(Pauli(''.join(label)))
+                frame=frame.compose(opening_factor(n,event['qubits'][1],event['name'][1:]))
             else:
-                if event['name'] not in ('t','tdg'):
-                    _,tableau=payload_operator(event['name'],tuple(event['qubits']),n)
-                    frame=frame.evolve(tableau,frame='s')
-                else:
-                    # T and Tdg commute with I/Z; X/Y immediately leave the
-                    # Pauli family. Inspect the unsigned symplectic component.
-                    q=event['qubits'][0]
-                    if frame.x[q]: non_pauli=True;break
+                try:frame=propagate(frame,event['name'],event['qubits'],n)
+                except ValueError:non_pauli=True;break
         if non_pauli:
             loop.update(nonPauli=True,message='Non-Pauli transport: use only Z/I at a T or Tdg crossing.'); continue
         frame=frame.to_matrix()
         if l['assisted']:
-            label, coefficient=single_term(frame.conj().T)
-            factors=[(f'c{p.lower()}',[wire,q]) for q,p in enumerate(reversed(label)) if p!='I']
-            phase=min([(1,None),(-1,'z'),(1j,'s'),(-1j,'sdg')],key=lambda pair:abs(pair[0]-coefficient))[1]
-            if phase: factors.append((phase,[wire]))
+            factors=closing_factors(frame,wire)
             if not factors:
                 loop['message']='Opening factors cancel to the identity; choose a useful check.'; continue
             for j,(name,qs) in enumerate(factors):
@@ -155,32 +121,12 @@ def _run(serialized):
     d=Draft.model_validate_json(serialized); l=get_level(d.levelId); v=validate(d)
     if v['hasChecks'] and not v['valid']:
         raise ValueError(next(c['message'] for c in v['checks'] if not c['valid']))
-    n=l['qubits']; noise=l['noise']; ops=v['operations']
-    active=sorted({q for g in ops for q in g['qubits'] if q>=n});mapping={q:n+i for i,q in enumerate(active)}
-    items=[]
-    for g in ops:
-        qs=[mapping.get(q,q) for q in g['qubits']]
-        if g['name']=='m': continue  # terminal syndrome measurements, projected exactly below
-        items.append(instruction(g['name'],qs,'Mission execution'))
-        if g['owner']=='fixed-fixture':
-            if g['id']==f'u{noise["hotspotColumn"]}':
-                items.append(instruction('noise',[noise['qubit']],'Relaxation hotspot',noise={
-                    'channel':'decoherence','timeUs':noise['timeUs'],'t1Us':noise['t1Us'],'t2Us':noise['t2Us']}))
-            for q in range(n):
-                items.append(instruction('noise',[q],'Background hardware noise',noise={'channel':'depolarizing','strength':noise['background']}))
-        elif g['name'] in CP:
-            items.append(instruction('noise',qs,'Check gate overhead',noise={'channel':'depolarizing','strength':noise['checkStrength'],'numQubits':2}))
-    state=exact_density(items,n+len(active))
-    # The target is pure. Its overlap with the unnormalized all-zero ancilla
-    # block is exactly F_ps * S_keep, without statistical fluctuations.
-    ideal=Operator(qc_for(payload(l),n)).data[:,0]
-    block=state[:2**n,:2**n]; retention=float(np.trace(block).real)
-    score=float(np.real(ideal.conj()@block@ideal));score=max(0.,min(1.,score))
+    metrics=simulate(l,v['operations']);score=metrics['score'];retention=metrics['retention']
     return dict(levelId=d.levelId,combinedScore=score,passed=bool(v['valid'] and score+1e-12>=l['targetScore']),
                 target=l['targetScore'],status='Target reached.' if v['valid'] and score+1e-12>=l['targetScore'] else
                 'Add a closed check.' if not v['hasChecks'] else 'Try a smaller window around the noisy crossing.',
                 configHash=fingerprint(dict(protocol=PROTOCOL,level=l,draft=d.model_dump())),
-                fidelity=score/retention if retention>1e-12 else 0., retention=retention,
+                fidelity=metrics['fidelity'], retention=retention,
                 protocol=PROTOCOL)
 
 

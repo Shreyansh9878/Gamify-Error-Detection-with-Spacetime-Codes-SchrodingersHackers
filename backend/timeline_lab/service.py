@@ -13,11 +13,12 @@ from qiskit.quantum_info import DensityMatrix, Operator, Clifford, Pauli, partia
 from ..learning.common import channel, instruction, evolve, stats, Observable, fingerprint
 from ..learning.visualization import state_visualization
 from .models import Draft, Request, Operation, fixed_payload, CompileRequest
+from ..quantum_core.noise import hardware_items
 
 CP=('cx','cy','cz')
 FAULTS=('bit_flip','phase_flip','decoherence')
-PROTOCOL='timeline-hardware-layers-v2-hotspot'
-CAPSTONE_GOAL=.60
+PROTOCOL='timeline-hardware-layers-v3-two-data-one-helper'
+CAPSTONE_GOAL=.62
 HOTSPOT={'channel':'decoherence','timeUs':70.,'t1Us':100.,'t2Us':200.}
 CHECK_STRENGTH=.02
 
@@ -113,14 +114,6 @@ def validation(d):
             loop.update(valid=False,message='Local transport matches, but the complete authored circuit disturbs the data or helper. Check intermediate gates and overlapping loops.')
     return {'checks':loops,'valid':bool(loops) and all(c['valid'] for c in loops) and whole,
             'payloadStart':lo,'payloadEnd':hi,'wholeCircuitIdentity':bool(whole),'wireOrder':'q(n−1)…q0; controlled gates list control first'}
-
-
-def hardware_items(noise,wires,scale=1):
-    if not noise.enabled:return []
-    specs=[{'channel':kind,'probability':p} for kind,p in (('bit_flip',noise.bitFlip),('phase_flip',noise.phaseFlip)) if p]
-    if noise.depolarizing:specs.append({'channel':'depolarizing','strength':noise.depolarizing})
-    if noise.relaxationTimeUs:specs.append({'channel':'decoherence','timeUs':noise.relaxationTimeUs,'t1Us':noise.t1Us,'t2Us':noise.t2Us})
-    return [instruction('noise',[q],'Hardware channel after occupied layer',noise=spec) for _ in range(scale) for q in wires for spec in specs]
 
 
 def schedule(d,noise=True):
@@ -251,36 +244,35 @@ def comparison(noise_json):
     noise=json.loads(noise_json);best=None;count=0
     # Exhaustive bounded reference family: one full-payload Pauli-product check.
     # Does not assert a global optimum across arbitrary shells/two-ancilla loops.
-    for label in itertools.product('IXYZ',repeat=3):
-        if label==('I','I','I'):continue
-        opening=[Operation(id=f'o{q}',name='c'+p.lower(),qubits=[3,q],column=q+1) for q,p in enumerate(label) if p!='I']
-        payload=fixed_payload(6);u=Clifford(circuit(payload,3))
+    for label in itertools.product('IXYZ',repeat=2):
+        if label==('I','I'):continue
+        opening=[Operation(id=f'o{q}',name='c'+p.lower(),qubits=[2,q],column=q+1) for q,p in enumerate(label) if p!='I']
+        payload=fixed_payload(6);u=Clifford(circuit(payload,2))
         propagated=Pauli(''.join(reversed(label))).evolve(u,frame='s')
         sign=-1 if propagated.phase==2 else 1
-        close=[Operation(id=f'c{q}',name='c'+p.lower(),qubits=[3,q],column=9+q) for q,p in enumerate(reversed(propagated.to_label().lstrip('-+'))) if p!='I']
-        tail=[Operation(id='fh',name='h',qubits=[3],column=13),Operation(id='m',name='m',qubits=[3],column=14)]
-        if sign<0:tail.insert(0,Operation(id='sign',name='z',qubits=[3],column=12))
-        d=Draft(lesson=6,dataQubits=3,ancillas=2,columns=15,hardware=noise,operations=[Operation(id='h',name='h',qubits=[3],column=0)]+opening+close+tail)
+        close=[Operation(id=f'c{q}',name='c'+p.lower(),qubits=[2,q],column=9+q) for q,p in enumerate(reversed(propagated.to_label().lstrip('-+'))) if p!='I']
+        tail=[Operation(id='fh',name='h',qubits=[2],column=13),Operation(id='m',name='m',qubits=[2],column=14)]
+        if sign<0:tail.insert(0,Operation(id='sign',name='z',qubits=[2],column=12))
+        d=Draft(lesson=6,dataQubits=2,ancillas=1,columns=15,hardware=noise,operations=[Operation(id='h',name='h',qubits=[2],column=0)]+opening+close+tail)
         m=evaluate(d,visuals=False);count+=1
         if best is None or m['score']>best['score']:best={**m,'draft':d.model_dump(),'openingPauli':''.join(reversed(label))}
-    return {'best':best,'candidates':count,'scope':'Exact maximum over 63 single-ancilla full-payload Pauli-product shells; fixed tap order and terminal readout. Arbitrary placements and two-check circuits are outside this certificate.',
-            'globalUpperBound':1.,'protocol':PROTOCOL,'physicsKey':fingerprint({'noise':noise,'protocol':PROTOCOL,'payload':[g.model_dump() for g in fixed_payload(6)],'referenceFamily':'63-full-window-fixed-order-v1'})}
+    return {'best':best,'candidates':count,'scope':'Exact maximum over 15 single-ancilla full-payload Pauli-product shells; fixed tap order and terminal readout. Arbitrary placements and multi-check circuits are outside this certificate.',
+            'globalUpperBound':1.,'protocol':PROTOCOL,'physicsKey':fingerprint({'noise':noise,'protocol':PROTOCOL,'payload':[g.model_dump() for g in fixed_payload(6)],'referenceFamily':'15-full-window-fixed-order-v2'})}
 
 
 @lru_cache(maxsize=8)
 def paulice_search(noise_json):
-    from qiskit_paulice import add_pauli_checks
-    from qiskit_paulice.noise_models import NoiseModel
+    from ..quantum_core.paulice import optimize_clifford
     noise=json.loads(noise_json)
-    qc=circuit(fixed_payload(6),3);qc.measure_all()
+    qc=circuit(fixed_payload(6),2);qc.measure_all()
     # Paulice's native cost uses its own gate depolarization model. Report that
     # model, never silently substitute it for the game's all-wire layer channels.
-    p=noise['depolarizing'] if noise['enabled'] else 0
-    choices=add_pauli_checks(qc,[0,1],NoiseModel(gate_noise=p,readout_noise=0),cost='gamma',method='windowed',seed=2026)
-    candidate=choices[-1]
+    p=.01  # Organizer-authorized synthetic Paulice search model, not calibration.
+    candidate=optimize_clifford(qc,[1],ancilla_limit=1,gate_noise=p)
+    if candidate.circuit.num_qubits>3:raise ValueError('Paulice exceeded the fixed one-ancilla budget.')
     instructions=[{'name':g.operation.name,'qubits':[candidate.circuit.find_bit(q).index for q in g.qubits]} for g in candidate.circuit.data]
     if len(instructions)>256:raise ValueError('Research candidate exceeds the display bound.')
-    return {'available':True,'packageVersion':version('qiskit-paulice'),'nativeCost':float(candidate.cost) if candidate.cost is not None and np.isfinite(candidate.cost) else None,
+    return {'available':True,'ancillaLimit':1,'addedAncillas':candidate.circuit.num_qubits-2,'packageVersion':version('qiskit-paulice'),'nativeCost':float(candidate.cost) if candidate.cost is not None and np.isfinite(candidate.cost) else None,
             'instructions':instructions,'checkSupport':[list(s) for s in candidate.check_support],
             'message':'Actual Paulice gamma/windowed research suggestion. Its native depolarizing gate-cost model differs from the game layer-noise protocol; it is not a certified global maximum or assigned a misleading game score.'}
 
@@ -288,7 +280,7 @@ def paulice_search(noise_json):
 def reveal(request):
     d=request.draft;player=run(request)
     if d.lesson!=6 or not player['validation']['valid'] or player['score']<player['qualificationThreshold']:
-        raise ValueError('First run a complete valid check with exact Fps × retention above both 0.60 and the unchecked baseline + 0.01.')
+        raise ValueError('First run a complete valid check with exact Fps × retention above both 0.62 and the unchecked baseline + 0.01.')
     key=json.dumps(d.hardware.model_dump(),sort_keys=True)
     try:research=paulice_search(key)
     except Exception as error:research={'available':False,'message':f'Paulice search failed ({type(error).__name__}). Retry; qualification remains valid.'}

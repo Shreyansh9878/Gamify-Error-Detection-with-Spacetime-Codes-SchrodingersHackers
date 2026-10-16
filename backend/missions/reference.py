@@ -72,7 +72,8 @@ def optimize(number):
             cost=sum(g['name'] in ('cx','cy','cz') for g in validate(draft)['operations'])
             if broadest is None or cost>broadest['cost']:
                 broadest=dict(label=label,cost=cost)
-    return dict(best=best,broadest=broadest,candidateCount=count,scope='Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits.')
+    return dict(kind='custom-t-pauli-search' if number>=8 else 'clifford-pauli-reference-search',pauliceUsed=False,
+                best=best,broadest=broadest,candidateCount=count,scope='Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits.')
 
 
 def overcheck(number):

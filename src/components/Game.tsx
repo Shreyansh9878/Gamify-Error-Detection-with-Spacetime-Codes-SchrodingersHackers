@@ -15,6 +15,8 @@ import {
   parseProgress,
   recordBest,
   STORAGE_KEY,
+  MISSION_VERSION,
+  missionUnlocked,
   type Progress,
 } from "@/lib/progress";
 import type { MissionLevel as Level, Outcome } from "@/lib/missions/contracts";
@@ -39,11 +41,11 @@ export function Game() {
   useEffect(() => {
     try {
       let saved = parseProgress(localStorage.getItem(STORAGE_KEY));
-      if (saved.missionVersion !== 1) {
+      if (saved.missionVersion !== MISSION_VERSION) {
         if (Object.keys(saved.best).length)
           try {
             localStorage.setItem(
-              "quantum-shield.archived-missions-v2",
+              saved.missionVersion === 1 ? "quantum-shield.archived-missions-v1" : "quantum-shield.archived-missions-v2",
               JSON.stringify(saved.best),
             );
           } catch {
@@ -51,7 +53,7 @@ export function Game() {
               "Previous mission scores could not be archived; tutorial progress is retained.",
             );
           }
-        saved = { ...saved, best: {}, missionVersion: 1 };
+        saved = { ...saved, best: {}, missionVersion: MISSION_VERSION };
       }
       setProgress(saved);
       if (saved.tutorial === "new") setScreen("tutorial");
@@ -286,7 +288,7 @@ export function Game() {
                 </div>
                 <span className="chip">
                   {unlocked
-                    ? "All missions unlocked"
+                    ? progress.tutorial === "skipped" ? "All missions unlocked" : completed === 10 ? "Expedition complete" : "Next mission ready"
                     : "Complete flight school to unlock"}
                 </span>
               </div>
@@ -303,7 +305,7 @@ export function Game() {
                   <button
                     className={`mission-card ${progress.best[l.id]?.stars ? "completed" : ""}`}
                     key={l.id}
-                    disabled={!unlocked}
+                    disabled={!missionUnlocked(progress,l.id)}
                     onClick={() => {
                       setSelected(l);
                       setScreen("mission");

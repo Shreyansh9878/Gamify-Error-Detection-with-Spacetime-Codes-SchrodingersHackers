@@ -15,7 +15,7 @@ async function openLesson(page: Page, step: number) {
         "quantum-shield-qed-v2",
         JSON.stringify({
           version: 2,
-          missionVersion: 1,
+          missionVersion: 2,
           tutorial: "new",
           step,
           sound: false,

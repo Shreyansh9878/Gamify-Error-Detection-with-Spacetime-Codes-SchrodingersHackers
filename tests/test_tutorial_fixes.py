@@ -76,9 +76,9 @@ def test_capstone_difficulty_exact_scores_and_same_noise_protocol():
     threshold=sensible['qualificationThreshold']
     assert baseline['score']<threshold<sensible['score']
     assert everywhere['score']<threshold
-    assert baseline['score']==pytest.approx(.4921615548,abs=1e-8)
-    assert sensible['score']==pytest.approx(.6806687434,abs=1e-8)
-    assert everywhere['score']==pytest.approx(.3685291113,abs=1e-8)
+    assert baseline['score']==pytest.approx(.4941321617,abs=1e-8)
+    assert sensible['score']==pytest.approx(.6681363656,abs=1e-8)
+    assert everywhere['score']==pytest.approx(.4569802140,abs=1e-8)
     # Finite sampling never changes exact qualification.
     a=service.run(Request(draft=example(),shots=256,seed=3))
     b=service.run(Request(draft=example(),shots=4096,seed=97))

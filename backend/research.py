@@ -3,8 +3,7 @@ import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.quantum_info import Clifford, Pauli, Statevector, state_fidelity
 from qiskit_aer import AerSimulator
-from qiskit_paulice import add_pauli_checks
-from qiskit_paulice.noise_models import NoiseModel as PauliceNoise
+from .quantum_core.paulice import optimize_clifford
 from .engine import payload, make_noise, density, VERSION, SEED, BASIS
 from .levels import get_level, doped
 from .models import Gate, ResearchRequest
@@ -55,7 +54,7 @@ def run_research(req: ResearchRequest):
     for generator in generators:
         group=group+[g.compose(generator) for g in group]
     raw_sum,post_sum=1.,1.
-    total_kept,total_shots,max_depth,max_two,checks=0,0,0,0,0
+    total_kept,total_shots,max_depth,max_two,checks,max_added_depth=0,0,0,0,0,0
     gamma_costs=[]
     sim=AerSimulator(noise_model=noise,max_parallel_threads=1)
     for index,observable in enumerate(group[1:]):
@@ -68,8 +67,7 @@ def run_research(req: ResearchRequest):
         # Paulice accepts the documented gate set, so remove explicit idle markers
         # from its input. Research circuits have a separately labeled protocol.
         measured.data=[ins for ins in measured.data if ins.operation.name!='id']
-        variants=add_pauli_checks(measured,req.targets,PauliceNoise(gate_noise=level.get('twoQubitNoise',.008),readout_noise=level.get('readoutNoise',.005)),cost='gamma',method='windowed',seed=SEED)
-        checked=variants[-1]
+        checked=optimize_clifford(measured,req.targets,len(req.targets),gate_noise=level.get('twoQubitNoise',.008),readout_noise=level.get('readoutNoise',.005),seed=SEED)
         gamma_costs.append(dict(setting=index,cost=float(checked.cost) if checked.cost is not None and np.isfinite(checked.cost) else None,
             metric=checked.cost_metric,targets=list(checked.target_qubits),support=[list(s) for s in checked.check_support]))
         pair=[transpile(q,basis_gates=BASIS,optimization_level=0,seed_transpiler=SEED) for q in [measured,checked.circuit]]
@@ -79,11 +77,12 @@ def run_research(req: ResearchRequest):
         raw_sum+=before; post_sum+=after; total_kept+=kept; total_shots+=1024
         checks=max(checks,len(checked.check_qubits))
         max_depth=max(max_depth,checked.circuit.depth())
+        max_added_depth=max(max_added_depth,checked.circuit.depth()-measured.depth())
         two=lambda q:sum(len(ins.qubits)==2 for ins in q.data)
         max_two=max(max_two,two(checked.circuit)-two(measured))
     return dict(metricId='paulice-observable-v1',fidelity=post_sum/len(group),baseline=raw_sum/len(group),
         gammaCosts=gamma_costs,optimizer='gamma / windowed',
         exactReference=reference_fidelity,
         retention=total_kept/total_shots,shots=total_shots,keptShots=total_kept,checks=checks,
-        depth=max_depth,addedTwoQubit=max_two,tCount=0,label='Paulice stabilizer benchmark',
+        depth=max_depth,addedDepth=max_added_depth,addedAncillas=checks,addedTwoQubit=max_two,tCount=0,label='Paulice stabilizer benchmark',
         warning='Finite-shot estimator with observable-specific checks, not one common retained density matrix. Includes readout noise; no mission stars are awarded. Idle markers are omitted from this research protocol.',settings=len(group)-1,engineVersion=VERSION)

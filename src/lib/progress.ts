@@ -4,7 +4,7 @@ const schema = z.object({
   tutorial: z.enum(["new", "complete", "skipped"]),
   step: z.number().int().min(0).max(5),
   sound: z.boolean(),
-  missionVersion: z.literal(1).optional(),
+  missionVersion: z.union([z.literal(1), z.literal(2)]).optional(),
   best: z.record(
     z.string(),
     z.object({
@@ -46,4 +46,9 @@ export function recordBest(
       },
     },
   };
+}
+
+export const MISSION_VERSION = 2;
+export function missionUnlocked(p: Progress, id: number): boolean {
+  return p.tutorial === "skipped" || (p.tutorial === "complete" && (id === 1 || (p.best[id-1]?.stars || 0) > 0));
 }

@@ -6,7 +6,7 @@ import numpy as np
 from pydantic import Field, model_validator
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import DensityMatrix, partial_trace, state_fidelity
-from qiskit_aer.noise import pauli_error, depolarizing_error, thermal_relaxation_error
+from ..quantum_core.noise import channel
 from ..noise_lab.models import StrictModel
 from ..noise_lab.simulator import describe
 
@@ -62,15 +62,6 @@ def instruction(name, qubits, stage, **extra):
 
 def gate_instruction(gate, stage='Payload'):
     return instruction('measure' if gate.name=='m' else gate.name,gate.qubits,stage,**({'bit':gate.qubits[0], 'measureData':True} if gate.name=='m' else {}),**({'angleRadians':gate.angleRadians} if gate.angleRadians is not None else {}),column=gate.column,sourceId=gate.id)
-
-
-def channel(noise):
-    name = noise['channel']
-    if name in ('bit_flip','phase_flip'):
-        p = noise['probability']
-        return pauli_error([('X' if name=='bit_flip' else 'Z',p),('I',1-p)])
-    if name == 'depolarizing': return depolarizing_error(noise['strength'],noise.get('numQubits',1))
-    return thermal_relaxation_error(noise['t1Us'],noise['t2Us'],noise['timeUs'],excited_state_population=0)
 
 
 def append_instruction(qc, item):

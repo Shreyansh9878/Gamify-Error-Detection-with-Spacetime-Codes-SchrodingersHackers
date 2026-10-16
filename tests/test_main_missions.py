@@ -17,7 +17,7 @@ def test_reachable_mission_references_and_stable_scores(number):
     row=json.loads(REFERENCE.read_text(encoding='utf-8'))['levels'][number-1]
     level=get_level(number)
     assert len(level['payload'])>(len(get_level(number-1)['payload']) if number>1 else 4)
-    assert level['qubits']>=3
+    assert level['qubits']>=(2 if number==1 else 3)
     assert sum(g['name'] in ('t','tdg') for g in level['payload'])=={8:1,9:3,10:5}.get(number,0)
     for kind in ('baseline','everywhere','reasonable','optimal'):
         draft=Draft.model_validate(row[kind+'Draft'])
@@ -79,7 +79,7 @@ def test_non_pauli_t_paths_are_red_and_cannot_score(number):
 
 
 def test_manual_mismatch_and_removed_inserted_band_are_rejected():
-    d=shell(1,'IXI',1,2)
+    d=shell(1,'XI',1,2)
     closing=next(g for g in d.operations if g.name=='cx' and g.boundary==2)
     closing.name='cz'
     assert not validate(d)['valid']

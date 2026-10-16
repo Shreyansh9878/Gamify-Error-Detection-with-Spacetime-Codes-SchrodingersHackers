@@ -1,5 +1,5 @@
 {
-  "protocol": "timeline-hardware-layers-v2-hotspot",
+  "protocol": "timeline-hardware-layers-v3-two-data-one-helper",
   "qiskitVersion": "2.5.2",
   "hardware": {
     "enabled": true,
@@ -10,102 +10,34 @@
     "t1Us": 100,
     "t2Us": 80
   },
-  "threshold": 0.6,
-  "exactReferenceMaximum": 0.6806687434022508,
-  "referenceScope": "Exact maximum over 63 single-ancilla full-payload Pauli-product shells; fixed tap order and terminal readout. Arbitrary placements and two-check circuits are outside this certificate.",
+  "threshold": 0.62,
+  "exactReferenceMaximum": 0.6861194292789656,
+  "referenceScope": "Exact maximum over 15 single-ancilla full-payload Pauli-product shells; fixed tap order and terminal readout. Arbitrary placements and multi-check circuits are outside this certificate.",
   "results": {
     "unchecked": {
-      "baselineScore": 0.49216155479837154,
-      "qualificationThreshold": 0.6,
-      "fidelity": 0.49216155479837187,
+      "baselineScore": 0.4941321616879697,
+      "qualificationThreshold": 0.62,
+      "fidelity": 0.49413216168796986,
       "retention": 1.0,
-      "score": 0.49216155479837187,
+      "score": 0.49413216168796986,
       "samplingOverhead": 1.0,
       "validCheck": false,
       "operations": []
     },
     "sensible": {
-      "baselineScore": 0.49216155479837154,
-      "qualificationThreshold": 0.6,
-      "fidelity": 0.8210339754977389,
-      "retention": 0.8290384609109581,
-      "score": 0.6806687434022508,
-      "samplingOverhead": 1.2062166559814211,
+      "baselineScore": 0.4941321616879697,
+      "qualificationThreshold": 0.62,
+      "fidelity": 0.8161864745343561,
+      "retention": 0.8186074953380253,
+      "score": 0.6681363656473422,
+      "samplingOverhead": 1.2215866647874667,
       "validCheck": true,
       "operations": [
         {
           "id": "h0",
           "name": "h",
           "qubits": [
-            3
-          ],
-          "column": 0,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        },
-        {
-          "id": "o01",
-          "name": "cx",
-          "qubits": [
-            3,
-            1
-          ],
-          "column": 2,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        },
-        {
-          "id": "c01",
-          "name": "cy",
-          "qubits": [
-            3,
-            1
-          ],
-          "column": 10,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        },
-        {
-          "id": "f0",
-          "name": "h",
-          "qubits": [
-            3
-          ],
-          "column": 13,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        },
-        {
-          "id": "m0",
-          "name": "m",
-          "qubits": [
-            3
-          ],
-          "column": 14,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        }
-      ]
-    },
-    "everywhere": {
-      "baselineScore": 0.49216155479837154,
-      "qualificationThreshold": 0.6,
-      "fidelity": 0.8408351872099346,
-      "retention": 0.438289354341325,
-      "score": 0.36852911130970933,
-      "samplingOverhead": 2.281597739244275,
-      "validCheck": true,
-      "operations": [
-        {
-          "id": "h0",
-          "name": "h",
-          "qubits": [
-            3
+            2
           ],
           "column": 0,
           "timeUs": 30,
@@ -116,7 +48,7 @@
           "id": "o00",
           "name": "cx",
           "qubits": [
-            3,
+            2,
             0
           ],
           "column": 1,
@@ -125,34 +57,10 @@
           "t2Us": 80
         },
         {
-          "id": "o01",
-          "name": "cy",
-          "qubits": [
-            3,
-            1
-          ],
-          "column": 2,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        },
-        {
-          "id": "o02",
-          "name": "cx",
-          "qubits": [
-            3,
-            2
-          ],
-          "column": 3,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        },
-        {
           "id": "c00",
-          "name": "cy",
+          "name": "cz",
           "qubits": [
-            3,
+            2,
             0
           ],
           "column": 9,
@@ -162,9 +70,9 @@
         },
         {
           "id": "c01",
-          "name": "cz",
+          "name": "cy",
           "qubits": [
-            3,
+            2,
             1
           ],
           "column": 10,
@@ -173,22 +81,10 @@
           "t2Us": 80
         },
         {
-          "id": "c02",
-          "name": "cz",
-          "qubits": [
-            3,
-            2
-          ],
-          "column": 11,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        },
-        {
           "id": "f0",
           "name": "h",
           "qubits": [
-            3
+            2
           ],
           "column": 13,
           "timeUs": 30,
@@ -199,18 +95,29 @@
           "id": "m0",
           "name": "m",
           "qubits": [
-            3
+            2
           ],
           "column": 14,
           "timeUs": 30,
           "t1Us": 100,
           "t2Us": 80
-        },
+        }
+      ]
+    },
+    "everywhere": {
+      "baselineScore": 0.4941321616879697,
+      "qualificationThreshold": 0.62,
+      "fidelity": 0.47858888607131456,
+      "retention": 0.9548491980092424,
+      "score": 0.4569802140413314,
+      "samplingOverhead": 1.0472857934895816,
+      "validCheck": true,
+      "operations": [
         {
-          "id": "h1",
+          "id": "h0",
           "name": "h",
           "qubits": [
-            4
+            2
           ],
           "column": 0,
           "timeUs": 30,
@@ -218,11 +125,11 @@
           "t2Us": 80
         },
         {
-          "id": "o11",
-          "name": "cy",
+          "id": "o00",
+          "name": "cx",
           "qubits": [
-            4,
-            1
+            2,
+            0
           ],
           "column": 1,
           "timeUs": 30,
@@ -230,11 +137,11 @@
           "t2Us": 80
         },
         {
-          "id": "o12",
+          "id": "o01",
           "name": "cx",
           "qubits": [
-            4,
-            2
+            2,
+            1
           ],
           "column": 2,
           "timeUs": 30,
@@ -242,23 +149,11 @@
           "t2Us": 80
         },
         {
-          "id": "o10",
-          "name": "cx",
-          "qubits": [
-            4,
-            0
-          ],
-          "column": 3,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        },
-        {
-          "id": "c11",
+          "id": "c00",
           "name": "cz",
           "qubits": [
-            4,
-            1
+            2,
+            0
           ],
           "column": 9,
           "timeUs": 30,
@@ -266,34 +161,10 @@
           "t2Us": 80
         },
         {
-          "id": "c12",
-          "name": "cz",
-          "qubits": [
-            4,
-            2
-          ],
-          "column": 10,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        },
-        {
-          "id": "c10",
-          "name": "cy",
-          "qubits": [
-            4,
-            0
-          ],
-          "column": 11,
-          "timeUs": 30,
-          "t1Us": 100,
-          "t2Us": 80
-        },
-        {
-          "id": "f1",
+          "id": "f0",
           "name": "h",
           "qubits": [
-            4
+            2
           ],
           "column": 13,
           "timeUs": 30,
@@ -301,10 +172,10 @@
           "t2Us": 80
         },
         {
-          "id": "m1",
+          "id": "m0",
           "name": "m",
           "qubits": [
-            4
+            2
           ],
           "column": 14,
           "timeUs": 30,

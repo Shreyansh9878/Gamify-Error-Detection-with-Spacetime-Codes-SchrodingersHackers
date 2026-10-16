@@ -74,7 +74,7 @@ function TimelineSession({
     "Keep the current lesson and mode; change them using the workspace controls.",
   );
   const work = useWorkbench(
-    `quantum-shield.timeline.${number}.${mode}.${number === 6 ? "v3" : "v2"}`,
+    `quantum-shield.timeline.${number}.${mode}.${number === 6 ? "v4" : "v2"}`,
     initialDraft(number, mode),
     schema,
     draftCode,
@@ -82,7 +82,7 @@ function TimelineSession({
     "draft",
   );
   const progress = useLocalProgress(
-    `quantum-shield.timeline.${number}.evidence.${number === 6 ? "v3" : "v2"}`,
+    `quantum-shield.timeline.${number}.evidence.${number === 6 ? "v4" : "v2"}`,
     evidenceSchema,
     { version: 2 as const, guided: false, answers: {}, reviewed: false },
   );
@@ -277,7 +277,7 @@ function TimelineSession({
                   <p>
                     Use H(a0), then CX(a0,q1) before the workload. X1 passes
                     CNOT and becomes Y1 through S, so close with CY(a0,q1), then
-                    H(a0) and M(a0). Leave a1 unused first.
+                    H(a0) and M(a0). Only a0 is available.
                   </p>
                 )}
               </div>
@@ -300,7 +300,7 @@ function TimelineSession({
                       ? "A Z opening evolves through H and CNOT into a two-wire X closing product."
                       : number === 5
                         ? "Z checks close across T; X/Y checks require non-Pauli transport."
-                        : "Short three-qubit workload with a high-noise CX interaction on q0–q1."
+                        : "Short two-qubit workload with a high-noise CX interaction on q0–q1."
                 }
               />
 
@@ -369,7 +369,7 @@ function TimelineSession({
                 onClick={onContinue}
               >
                 {number === 6
-                  ? "Unlock Main Game Missions 1–10"
+                  ? "Start Main Mission 1"
                   : "Continue to next Flight School →"}
               </button>
               {previous >= number && !complete && (
@@ -586,14 +586,14 @@ function TimelineSession({
                 <p>
                   Combined score <b>{result.score.toFixed(5)}</b>{" "}
                   {number === 6
-                    ? `/ target ${result.qualificationThreshold?.toFixed(3) ?? "0.600"}`
+                    ? `/ target ${result.qualificationThreshold?.toFixed(3) ?? "0.620"}`
                     : ""}
                 </p>
               </div>
               {number === 6 && (
                 <p>
                   Unchecked score: {result.baselineScore.toFixed(5)}.
-                  Qualification needs max(0.60, unchecked score + 0.01).{" "}
+                  Qualification needs max(0.62, unchecked score + 0.01).{" "}
                   {result.qualificationThreshold! > 1
                     ? "These noise settings leave no qualification headroom; reset the guided circuit to restore the calibrated lesson."
                     : ""}
@@ -649,7 +649,7 @@ function TimelineSession({
             <>
               {revealing && (
                 <p role="status">
-                  Running the actual Paulice search and enumerating 63 reference
+                  Running the actual Paulice search and enumerating 15 reference
                   shells under your hardware settings…
                 </p>
               )}
@@ -731,7 +731,7 @@ function TimelineSession({
                       </button>
                       {progress.value.reviewed && (
                         <button className="nw-accent" onClick={onContinue}>
-                          Unlock Main Game Missions 1–10
+                          Start Main Mission 1
                         </button>
                       )}
                     </>

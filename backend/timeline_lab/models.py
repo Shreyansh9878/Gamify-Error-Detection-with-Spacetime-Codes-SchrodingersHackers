@@ -40,7 +40,7 @@ class Operation(StrictModel):
 
 def fixed_payload(lesson):
     rows = {3:[('s',[0],2)], 4:[('h',[0],3),('cx',[0,1],4)],
-            5:[('t',[0],2)], 6:[('x',[0],4),('cx',[0,1],5),('h',[2],6),('s',[1],7)]}[lesson]
+            5:[('t',[0],2)], 6:[('x',[0],4),('cx',[0,1],5),('h',[0],6),('s',[1],7)]}[lesson]
     return [Operation(id=f'locked-{i}',name=name,qubits=qs,column=c) for i,(name,qs,c) in enumerate(rows)]
 
 
@@ -56,9 +56,9 @@ class Draft(StrictModel):
 
     @model_validator(mode='after')
     def bounded(self):
-        if self.lesson==6 and (self.mode!='guided' or self.dataQubits!=3 or self.ancillas!=2):
-            raise ValueError('The capstone has three locked data wires and two ancillas.')
-        if self.mode=='guided' and self.dataQubits!={3:1,4:2,5:1,6:3}[self.lesson]:
+        if self.lesson==6 and (self.mode!='guided' or self.dataQubits!=2 or self.ancillas!=1):
+            raise ValueError('The capstone has two locked data wires and one ancilla.')
+        if self.mode=='guided' and self.dataQubits!={3:1,4:2,5:1,6:2}[self.lesson]:
             raise ValueError('Use the sandbox to change the guided data register.')
         if self.lesson!=6 and self.hardware.enabled: raise ValueError('Spatial faults belong to these lessons; hardware noise is enabled in FS6.')
         occupied=set();ids=set();measured={}
@@ -77,7 +77,7 @@ class Draft(StrictModel):
                 occupied.add((q,g.column))
                 if g.name=='m': measured[q]=g.column
             if self.lesson==6 and g in self.operations:
-                if not (len(g.qubits)==2 and g.name in ('cx','cy','cz') and g.qubits[0]>=3 and g.qubits[1]<3) and not (len(g.qubits)==1 and g.qubits[0]>=3 and g.name in ('h','x','y','z','s','sdg','rx','ry','rz','m')):
+                if not (len(g.qubits)==2 and g.name in ('cx','cy','cz') and g.qubits[0]>=2 and g.qubits[1]<2) and not (len(g.qubits)==1 and g.qubits[0]>=2 and g.name in ('h','x','y','z','s','sdg','rx','ry','rz','m')):
                     raise ValueError('The payload is locked. Add ancilla controls, readout, and ancilla-to-data CP gates around it.')
                 if 4<=g.column<=8: raise ValueError('Keep capstone checks outside the locked workload.')
         if sum(g.name in ('t','tdg') for g in ops)>6: raise ValueError('Use at most six T gates in this bounded sandbox.')

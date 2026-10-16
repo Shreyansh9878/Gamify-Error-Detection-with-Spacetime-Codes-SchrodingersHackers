@@ -1,0 +1,472 @@
+{
+  "schemaVersion": 1,
+  "flightSchools": [
+    {
+      "id": 1,
+      "qubits": 1,
+      "ancillas": 0,
+      "tCount": 0,
+      "request": {
+        "circuit": {
+          "schemaVersion": 1,
+          "qubits": 1,
+          "combineErrors": false,
+          "operations": [
+            {
+              "id": "code-0",
+              "role": "error",
+              "name": "bit_flip",
+              "qubits": [
+                0
+              ],
+              "column": 0,
+              "angleRadians": null,
+              "timeUs": null,
+              "t1Us": null,
+              "t2Us": null
+            }
+          ]
+        },
+        "comparisonMode": "final",
+        "selectedErrorId": null,
+        "basis": "Z",
+        "shots": 1024,
+        "sampleSeed": 2026
+      },
+      "answers": [
+        "B",
+        "C",
+        "A"
+      ],
+      "criteria": "Run experiment and correctly answer all three MCQs."
+    },
+    {
+      "id": 2,
+      "qubits": 1,
+      "ancillas": 1,
+      "tCount": 0,
+      "experiment": {
+        "schemaVersion": 1,
+        "qubits": 1,
+        "operations": [],
+        "noise": {
+          "enabled": true,
+          "targetQubits": null,
+          "channel": "bit_flip",
+          "targetQubit": 0,
+          "boundary": 0,
+          "probability": 0.15,
+          "strength": null,
+          "timeUs": null,
+          "t1Us": null,
+          "t2Us": null
+        },
+        "hardware": {
+          "enabled": true,
+          "bitFlip": 0.025,
+          "phaseFlip": 0.01,
+          "depolarizing": 0,
+          "relaxationTimeUs": 0,
+          "t1Us": 100,
+          "t2Us": 80
+        }
+      },
+      "methods": [
+        "detection",
+        "mitigation",
+        "correction"
+      ],
+      "criteria": "Try all three methods on a valid authored circuit."
+    },
+    {
+      "id": 3,
+      "qubits": 1,
+      "ancillas": 1,
+      "tCount": 0,
+      "draft": {
+        "version": 2,
+        "lesson": 3,
+        "mode": "guided",
+        "dataQubits": 1,
+        "ancillas": 1,
+        "columns": 7,
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              1
+            ],
+            "column": 0,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g1",
+            "name": "cx",
+            "qubits": [
+              1,
+              0
+            ],
+            "column": 1,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g2",
+            "name": "bit_flip",
+            "qubits": [
+              0
+            ],
+            "column": 3,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g3",
+            "name": "cy",
+            "qubits": [
+              1,
+              0
+            ],
+            "column": 4,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g4",
+            "name": "h",
+            "qubits": [
+              1
+            ],
+            "column": 5,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g5",
+            "name": "m",
+            "qubits": [
+              1
+            ],
+            "column": 6,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          }
+        ],
+        "hardware": {
+          "enabled": false,
+          "bitFlip": 0.025,
+          "phaseFlip": 0.01,
+          "depolarizing": 0,
+          "relaxationTimeUs": 0,
+          "t1Us": 100,
+          "t2Us": 80
+        }
+      },
+      "criteria": "Complete the guided physical check and knowledge questions."
+    },
+    {
+      "id": 4,
+      "qubits": 2,
+      "ancillas": 1,
+      "tCount": 0,
+      "draft": {
+        "version": 2,
+        "lesson": 4,
+        "mode": "guided",
+        "dataQubits": 2,
+        "ancillas": 1,
+        "columns": 10,
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              2
+            ],
+            "column": 0,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              2,
+              0
+            ],
+            "column": 1,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g2",
+            "name": "cx",
+            "qubits": [
+              2,
+              0
+            ],
+            "column": 6,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g3",
+            "name": "cx",
+            "qubits": [
+              2,
+              1
+            ],
+            "column": 7,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g4",
+            "name": "h",
+            "qubits": [
+              2
+            ],
+            "column": 8,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g5",
+            "name": "m",
+            "qubits": [
+              2
+            ],
+            "column": 9,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          }
+        ],
+        "hardware": {
+          "enabled": false,
+          "bitFlip": 0.025,
+          "phaseFlip": 0.01,
+          "depolarizing": 0,
+          "relaxationTimeUs": 0,
+          "t1Us": 100,
+          "t2Us": 80
+        }
+      },
+      "criteria": "Complete the guided physical check and knowledge questions."
+    },
+    {
+      "id": 5,
+      "qubits": 1,
+      "ancillas": 1,
+      "tCount": 1,
+      "draft": {
+        "version": 2,
+        "lesson": 5,
+        "mode": "guided",
+        "dataQubits": 1,
+        "ancillas": 1,
+        "columns": 7,
+        "operations": [
+          {
+            "id": "g0",
+            "name": "h",
+            "qubits": [
+              1
+            ],
+            "column": 0,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g1",
+            "name": "cz",
+            "qubits": [
+              1,
+              0
+            ],
+            "column": 1,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g2",
+            "name": "cz",
+            "qubits": [
+              1,
+              0
+            ],
+            "column": 4,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g3",
+            "name": "h",
+            "qubits": [
+              1
+            ],
+            "column": 5,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "g4",
+            "name": "m",
+            "qubits": [
+              1
+            ],
+            "column": 6,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          }
+        ],
+        "hardware": {
+          "enabled": false,
+          "bitFlip": 0.025,
+          "phaseFlip": 0.01,
+          "depolarizing": 0,
+          "relaxationTimeUs": 0,
+          "t1Us": 100,
+          "t2Us": 80
+        }
+      },
+      "criteria": "Complete the guided physical check and knowledge questions."
+    },
+    {
+      "id": 6,
+      "qubits": 2,
+      "ancillas": 1,
+      "tCount": 0,
+      "draft": {
+        "version": 2,
+        "lesson": 6,
+        "mode": "guided",
+        "dataQubits": 2,
+        "ancillas": 1,
+        "columns": 15,
+        "operations": [
+          {
+            "id": "h0",
+            "name": "h",
+            "qubits": [
+              2
+            ],
+            "column": 0,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "o00",
+            "name": "cx",
+            "qubits": [
+              2,
+              0
+            ],
+            "column": 1,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "c00",
+            "name": "cz",
+            "qubits": [
+              2,
+              0
+            ],
+            "column": 9,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "c01",
+            "name": "cy",
+            "qubits": [
+              2,
+              1
+            ],
+            "column": 10,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "f0",
+            "name": "h",
+            "qubits": [
+              2
+            ],
+            "column": 13,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          },
+          {
+            "id": "m0",
+            "name": "m",
+            "qubits": [
+              2
+            ],
+            "column": 14,
+            "angleRadians": null,
+            "timeUs": 30,
+            "t1Us": 100,
+            "t2Us": 80
+          }
+        ],
+        "hardware": {
+          "enabled": true,
+          "bitFlip": 0.001,
+          "phaseFlip": 0.001,
+          "depolarizing": 0,
+          "relaxationTimeUs": 0,
+          "t1Us": 100,
+          "t2Us": 80
+        }
+      },
+      "criteria": "Pass score threshold, review real Paulice and reference comparison."
+    }
+  ]
+}

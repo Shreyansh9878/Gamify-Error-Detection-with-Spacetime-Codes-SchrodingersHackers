@@ -28,9 +28,9 @@ All main missions share that workspace and drag/drop renderer. The left panel ha
 
 Missions 1–3 require manual closing products. Missions 4–10 generate signed closing products immediately before the player's final H. Inserting editable columns inside the payload permits short check windows; removing occupied columns requires moving their gates first. Invalid propagation, including X/Y at a T/Tdg crossing, turns the connector red and blocks scoring. Main missions permit Clifford checks and H/M readout; arbitrary rotations belong to the tutorials.
 
-The score is the exact expectation **post-selected fidelity × kept-shot fraction**. Noise and targets are server-owned. Changing a draft invalidates its displayed result. Scores do not fluctuate with sampled counts. See [mission physics, reference solutions and validation](docs/MAIN_MISSIONS.md).
+The score is the exact expectation **post-selected fidelity × kept-shot fraction**. Noise and targets are server-owned. Changing a draft invalidates its displayed result. Scores do not fluctuate with sampled counts. See [mission physics](docs/SCIENTIFIC_REPORT.md) and [reference validation](docs/LEVEL_VALIDATION.md).
 
-Progress is device-local under `quantum-shield-qed-v2`. Tutorial completion and sound preferences survive the redesign. The old mission bests are archived under `quantum-shield.archived-missions-v2`; new mission bests use `missionVersion: 1` and store the combined score multiplied by 1000 for compatibility with the profile schema. One star means passing; two/three stars mean exceeding the target by 0.025/0.05. Editing local storage is not a trusted leaderboard.
+Progress is device-local under `quantum-shield-qed-v2`. Tutorial completion and sound preferences survive the redesign. Mission bests use `missionVersion: 2`; older bests are archived under `quantum-shield.archived-missions-v1` (or `v2` for unversioned profiles). Complete Flight School 6 to open Main1, then pass each mission to unlock the next. The explicit tutorial skip still unlocks every mission. Scores store the combined score multiplied by 1000. One star means passing; two/three stars mean exceeding the target by 0.025/0.05. Local storage is not a trusted leaderboard.
 
 ## Source map
 
@@ -41,7 +41,8 @@ src/components/Mission.tsx                     Main-mission orchestration and co
 src/components/learning/TimelineLab.tsx         Flight Schools 3–6
 src/components/flight-school-{1,2}/             Noise and protection tutorials
 src/lib/missions/                              Validated mission drafts and source generation
-backend/missions/                              Locked fixtures, transport, exact engine, references
+backend/quantum_core/                          Readable transport, checks, scoring, noise, Paulice
+backend/missions/                              Locked fixtures, dynamic checks, scheduling, references
 backend/{noise_lab,protection_lab,timeline_lab}/ Current Flight School physics
 backend/learning/                              Shared quantum channels and visualization
 backend/app.py                                 Bounded FastAPI routes
@@ -71,6 +72,9 @@ The editable source is a bounded teaching API, parsed with Python AST and never 
 ```powershell
 .venv/Scripts/python.exe -m pytest tests -q
 .venv/Scripts/python.exe scripts/validate_main_levels.py
+.venv/Scripts/python.exe scripts/validate_all_levels.py
+.venv/Scripts/python.exe scripts/verify_paulice.py
+.venv/Scripts/python.exe scripts/validate_t_scoring.py
 pnpm typecheck
 pnpm test
 pnpm build
@@ -87,4 +91,21 @@ Recompute the complete bounded reference search with `python scripts/validate_ma
 .venv/Scripts/python.exe scripts/generate_tutorial_circuits.py
 ```
 
-Keep the generator, drawing requirements and `public/tutorial-circuits` assets together. Figures use Qiskit's matplotlib renderer once, never on a request. See [the current tutorial physics notes](docs/TUTORIAL_GLOBAL_FIXES_IMPLEMENTATION.md) and regenerate the FS6 certificate with `python scripts/verify_capstone_difficulty.py`.
+Keep the generator, drawing requirements and `public/tutorial-circuits` assets together. Figures use Qiskit's matplotlib renderer once, never on a request. Regenerate the FS6 certificate with `python scripts/verify_capstone_difficulty.py`.
+
+## Noise, science and submission
+
+The organizer authorized a participant-selected model. **All models are explicitly synthetic**, with parameters and channel placement in [the report](docs/SCIENTIFIC_REPORT.md). FS6 and Main1 have exactly two data qubits and one fixed helper. Main8–10 contain 1/3/5 T or Tdg gates. Local Aer density matrices score every mission, including T circuits; Paulice is restricted to separate Clifford gamma/windowed suggestions and observable benchmarks. RuntimeService is not used to execute circuits or required for setup. Any future RuntimeService adapter must only fetch calibration data.
+
+See [level validation](docs/LEVEL_VALIDATION.md), [core physics guide](docs/CORE_GUIDE.md), [deliverables checklist](docs/DELIVERABLES_AUDIT.md) and [AI provenance](PROVENANCE.md). The best reference scores are finite-family optima, not global guarantees over arbitrary circuits. The game-score search and Paulice's native measurement-parity cost are deliberately reported separately.
+
+Reproduce the matched Clifford/T study and notebook:
+
+```powershell
+.venv/Scripts/python.exe -m pip install -r requirements-draw.txt
+.venv/Scripts/python.exe scripts/run_track_experiments.py
+.venv/Scripts/python.exe scripts/execute_track_notebook.py
+.venv/Scripts/python.exe scripts/generate_validation_report.py
+```
+
+[The executed notebook](notebooks/track_experiments.ipynb) records actual local outputs and a paired fidelity/retention plot. The written report includes noise disclosure, metrics, findings and limits. [The recording script](docs/DEMO_SCRIPT.md) is ready; an actual recorded walkthrough, public repository visibility and final repository-link submission remain owner actions. No demo video URL is claimed before a real recording is published.

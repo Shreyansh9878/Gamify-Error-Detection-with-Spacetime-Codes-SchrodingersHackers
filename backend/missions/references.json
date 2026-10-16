@@ -1,16 +1,22 @@
 {
-  "protocol": "main-missions-exact-v1",
+  "protocol": "main-missions-exact-v2-all-wire",
   "score": "F_ps * S_keep; exact density-matrix expectation",
+  "packages": {
+    "qiskit": "2.5.2",
+    "qiskit-aer": "0.17.2",
+    "qiskit-paulice": "0.2.1",
+    "numpy": "2.2.6"
+  },
   "levels": [
     {
       "id": 1,
-      "qubits": 3,
+      "qubits": 2,
       "ancillas": 1,
       "tCount": 0,
-      "baseline": 0.4657970221087031,
-      "everywhere": 0.4230723226485485,
-      "reasonable": 0.6822037568628656,
-      "optimal": 0.6822846541719368,
+      "baseline": 0.4666646815850889,
+      "everywhere": 0.4357752750844933,
+      "reasonable": 0.681382501677898,
+      "optimal": 0.6816147235629979,
       "target": 0.6,
       "spread": 0.0,
       "baselineDraft": {
@@ -18,7 +24,7 @@
         "levelId": 1,
         "bands": {
           "0": 4,
-          "8": 8
+          "6": 8
         },
         "operations": []
       },
@@ -27,14 +33,14 @@
         "levelId": 1,
         "bands": {
           "0": 8,
-          "8": 8
+          "6": 8
         },
         "operations": [
           {
             "id": "g0",
             "name": "h",
             "qubits": [
-              3
+              2
             ],
             "boundary": 0,
             "slot": 0
@@ -43,7 +49,7 @@
             "id": "g1",
             "name": "cx",
             "qubits": [
-              3,
+              2,
               0
             ],
             "boundary": 0,
@@ -53,7 +59,7 @@
             "id": "g2",
             "name": "cx",
             "qubits": [
-              3,
+              2,
               1
             ],
             "boundary": 0,
@@ -61,59 +67,30 @@
           },
           {
             "id": "g3",
-            "name": "cx",
+            "name": "cz",
             "qubits": [
-              3,
-              2
-            ],
-            "boundary": 0,
-            "slot": 3
-          },
-          {
-            "id": "g4",
-            "name": "cy",
-            "qubits": [
-              3,
+              2,
               0
             ],
-            "boundary": 8,
+            "boundary": 6,
             "slot": 0
           },
           {
-            "id": "g5",
-            "name": "cx",
-            "qubits": [
-              3,
-              1
-            ],
-            "boundary": 8,
-            "slot": 1
-          },
-          {
-            "id": "g6",
-            "name": "z",
-            "qubits": [
-              3
-            ],
-            "boundary": 8,
-            "slot": 5
-          },
-          {
-            "id": "g7",
+            "id": "g4",
             "name": "h",
             "qubits": [
-              3
+              2
             ],
-            "boundary": 8,
+            "boundary": 6,
             "slot": 6
           },
           {
-            "id": "g8",
+            "id": "g5",
             "name": "m",
             "qubits": [
-              3
+              2
             ],
-            "boundary": 8,
+            "boundary": 6,
             "slot": 7
           }
         ]
@@ -123,7 +100,7 @@
         "levelId": 1,
         "bands": {
           "0": 8,
-          "8": 8,
+          "6": 8,
           "2": 8
         },
         "operations": [
@@ -131,7 +108,7 @@
             "id": "g0",
             "name": "h",
             "qubits": [
-              3
+              2
             ],
             "boundary": 0,
             "slot": 0
@@ -140,7 +117,7 @@
             "id": "g1",
             "name": "cx",
             "qubits": [
-              3,
+              2,
               1
             ],
             "boundary": 0,
@@ -150,7 +127,7 @@
             "id": "g2",
             "name": "cx",
             "qubits": [
-              3,
+              2,
               1
             ],
             "boundary": 2,
@@ -160,7 +137,7 @@
             "id": "g3",
             "name": "h",
             "qubits": [
-              3
+              2
             ],
             "boundary": 2,
             "slot": 6
@@ -169,7 +146,7 @@
             "id": "g4",
             "name": "m",
             "qubits": [
-              3
+              2
             ],
             "boundary": 2,
             "slot": 7
@@ -181,7 +158,7 @@
         "levelId": 1,
         "bands": {
           "0": 4,
-          "8": 8,
+          "6": 8,
           "1": 8,
           "2": 8
         },
@@ -190,7 +167,7 @@
             "id": "g0",
             "name": "h",
             "qubits": [
-              3
+              2
             ],
             "boundary": 1,
             "slot": 0
@@ -199,7 +176,7 @@
             "id": "g1",
             "name": "cx",
             "qubits": [
-              3,
+              2,
               1
             ],
             "boundary": 1,
@@ -209,7 +186,7 @@
             "id": "g2",
             "name": "cx",
             "qubits": [
-              3,
+              2,
               1
             ],
             "boundary": 2,
@@ -219,7 +196,7 @@
             "id": "g3",
             "name": "h",
             "qubits": [
-              3
+              2
             ],
             "boundary": 2,
             "slot": 6
@@ -228,7 +205,7 @@
             "id": "g4",
             "name": "m",
             "qubits": [
-              3
+              2
             ],
             "boundary": 2,
             "slot": 7
@@ -236,12 +213,48 @@
         ]
       },
       "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
         "broadest": {
-          "label": "XYZ",
-          "cost": 9
+          "label": "XY",
+          "cost": 6
         },
-        "candidateCount": 315,
+        "candidateCount": 75,
         "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.4666646815850889,
+          "keptFraction": 1.0,
+          "combinedScore": 0.4666646815850889,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
+        },
+        "everywhere": {
+          "fidelity": 0.4546009803652649,
+          "keptFraction": 0.9585885070779094,
+          "combinedScore": 0.4357752750844933,
+          "addedAncillas": 1,
+          "addedTwoQubit": 3,
+          "addedDepth": 3
+        },
+        "reasonable": {
+          "fidelity": 0.8273339201939829,
+          "keptFraction": 0.8235882574694097,
+          "combinedScore": 0.681382501677898,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        },
+        "optimal": {
+          "fidelity": 0.8274532685611461,
+          "keptFraction": 0.8237501131009537,
+          "combinedScore": 0.6816147235629979,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        }
       }
     },
     {
@@ -249,10 +262,10 @@
       "qubits": 3,
       "ancillas": 1,
       "tCount": 0,
-      "baseline": 0.45607968858389336,
-      "everywhere": 0.4127278811507968,
-      "reasonable": 0.6756953856618347,
-      "optimal": 0.6757753780991016,
+      "baseline": 0.45594358412173425,
+      "everywhere": 0.4060856072197824,
+      "reasonable": 0.6721370068706034,
+      "optimal": 0.6723648897972381,
       "target": 0.6,
       "spread": 0.0,
       "baselineDraft": {
@@ -478,12 +491,48 @@
         ]
       },
       "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
         "broadest": {
           "label": "XXY",
           "cost": 10
         },
         "candidateCount": 315,
         "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.45594358412173425,
+          "keptFraction": 1.0,
+          "combinedScore": 0.45594358412173425,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
+        },
+        "everywhere": {
+          "fidelity": 0.4370084277046908,
+          "keptFraction": 0.9292397616967594,
+          "combinedScore": 0.4060856072197824,
+          "addedAncillas": 1,
+          "addedTwoQubit": 5,
+          "addedDepth": 6
+        },
+        "reasonable": {
+          "fidelity": 0.8193110857524656,
+          "keptFraction": 0.8203685005107728,
+          "combinedScore": 0.6721370068706034,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        },
+        "optimal": {
+          "fidelity": 0.8194288053407247,
+          "keptFraction": 0.8205287456518735,
+          "combinedScore": 0.6723648897972381,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        }
       }
     },
     {
@@ -491,10 +540,10 @@
       "qubits": 3,
       "ancillas": 2,
       "tCount": 0,
-      "baseline": 0.44538431537240514,
-      "everywhere": 0.34506238018093494,
-      "reasonable": 0.6688692985197592,
-      "optimal": 0.6689482387276895,
+      "baseline": 0.44538478594480574,
+      "everywhere": 0.3360666962162594,
+      "reasonable": 0.665396285374112,
+      "optimal": 0.6656209888427601,
       "target": 0.59,
       "spread": 0.0,
       "baselineDraft": {
@@ -809,12 +858,48 @@
         ]
       },
       "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
         "broadest": {
           "label": "XXX",
           "cost": 11
         },
         "candidateCount": 315,
         "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.44538478594480574,
+          "keptFraction": 1.0,
+          "combinedScore": 0.44538478594480574,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
+        },
+        "everywhere": {
+          "fidelity": 0.41200357506117674,
+          "keptFraction": 0.8156887865993838,
+          "combinedScore": 0.3360666962162594,
+          "addedAncillas": 2,
+          "addedTwoQubit": 12,
+          "addedDepth": 7
+        },
+        "reasonable": {
+          "fidelity": 0.8144163987124963,
+          "keptFraction": 0.817022209309674,
+          "combinedScore": 0.665396285374112,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        },
+        "optimal": {
+          "fidelity": 0.8145333377734423,
+          "keptFraction": 0.8171807806691624,
+          "combinedScore": 0.6656209888427601,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        }
       }
     },
     {
@@ -822,10 +907,10 @@
       "qubits": 3,
       "ancillas": 2,
       "tCount": 0,
-      "baseline": 0.43606514091253495,
-      "everywhere": 0.3412543220271263,
-      "reasonable": 0.6626825906463827,
-      "optimal": 0.6627606479476318,
+      "baseline": 0.436065661456261,
+      "everywhere": 0.3319205917308496,
+      "reasonable": 0.6592505457510566,
+      "optimal": 0.6594721468958933,
       "target": 0.59,
       "spread": 0.0,
       "baselineDraft": {
@@ -1060,12 +1145,48 @@
         ]
       },
       "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
         "broadest": {
           "label": "XXX",
           "cost": 12
         },
         "candidateCount": 315,
         "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.436065661456261,
+          "keptFraction": 1.0,
+          "combinedScore": 0.436065661456261,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
+        },
+        "everywhere": {
+          "fidelity": 0.4078660005751065,
+          "keptFraction": 0.8137981377776745,
+          "combinedScore": 0.3319205917308496,
+          "addedAncillas": 2,
+          "addedTwoQubit": 12,
+          "addedDepth": 7
+        },
+        "reasonable": {
+          "fidelity": 0.8100216735416745,
+          "keptFraction": 0.8138677856218363,
+          "combinedScore": 0.6592505457510566,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        },
+        "optimal": {
+          "fidelity": 0.8101376810277944,
+          "keptFraction": 0.8140247791699347,
+          "combinedScore": 0.6594721468958933,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        }
       }
     },
     {
@@ -1073,10 +1194,10 @@
       "qubits": 3,
       "ancillas": 2,
       "tCount": 0,
-      "baseline": 0.42566318162399575,
-      "everywhere": 0.3295531059313744,
-      "reasonable": 0.6547254338943934,
-      "optimal": 0.6548024073733857,
+      "baseline": 0.4244327819552206,
+      "everywhere": 0.31803004193345985,
+      "reasonable": 0.6490793641202743,
+      "optimal": 0.6492965094579561,
       "target": 0.58,
       "spread": 0.0,
       "baselineDraft": {
@@ -1311,12 +1432,48 @@
         ]
       },
       "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
         "broadest": {
           "label": "XXX",
           "cost": 13
         },
         "candidateCount": 315,
         "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.4244327819552206,
+          "keptFraction": 1.0,
+          "combinedScore": 0.4244327819552206,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
+        },
+        "everywhere": {
+          "fidelity": 0.39245349564137266,
+          "keptFraction": 0.8103636366232763,
+          "combinedScore": 0.31803004193345985,
+          "addedAncillas": 2,
+          "addedTwoQubit": 12,
+          "addedDepth": 10
+        },
+        "reasonable": {
+          "fidelity": 0.8007498838849688,
+          "keptFraction": 0.8105893952443175,
+          "combinedScore": 0.6490793641202743,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        },
+        "optimal": {
+          "fidelity": 0.8008642797619691,
+          "keptFraction": 0.8107447489741189,
+          "combinedScore": 0.6492965094579561,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        }
       }
     },
     {
@@ -1324,10 +1481,10 @@
       "qubits": 3,
       "ancillas": 2,
       "tCount": 0,
-      "baseline": 0.4164469264663487,
-      "everywhere": 0.33351720712906224,
-      "reasonable": 0.6483142863158633,
-      "optimal": 0.6483903423830081,
+      "baseline": 0.41498159114065014,
+      "everywhere": 0.3215142839619547,
+      "reasonable": 0.6423861466095577,
+      "optimal": 0.6426000689397053,
       "target": 0.58,
       "spread": 0.0,
       "baselineDraft": {
@@ -1562,12 +1719,48 @@
         ]
       },
       "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
         "broadest": {
           "label": "XXZ",
           "cost": 14
         },
         "candidateCount": 315,
         "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.41498159114065014,
+          "keptFraction": 1.0,
+          "combinedScore": 0.41498159114065014,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
+        },
+        "everywhere": {
+          "fidelity": 0.38586394948109487,
+          "keptFraction": 0.8332322425930776,
+          "combinedScore": 0.3215142839619547,
+          "addedAncillas": 2,
+          "addedTwoQubit": 10,
+          "addedDepth": 9
+        },
+        "reasonable": {
+          "fidelity": 0.7955256454998044,
+          "keptFraction": 0.8074989791258912,
+          "combinedScore": 0.6423861466095577,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        },
+        "optimal": {
+          "fidelity": 0.7956390162147299,
+          "keptFraction": 0.8076527870602541,
+          "combinedScore": 0.6426000689397053,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        }
       }
     },
     {
@@ -1575,11 +1768,11 @@
       "qubits": 3,
       "ancillas": 3,
       "tCount": 0,
-      "baseline": 0.40713266626681266,
-      "everywhere": 0.29117400936944055,
-      "reasonable": 0.6415555521224775,
-      "optimal": 0.6416306645102202,
-      "target": 0.58,
+      "baseline": 0.40538232392733997,
+      "everywhere": 0.2761919480041414,
+      "reasonable": 0.6351144320519374,
+      "optimal": 0.6353248974274665,
+      "target": 0.57,
       "spread": 0.0,
       "baselineDraft": {
         "version": 1,
@@ -1870,12 +2063,48 @@
         ]
       },
       "optimizer": {
+        "kind": "clifford-pauli-reference-search",
+        "pauliceUsed": false,
         "broadest": {
           "label": "XXY",
           "cost": 15
         },
         "candidateCount": 315,
         "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.40538232392733997,
+          "keptFraction": 1.0,
+          "combinedScore": 0.40538232392733997,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
+        },
+        "everywhere": {
+          "fidelity": 0.36680045788980864,
+          "keptFraction": 0.7529760175138953,
+          "combinedScore": 0.2761919480041414,
+          "addedAncillas": 3,
+          "addedTwoQubit": 15,
+          "addedDepth": 10
+        },
+        "reasonable": {
+          "fidelity": 0.7896613320747198,
+          "keptFraction": 0.8042871117714059,
+          "combinedScore": 0.6351144320519374,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 1
+        },
+        "optimal": {
+          "fidelity": 0.789773556603663,
+          "keptFraction": 0.8044393131616275,
+          "combinedScore": 0.6353248974274665,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 1
+        }
       }
     },
     {
@@ -1883,10 +2112,10 @@
       "qubits": 4,
       "ancillas": 3,
       "tCount": 1,
-      "baseline": 0.3931640199652508,
-      "everywhere": 0.22882222557707804,
-      "reasonable": 0.6257797239211101,
-      "optimal": 0.6260723308000473,
+      "baseline": 0.3907487267704999,
+      "everywhere": 0.21193481493712743,
+      "reasonable": 0.616307659270219,
+      "optimal": 0.6175343139718612,
       "target": 0.56,
       "spread": 0.0,
       "baselineDraft": {
@@ -2208,12 +2437,48 @@
         ]
       },
       "optimizer": {
+        "kind": "custom-t-pauli-search",
+        "pauliceUsed": false,
         "broadest": {
           "label": "XXXZ",
           "cost": 19
         },
         "candidateCount": 891,
         "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.3907487267704999,
+          "keptFraction": 1.0,
+          "combinedScore": 0.3907487267704999,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
+        },
+        "everywhere": {
+          "fidelity": 0.3325289057220995,
+          "keptFraction": 0.6373425326045046,
+          "combinedScore": 0.21193481493712743,
+          "addedAncillas": 3,
+          "addedTwoQubit": 24,
+          "addedDepth": 11
+        },
+        "reasonable": {
+          "fidelity": 0.7700410747807148,
+          "keptFraction": 0.8003568633604713,
+          "combinedScore": 0.616307659270219,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        },
+        "optimal": {
+          "fidelity": 0.770559692986463,
+          "keptFraction": 0.8014100913823816,
+          "combinedScore": 0.6175343139718612,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        }
       }
     },
     {
@@ -2221,11 +2486,11 @@
       "qubits": 4,
       "ancillas": 3,
       "tCount": 3,
-      "baseline": 0.38328329004454553,
-      "everywhere": 0.22211739866323854,
-      "reasonable": 0.6170658429520691,
-      "optimal": 0.6173538896609545,
-      "target": 0.56,
+      "baseline": 0.3811990330345677,
+      "everywhere": 0.204178946162573,
+      "reasonable": 0.6081872332175502,
+      "optimal": 0.6093918980306683,
+      "target": 0.55,
       "spread": 0.0,
       "baselineDraft": {
         "version": 1,
@@ -2546,12 +2811,48 @@
         ]
       },
       "optimizer": {
+        "kind": "custom-t-pauli-search",
+        "pauliceUsed": false,
         "broadest": {
           "label": "YXXY",
           "cost": 20
         },
         "candidateCount": 699,
         "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.3811990330345677,
+          "keptFraction": 1.0,
+          "combinedScore": 0.3811990330345677,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
+        },
+        "everywhere": {
+          "fidelity": 0.3229922347842689,
+          "keptFraction": 0.6321481576761343,
+          "combinedScore": 0.204178946162573,
+          "addedAncillas": 3,
+          "addedTwoQubit": 24,
+          "addedDepth": 13
+        },
+        "reasonable": {
+          "fidelity": 0.7628854533994833,
+          "keptFraction": 0.7972195963462345,
+          "combinedScore": 0.6081872332175502,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        },
+        "optimal": {
+          "fidelity": 0.7633985244840413,
+          "keptFraction": 0.7982618232626771,
+          "combinedScore": 0.6093918980306683,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        }
       }
     },
     {
@@ -2559,10 +2860,10 @@
       "qubits": 4,
       "ancillas": 3,
       "tCount": 5,
-      "baseline": 0.3741744020759493,
-      "everywhere": 0.2363421583759983,
-      "reasonable": 0.6094393922744642,
-      "optimal": 0.6097232874294931,
+      "baseline": 0.3719583256414559,
+      "everywhere": 0.2174031887502856,
+      "reasonable": 0.6002948178139932,
+      "optimal": 0.6014786016402718,
       "target": 0.55,
       "spread": 0.0,
       "baselineDraft": {
@@ -2884,19 +3185,49 @@
         ]
       },
       "optimizer": {
+        "kind": "custom-t-pauli-search",
+        "pauliceUsed": false,
         "broadest": {
           "label": "ZIXY",
           "cost": 19
         },
         "candidateCount": 651,
         "scope": "Exact maximum over all nonidentity single-helper Pauli products in the five declared windows. Not a global optimum over arbitrary multi-helper circuits."
+      },
+      "metrics": {
+        "baseline": {
+          "fidelity": 0.3719583256414559,
+          "keptFraction": 1.0,
+          "combinedScore": 0.3719583256414559,
+          "addedAncillas": 0,
+          "addedTwoQubit": 0,
+          "addedDepth": 0
+        },
+        "everywhere": {
+          "fidelity": 0.327538393365561,
+          "keptFraction": 0.6637487181774289,
+          "combinedScore": 0.2174031887502856,
+          "addedAncillas": 3,
+          "addedTwoQubit": 21,
+          "addedDepth": 11
+        },
+        "reasonable": {
+          "fidelity": 0.7557892202129544,
+          "keptFraction": 0.7942622119495851,
+          "combinedScore": 0.6002948178139932,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        },
+        "optimal": {
+          "fidelity": 0.7562971049794116,
+          "keptFraction": 0.7952940685349386,
+          "combinedScore": 0.6014786016402718,
+          "addedAncillas": 1,
+          "addedTwoQubit": 2,
+          "addedDepth": 2
+        }
       }
     }
-  ],
-  "packages": {
-    "qiskit": "2.5.2",
-    "qiskit-aer": "0.17.2",
-    "qiskit-paulice": "0.2.1",
-    "numpy": "2.2.6"
-  }
+  ]
 }

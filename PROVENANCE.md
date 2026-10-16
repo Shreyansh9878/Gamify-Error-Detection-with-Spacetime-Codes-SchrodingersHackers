@@ -1,0 +1,9 @@
+# AI-use provenance
+
+The project owner supplied the game requirements, pedagogical direction, domain feedback, organizer clarification and acceptance criteria. Those contributions are human design input; this file does not infer authorship of individual source lines from Git identity.
+
+The implementation developed in this chat is AI-generated or AI-assisted: UI/layout, circuit drag/drop and invariant detection/rendering, level fixtures and progression, backend physics adapters, core reference modules, custom T-capable search/scoring, tests, validation scripts, circuit-image generation, notebook and documentation. No specific core source module has been independently verified as exclusively human-written. Existing code preserved from the repository is not retroactively claimed as human-written or newly authored here.
+
+`backend/quantum_core` contains readable, AI-assisted reference implementations with small tests. The owner should review, understand, explain and adapt these before presenting them; an expectation of review is not a claim that review or independent authorship already occurred. Qiskit, Qiskit Aer and qiskit-paulice supply the underlying library algorithms; their authorship/licenses remain theirs. Static circuit figures are Qiskit-generated, not AI image output.
+
+The repository contains real local execution results, not fabricated experiments, recordings, authorship claims or backdated history. The owner must adapt this disclosure to the event's actual AI-use rules and report any later independently written work accurately.

@@ -81,11 +81,13 @@
   "school-6": {
     "generator": "QuantumCircuit.draw(\"mpl\")",
     "operations": {
+      "h": 3,
+      "cx": 2,
       "x": 1,
-      "cx": 1,
       "quantum_channel": 1,
-      "h": 1,
-      "s": 1
+      "s": 1,
+      "cy": 1,
+      "measure": 1
     },
     "qubits": 3
   },

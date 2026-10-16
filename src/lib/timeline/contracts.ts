@@ -92,7 +92,7 @@ export const draftSchema = z
     }
     if (
       d.mode === "guided" &&
-      d.dataQubits !== { 3: 1, 4: 2, 5: 1, 6: 3 }[d.lesson]
+      d.dataQubits !== { 3: 1, 4: 2, 5: 1, 6: 2 }[d.lesson]
     )
       fail("Change the register in the sandbox.");
     if (d.lesson !== 5 && all.some((g) => ["t", "tdg"].includes(g.name)))
@@ -104,20 +104,20 @@ export const draftSchema = z
     if (all.filter((g) => g.name === "t" || g.name === "tdg").length > 6)
       fail("Use at most six T gates in this bounded sandbox.");
     if (d.lesson === 6) {
-      if (d.mode !== "guided" || d.ancillas !== 2)
-        fail("The capstone has two fixed helper wires.");
+      if (d.mode !== "guided" || d.ancillas !== 1)
+        fail("The capstone has one fixed helper wire.");
       for (const g of d.operations)
         if (
           (g.column >= 4 && g.column <= 8) ||
           !(
-            g.qubits[0] >= 3 &&
+            g.qubits[0] >= 2 &&
             ((g.qubits.length === 1 &&
               ["h", "x", "y", "z", "s", "sdg", "rx", "ry", "rz", "m"].includes(
                 g.name,
               )) ||
               (g.qubits.length === 2 &&
                 ["cx", "cy", "cz"].includes(g.name) &&
-                g.qubits[1] < 3))
+                g.qubits[1] < 2))
           )
         )
           fail(
@@ -137,7 +137,7 @@ export function fixedPayload(lesson: number): Operation[] {
     6: [
       ["x", [0], 4],
       ["cx", [0, 1], 5],
-      ["h", [2], 6],
+      ["h", [0], 6],
       ["s", [1], 7],
     ],
   };
@@ -156,8 +156,8 @@ export function initialDraft(
     version: 2,
     lesson,
     mode,
-    dataQubits: mode === "sandbox" ? 1 : { 3: 1, 4: 2, 5: 1, 6: 3 }[lesson],
-    ancillas: lesson === 6 ? 2 : 1,
+    dataQubits: mode === "sandbox" ? 1 : { 3: 1, 4: 2, 5: 1, 6: 2 }[lesson],
+    ancillas: 1,
     columns:
       mode === "sandbox" ? 12 : lesson === 4 ? 10 : lesson === 6 ? 15 : 7,
     operations: [],

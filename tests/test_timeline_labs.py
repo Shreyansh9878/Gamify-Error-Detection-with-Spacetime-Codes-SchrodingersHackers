@@ -98,10 +98,10 @@ def test_source_is_allowlisted_and_roundtrips_controlled_y_measurement():
 
 
 def test_hardware_noise_reaches_all_data_and_helper_wires_and_stops_at_measurement():
-    d=Draft(lesson=6,dataQubits=3,ancillas=2,columns=15,hardware=HardwareNoise(),operations=[op('h',[3],0),op('cz',[3,1],1),op('cz',[3,0],9),op('cz',[3,1],10),op('h',[3],11),op('m',[3],12),op('h',[4],13)])
+    d=Draft(lesson=6,dataQubits=2,ancillas=1,columns=15,hardware=HardwareNoise(),operations=[op('h',[2],0),op('cz',[2,1],1),op('h',[2],2),op('m',[2],3)])
     items=service.schedule(d);read=next(i for i,g in enumerate(items) if g['name']=='measure')
-    assert set(g['qubits'][0] for g in items[:read] if g['name']=='noise')==set(range(5))
-    assert not any(g['name']=='noise' and g['qubits']==[3] for g in items[read:])
+    assert set(g['qubits'][0] for g in items[:read] if g['name']=='noise')==set(range(3))
+    assert not any(g['name']=='noise' and g['qubits']==[2] for g in items[read:])
 
 
 @pytest.mark.parametrize('technique',['detection','mitigation','correction'])
@@ -119,13 +119,13 @@ def test_hardware_protection_uses_noisy_helpers_and_true_output_types(technique)
 def test_qualification_rechecks_and_certificate_is_keyed_by_hardware(monkeypatch):
     noise=HardwareNoise(bitFlip=.001,phaseFlip=.001)
     reference=service.comparison(json.dumps(noise.model_dump(),sort_keys=True))
-    assert reference['candidates']==63 and reference['best']['score']>=.60
+    assert reference['candidates']==15 and reference['best']['score']>=.60
     d=Draft.model_validate(reference['best']['draft']);assert service.validation(d)['valid']
     calls=[]
     monkeypatch.setattr(service,'paulice_search',lambda key:calls.append(key) or {'available':True,'message':'test research adapter'})
     r=service.reveal(Request(draft=d));assert calls and r['player']['score']==pytest.approx(r['reference']['best']['score'])
-    assert '63' in r['reference']['scope'] and r['reference']['globalUpperBound']==1
-    with pytest.raises(ValueError):service.reveal(Request(draft=Draft(lesson=6,dataQubits=3,ancillas=2,columns=15)))
+    assert '15' in r['reference']['scope'] and r['reference']['globalUpperBound']==1
+    with pytest.raises(ValueError):service.reveal(Request(draft=Draft(lesson=6,dataQubits=2,ancillas=1,columns=15)))
 
 
 def test_native_export_executes_the_same_terminal_measurement_schedule():

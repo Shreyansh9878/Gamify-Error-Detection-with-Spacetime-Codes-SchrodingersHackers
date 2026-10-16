@@ -58,7 +58,7 @@ def verify(reoptimize=False):
         from backend.missions.service import qc_for,payload
         depth=qc_for(payload(l),l['qubits']).depth()
         assert depth>last_depth;last_depth=depth
-        assert l['qubits']>=3 and l['ancillas']==row['ancillas']
+        assert l['qubits']>=(2 if number==1 else 3) and l['ancillas']==row['ancillas']
         assert row['tCount']==({8:1,9:3,10:5}.get(number,0))
         scores={}
         for kind in ('baseline','everywhere','reasonable','optimal'):

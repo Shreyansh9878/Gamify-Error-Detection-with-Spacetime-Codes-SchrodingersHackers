@@ -44,11 +44,13 @@ def main():
         qc.cy(a,0);qc.h(a);qc.measure(a,c);circuits['school-3-fault' if fault else 'school-3']=qc
     qc,a,c=shell(2);qc.h(a);qc.cz(a,0);qc.h(0);qc.cx(0,1);qc.cx(a,0);qc.cx(a,1);qc.h(a);qc.measure(a,c);circuits['school-4']=qc
     qc,a,c=shell();qc.h(a);qc.cz(a,0);qc.t(0);qc.cz(a,0);qc.h(a);qc.measure(a,c);circuits['school-5']=qc
-    qc=QuantumCircuit(3)
+    qc,a,c=shell(2)
+    qc.h(a);qc.cx(a,1)
     for g in fixed_payload(6):
         getattr(qc,g.name)(*g.qubits)
         if g.name=='cx':
             gate=thermal_relaxation_error(HOTSPOT['t1Us'],HOTSPOT['t2Us'],HOTSPOT['timeUs']).to_instruction();gate.label='q1 hotspot: 70 us';qc.append(gate,[1])
+    qc.cy(a,1);qc.h(a);qc.measure(a,c)
     circuits['school-6']=qc
     qc=QuantumCircuit(2);qc.h(0);qc.x(0);qc.h(0);qc.sdg(1);qc.x(1);qc.s(1);circuits['clifford']=qc
     OUT.mkdir(parents=True,exist_ok=True)

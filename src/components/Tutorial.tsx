@@ -10,6 +10,7 @@ export function Tutorial({
   onSkip,
   onBack = () => {},
   unlocked = false,
+  onNavigate,
 }: {
   start: number;
   onStep: (s: number) => void;
@@ -17,6 +18,7 @@ export function Tutorial({
   onSkip: () => void;
   onBack?: () => void;
   unlocked?: boolean;
+  onNavigate?: (step: number) => void;
 }) {
   const [step, setStep] = useState(start),
     [maxReached, setMaxReached] = useState(unlocked ? 5 : start);
@@ -25,6 +27,7 @@ export function Tutorial({
     setMaxReached(highest);
     setStep(n);
     onStep(highest);
+    onNavigate?.(n);
   }
   function next() {
     if (step === 5) onFinish();

@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
   async rewrites() {
+    // Vercel routes to the colocated Python function, never to localhost.
+    if (process.env.VERCEL === "1") return [];
     return [
       {
         source: "/api/:path*",

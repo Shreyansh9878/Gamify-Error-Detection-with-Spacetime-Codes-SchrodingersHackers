@@ -2,9 +2,11 @@
 
 A Next.js / React game with a Qiskit 2 backend. Six Flight Schools teach quantum noise and coherent Pauli checks; ten main missions use locked payloads and localized spacetime checks. No account, database, paid API or quantum hardware is required.
 
+Live URL: **pending first Vercel Hobby deployment**. The app is prepared for option A: Next.js plus one Python function on Vercel, with no external host or paid add-on. See [measurements, deployment steps and the live checklist](docs/DEPLOYMENT.md). Hobby is for personal, non-commercial use; quotas and cold starts apply.
+
 ## Local setup
 
-Use Node.js 22+ and Python 3.10+:
+Use Node.js 24.x and preferably Python 3.12 to match deployment. The existing Python 3.10 development environment also passes the physics tests:
 
 ```powershell
 python -m venv .venv
@@ -14,11 +16,13 @@ pnpm install --frozen-lockfile
 pnpm dev:all
 ```
 
-Open http://127.0.0.1:3000. The launcher starts Next.js on port 3000 and the Python API on port 8000; Ctrl+C stops both. On Linux/macOS, use `.venv/bin/python` instead. The compatible runtime ranges are in `requirements.txt`; the lock file also includes the test tools.
+Open http://127.0.0.1:3000. The launcher starts Next.js on port 3000 and the Python API on port 8000; Ctrl+C stops both. On Linux/macOS, use `.venv/bin/python` instead. `requirements-deploy.txt` pins runtime packages; `requirements.lock.txt` also includes test tools. Drawing dependencies remain separate.
 
 Next.js proxies `/api/*` to the Python process. Optional `QUANTUM_API_URL` sets another backend address; `SIMULATION_ENABLED=false` pauses computations. See `.env.example`. No secrets are needed. Python reads its process environment rather than Next's `.env.local`.
 
-For production verification, keep Python running, run `pnpm build`, then `pnpm start`. This checkout is the local Stage 1 app; Vercel free-tier packaging and a global leaderboard are separate deployment work.
+On Vercel set `ENABLE_EXPERIMENTAL_COREPACK=1` to honor the pinned pnpm version. The browser API base is `NEXT_PUBLIC_API_BASE_URL`, default `/api`. On Vercel leave `QUANTUM_API_URL` unset: vercel.json selects the same-origin Python function. No browser localhost URL or external CORS dependency is used in production.
+
+For production verification, start `.venv/Scripts/python.exe -m uvicorn api.index:app --host 127.0.0.1 --port 8000`, run `pnpm build`, then `pnpm start`. Vercel packaging is included; account linking and actual live-domain verification remain manual. A global leaderboard remains separate work.
 
 ## Playing
 

@@ -5,6 +5,7 @@ import type {
   SpectralComponent,
 } from "@/lib/state-visualization/contracts";
 import { api } from "@/lib/api";
+import { portablePage } from "@/lib/state-visualization/portable";
 import { QSphere } from "./QSphere";
 import { BlochSphere } from "./BlochSphere";
 export function QuantumStateView({
@@ -90,13 +91,19 @@ export function QuantumStateView({
               onClick={() => {
                 const id = frame.frameId;
                 setLoading(true);
-                void api<{ components: SpectralComponent[] }>(
-                  "tutorial/state-visualization",
-                  {
-                    visualizationToken: frame.visualizationToken,
-                    cursor: components.length,
-                  },
-                )
+                void Promise.resolve()
+                  .then(() => {
+                    const local = portablePage(frame, components.length);
+                    return local
+                      ? { components: local }
+                      : api<{ components: SpectralComponent[] }>(
+                          "tutorial/state-visualization",
+                          {
+                            visualizationToken: frame.visualizationToken,
+                            cursor: components.length,
+                          },
+                        );
+                  })
                   .then((r) => {
                     if (id === current.current)
                       setComponents((prev) => [...prev, ...r.components]);

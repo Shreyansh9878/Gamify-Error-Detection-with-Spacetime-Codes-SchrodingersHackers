@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm build",
+  "outputDirectory": ".next",
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 60,
+      "excludeFiles": "{node_modules/**,src/**,public/**,.next/**,.venv/**,.pnpm-store/**,docs/**,tests/**,e2e/**,notebooks/**,scripts/**,artifacts/**,test-results/**,backend/reference_solutions/**,**/__pycache__/**,**/*.pdf,**/*.md}"
+    }
+  },
+  "rewrites": [{ "source": "/api/:path*", "destination": "/api" }]
+}

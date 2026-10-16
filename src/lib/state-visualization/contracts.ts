@@ -12,6 +12,12 @@ export interface StateVisualization {
   amplitudes?: [number, number][];
   spectral?: { rank: number; componentCount: number; omittedWeight: number };
   components?: SpectralComponent[];
+  componentPayload?: {
+    format: "f64le-base64-v1";
+    qubits: number;
+    count: number;
+    data: string;
+  };
   coherences?: { row: string; column: string; value: [number, number] }[];
   coherenceCount?: number;
 }

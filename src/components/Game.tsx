@@ -10,6 +10,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { api } from "@/lib/api";
+import { readDeepLink, writeDeepLink } from "@/lib/location";
 import {
   initial,
   parseProgress,
@@ -28,6 +29,8 @@ export function Game() {
     [ready, setReady] = useState(false),
     [screen, setScreen] = useState<"map" | "tutorial" | "mission">("map"),
     [selected, setSelected] = useState<Level | null>(null),
+    [entrySchool, setEntrySchool] = useState<number | null>(null),
+    [pendingMission, setPendingMission] = useState<number | null>(null),
     [error, setError] = useState(""),
     [storageError, setStorageError] = useState("");
   async function load() {
@@ -45,7 +48,9 @@ export function Game() {
         if (Object.keys(saved.best).length)
           try {
             localStorage.setItem(
-              saved.missionVersion === 1 ? "quantum-shield.archived-missions-v1" : "quantum-shield.archived-missions-v2",
+              saved.missionVersion === 1
+                ? "quantum-shield.archived-missions-v1"
+                : "quantum-shield.archived-missions-v2",
               JSON.stringify(saved.best),
             );
           } catch {
@@ -56,7 +61,19 @@ export function Game() {
         saved = { ...saved, best: {}, missionVersion: MISSION_VERSION };
       }
       setProgress(saved);
-      if (saved.tutorial === "new") setScreen("tutorial");
+      const link = readDeepLink(window.location.search);
+      if (link?.kind === "school") {
+        const allowed = saved.tutorial !== "new" || link.id - 1 <= saved.step;
+        setEntrySchool(allowed ? link.id - 1 : saved.step);
+        setScreen("tutorial");
+        if (!allowed)
+          setStorageError(
+            "Complete the preceding Flight Schools or use the visible tutorial skip.",
+          );
+      } else if (link?.kind === "mission" && missionUnlocked(saved, link.id)) {
+        setPendingMission(link.id);
+        setScreen("mission");
+      } else if (saved.tutorial === "new") setScreen("tutorial");
     } catch {
       setStorageError(
         "Storage is unavailable. Progress will last for this session only.",
@@ -66,6 +83,18 @@ export function Game() {
     setReady(true);
     void load();
   }, []);
+  useEffect(() => {
+    if (pendingMission && levels.length) {
+      setSelected(levels.find((level) => level.id === pendingMission) || null);
+      setPendingMission(null);
+    }
+  }, [pendingMission, levels]);
+  useEffect(() => {
+    if (!ready) return;
+    if (screen === "map") writeDeepLink(null);
+    else if (screen === "mission" && selected)
+      writeDeepLink({ kind: "mission", id: selected.id });
+  }, [ready, screen, selected]);
   useEffect(() => {
     if (ready)
       try {
@@ -175,7 +204,10 @@ export function Game() {
             <div className="empty">Loading your expedition…</div>
           ) : screen === "tutorial" ? (
             <Tutorial
-              start={unlocked ? 0 : progress.step}
+              start={entrySchool ?? (unlocked ? 0 : progress.step)}
+              onNavigate={(step) =>
+                writeDeepLink({ kind: "school", id: step + 1 })
+              }
               onStep={(step) => setProgress((p) => ({ ...p, step }))}
               onFinish={() => unlock("complete")}
               onSkip={() => unlock("skipped")}
@@ -288,7 +320,11 @@ export function Game() {
                 </div>
                 <span className="chip">
                   {unlocked
-                    ? progress.tutorial === "skipped" ? "All missions unlocked" : completed === 10 ? "Expedition complete" : "Next mission ready"
+                    ? progress.tutorial === "skipped"
+                      ? "All missions unlocked"
+                      : completed === 10
+                        ? "Expedition complete"
+                        : "Next mission ready"
                     : "Complete flight school to unlock"}
                 </span>
               </div>
@@ -305,7 +341,7 @@ export function Game() {
                   <button
                     className={`mission-card ${progress.best[l.id]?.stars ? "completed" : ""}`}
                     key={l.id}
-                    disabled={!missionUnlocked(progress,l.id)}
+                    disabled={!missionUnlocked(progress, l.id)}
                     onClick={() => {
                       setSelected(l);
                       setScreen("mission");

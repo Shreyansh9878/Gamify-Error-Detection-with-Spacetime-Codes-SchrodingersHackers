@@ -2,8 +2,10 @@
 from collections import OrderedDict
 from threading import Lock
 from uuid import uuid4
+import os
 import numpy as np
 from qiskit.quantum_info import DensityMatrix
+from .portable_frames import pack_components
 
 _frames = OrderedDict()
 _lock = Lock()
@@ -36,7 +38,8 @@ def state_visualization(state, n, experiment_wires=None, labels=None, stage='bef
     pairs = [(float(abs(rho[a,b])),a,b) for a in range(2**n) for b in range(a+1,2**n) if abs(rho[a,b])>1e-10]
     pairs.sort(reverse=True)
     return {'schemaVersion':2,'experimentWireCount':experiment_wires or n,'frameId':token,'visualizationToken':token,'scope':scope,'stage':stage,'wireOrder':labels or [f'q{q}' for q in reversed(range(n))],'stateKind':'pure' if pure else 'mixed','purity':purity,'probabilities':[float(v) for v in np.real(np.diag(rho))],
-        **({'amplitudes':components[0]['amplitudes']} if pure else {'spectral':{'rank':len(components),'componentCount':len(components),'omittedWeight':max(0.,1-sum(c['weight'] for c in components))},'components':components[:4]}),
+        **({'amplitudes':components[0]['amplitudes']} if pure else {'spectral':{'rank':len(components),'componentCount':len(components),'omittedWeight':max(0.,1-sum(c['weight'] for c in components))},'components':components[:4],
+           **({'componentPayload':pack_components(components,n)} if os.getenv('PORTABLE_STATE_FRAMES')=='true' else {})}),
         'coherences':[{'row':format(a,f'0{n}b'),'column':format(b,f'0{n}b'),'value':[float(rho[a,b].real),float(rho[a,b].imag)]} for _,a,b in pairs[:16]],'coherenceCount':len(pairs)}
 
 

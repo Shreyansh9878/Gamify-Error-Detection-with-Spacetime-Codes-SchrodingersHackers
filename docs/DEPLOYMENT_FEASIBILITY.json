@@ -1,0 +1,1221 @@
+{
+  "checkedOn": "2026-10-16",
+  "decision": "A: Next frontend and a single Python ASGI function on Vercel Hobby; portable visualization transport required.",
+  "limits": {
+    "pythonBundleBytes": 500000000,
+    "durationSeconds": 300,
+    "memoryBytes": 2000000000,
+    "pythonVersions": [
+      "3.12",
+      "3.13",
+      "3.14"
+    ],
+    "chosenPython": "3.12",
+    "fluidCompute": true
+  },
+  "windowsInstalled": [
+    {
+      "name": "annotated-doc",
+      "version": "0.0.5",
+      "bytes": 11673,
+      "MiB": 0.01,
+      "runtime": true
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "bytes": 56122,
+      "MiB": 0.05,
+      "runtime": true
+    },
+    {
+      "name": "anyio",
+      "version": "4.15.1",
+      "bytes": 1045818,
+      "MiB": 1.0,
+      "runtime": true
+    },
+    {
+      "name": "click",
+      "version": "8.5.0",
+      "bytes": 820230,
+      "MiB": 0.78,
+      "runtime": true
+    },
+    {
+      "name": "dill",
+      "version": "0.4.1",
+      "bytes": 652614,
+      "MiB": 0.62,
+      "runtime": true
+    },
+    {
+      "name": "exceptiongroup",
+      "version": "1.3.1",
+      "bytes": 81851,
+      "MiB": 0.08,
+      "runtime": true
+    },
+    {
+      "name": "fastapi",
+      "version": "0.143.1",
+      "bytes": 1425197,
+      "MiB": 1.36,
+      "runtime": true
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0",
+      "bytes": 162826,
+      "MiB": 0.16,
+      "runtime": true
+    },
+    {
+      "name": "idna",
+      "version": "3.20",
+      "bytes": 613805,
+      "MiB": 0.59,
+      "runtime": true
+    },
+    {
+      "name": "matplotlib",
+      "version": "3.10.9",
+      "bytes": 26687481,
+      "MiB": 25.45,
+      "runtime": false
+    },
+    {
+      "name": "numpy",
+      "version": "2.2.6",
+      "bytes": 51328459,
+      "MiB": 48.95,
+      "runtime": true
+    },
+    {
+      "name": "opentelemetry-api",
+      "version": "1.45.1",
+      "bytes": 370473,
+      "MiB": 0.35,
+      "runtime": true
+    },
+    {
+      "name": "pip",
+      "version": "22.3.1",
+      "bytes": 12116128,
+      "MiB": 11.55,
+      "runtime": false
+    },
+    {
+      "name": "psutil",
+      "version": "7.2.2",
+      "bytes": 695750,
+      "MiB": 0.66,
+      "runtime": true
+    },
+    {
+      "name": "pydantic",
+      "version": "2.14.1",
+      "bytes": 3360874,
+      "MiB": 3.21,
+      "runtime": true
+    },
+    {
+      "name": "pydantic-core",
+      "version": "2.50.1",
+      "bytes": 6077834,
+      "MiB": 5.8,
+      "runtime": true
+    },
+    {
+      "name": "pylatexenc",
+      "version": "2.11",
+      "bytes": 1413152,
+      "MiB": 1.35,
+      "runtime": false
+    },
+    {
+      "name": "pytest",
+      "version": "9.1.1",
+      "bytes": 2727165,
+      "MiB": 2.6,
+      "runtime": false
+    },
+    {
+      "name": "python-dateutil",
+      "version": "2.9.0.post0",
+      "bytes": 642812,
+      "MiB": 0.61,
+      "runtime": true
+    },
+    {
+      "name": "qiskit",
+      "version": "2.5.2",
+      "bytes": 33648419,
+      "MiB": 32.09,
+      "runtime": true
+    },
+    {
+      "name": "qiskit-aer",
+      "version": "0.17.2",
+      "bytes": 41410034,
+      "MiB": 39.49,
+      "runtime": true
+    },
+    {
+      "name": "qiskit-paulice",
+      "version": "0.2.1",
+      "bytes": 1013269,
+      "MiB": 0.97,
+      "runtime": true
+    },
+    {
+      "name": "rustworkx",
+      "version": "0.18.1",
+      "bytes": 6852163,
+      "MiB": 6.53,
+      "runtime": true
+    },
+    {
+      "name": "scipy",
+      "version": "1.15.3",
+      "bytes": 136944255,
+      "MiB": 130.6,
+      "runtime": true
+    },
+    {
+      "name": "setuptools",
+      "version": "65.5.0",
+      "bytes": 6495132,
+      "MiB": 6.19,
+      "runtime": false
+    },
+    {
+      "name": "six",
+      "version": "1.17.0",
+      "bytes": 65790,
+      "MiB": 0.06,
+      "runtime": true
+    },
+    {
+      "name": "starlette",
+      "version": "1.7.0",
+      "bytes": 519140,
+      "MiB": 0.5,
+      "runtime": true
+    },
+    {
+      "name": "stevedore",
+      "version": "5.8.0",
+      "bytes": 264860,
+      "MiB": 0.25,
+      "runtime": true
+    },
+    {
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "bytes": 300426,
+      "MiB": 0.29,
+      "runtime": true
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4",
+      "bytes": 80591,
+      "MiB": 0.08,
+      "runtime": true
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.54.0",
+      "bytes": 636674,
+      "MiB": 0.61,
+      "runtime": true
+    }
+  ],
+  "linuxWheels": [
+    {
+      "wheel": "annotated_doc-0.0.5-py3-none-any.whl",
+      "compressedBytes": 5302,
+      "uncompressedBytes": 9515,
+      "pythonSourceBytes": 1127,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "annotated_types-0.8.0-py3-none-any.whl",
+      "compressedBytes": 13427,
+      "uncompressedBytes": 36347,
+      "pythonSourceBytes": 19583,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "anyio-4.15.1-py3-none-any.whl",
+      "compressedBytes": 132079,
+      "uncompressedBytes": 539217,
+      "pythonSourceBytes": 529017,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "click-8.5.0-py3-none-any.whl",
+      "compressedBytes": 125251,
+      "uncompressedBytes": 447719,
+      "pythonSourceBytes": 441955,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "dill-0.4.1-py3-none-any.whl",
+      "compressedBytes": 120019,
+      "uncompressedBytes": 371745,
+      "pythonSourceBytes": 350717,
+      "testsBytes": 105176
+    },
+    {
+      "wheel": "exceptiongroup-1.3.1-py3-none-any.whl",
+      "compressedBytes": 16740,
+      "uncompressedBytes": 52154,
+      "pythonSourceBytes": 40731,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "fastapi-0.143.1-py3-none-any.whl",
+      "compressedBytes": 144682,
+      "uncompressedBytes": 867085,
+      "pythonSourceBytes": 809922,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "h11-0.16.0-py3-none-any.whl",
+      "compressedBytes": 37515,
+      "uncompressedBytes": 103935,
+      "pythonSourceBytes": 93117,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "idna-3.20-py3-none-any.whl",
+      "compressedBytes": 69583,
+      "uncompressedBytes": 342091,
+      "pythonSourceBytes": 332039,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "numpy-2.2.6-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "compressedBytes": 16527618,
+      "uncompressedBytes": 57790150,
+      "pythonSourceBytes": 8219744,
+      "testsBytes": 6363328
+    },
+    {
+      "wheel": "opentelemetry_api-1.45.1-py3-none-any.whl",
+      "compressedBytes": 60256,
+      "uncompressedBytes": 196393,
+      "pythonSourceBytes": 178691,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl",
+      "compressedBytes": 155560,
+      "uncompressedBytes": 520630,
+      "pythonSourceBytes": 344560,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "pydantic-2.14.1-py3-none-any.whl",
+      "compressedBytes": 488106,
+      "uncompressedBytes": 1964433,
+      "pythonSourceBytes": 1820880,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "compressedBytes": 2160157,
+      "uncompressedBytes": 5205110,
+      "pythonSourceBytes": 181683,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "python_dateutil-2.9.0.post0-py2.py3-none-any.whl",
+      "compressedBytes": 229892,
+      "uncompressedBytes": 441579,
+      "pythonSourceBytes": 271736,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "qiskit-2.5.2-cp310-abi3-manylinux_2_28_x86_64.whl",
+      "compressedBytes": 9753072,
+      "uncompressedBytes": 28501514,
+      "pythonSourceBytes": 6343462,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "qiskit_aer-0.17.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "compressedBytes": 12375640,
+      "uncompressedBytes": 45656075,
+      "pythonSourceBytes": 637222,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "qiskit_paulice-0.2.1-cp310-abi3-manylinux_2_28_x86_64.whl",
+      "compressedBytes": 560218,
+      "uncompressedBytes": 1490599,
+      "pythonSourceBytes": 88258,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "rustworkx-0.18.1-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "compressedBytes": 2366881,
+      "uncompressedBytes": 7364895,
+      "pythonSourceBytes": 162006,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "scipy-1.15.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "compressedBytes": 37309455,
+      "uncompressedBytes": 119930507,
+      "pythonSourceBytes": 18962861,
+      "testsBytes": 15622072
+    },
+    {
+      "wheel": "six-1.17.0-py2.py3-none-any.whl",
+      "compressedBytes": 11050,
+      "uncompressedBytes": 37975,
+      "pythonSourceBytes": 34703,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "starlette-1.7.0-py3-none-any.whl",
+      "compressedBytes": 78980,
+      "uncompressedBytes": 269555,
+      "pythonSourceBytes": 257955,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "stevedore-5.8.0-py3-none-any.whl",
+      "compressedBytes": 54553,
+      "uncompressedBytes": 148385,
+      "pythonSourceBytes": 125113,
+      "testsBytes": 50570
+    },
+    {
+      "wheel": "typing_extensions-4.16.0-py3-none-any.whl",
+      "compressedBytes": 45571,
+      "uncompressedBytes": 182767,
+      "pythonSourceBytes": 165012,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "typing_inspection-0.4.4-py3-none-any.whl",
+      "compressedBytes": 14750,
+      "uncompressedBytes": 54538,
+      "pythonSourceBytes": 40388,
+      "testsBytes": 0
+    },
+    {
+      "wheel": "uvicorn-0.54.0-py3-none-any.whl",
+      "compressedBytes": 87427,
+      "uncompressedBytes": 294179,
+      "pythonSourceBytes": 281596,
+      "testsBytes": 0
+    }
+  ],
+  "timing": {
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.10.10 (tags/v3.10.10:aad5f6a, Feb  7 2023, 17:20:36) [MSC v.1929 64 bit (AMD64)]",
+    "singleCpuAffinity": true,
+    "threadEnvironment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "caveat": "Local fresh-process imports and ASGI timings, warm disk cache. Not Vercel cold boot, Linux execution, network RTT or a guarantee about hosted CPU speed.",
+    "cases": [
+      {
+        "case": "health",
+        "runs": [
+          {
+            "case": "health",
+            "path": "/api/health",
+            "importSeconds": 1.6970860000001267,
+            "requestSeconds": [
+              0.026294400013284758,
+              0.005948199977865443,
+              0.006656499987002462
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.7233804000134114,
+            "responseBytes": [
+              130,
+              130,
+              130
+            ],
+            "selfPeakRssBytes": 101441536,
+            "processWallSeconds": 2.1746749999874737,
+            "sampledPeakRssBytes": 105783296
+          },
+          {
+            "case": "health",
+            "path": "/api/health",
+            "importSeconds": 1.424770499987062,
+            "requestSeconds": [
+              0.02351890000863932,
+              0.005915299989283085,
+              0.00655009999172762
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.4482893999957014,
+            "responseBytes": [
+              130,
+              130,
+              130
+            ],
+            "selfPeakRssBytes": 101552128,
+            "processWallSeconds": 1.8671049999829847,
+            "sampledPeakRssBytes": 105885696
+          },
+          {
+            "case": "health",
+            "path": "/api/health",
+            "importSeconds": 1.4456291999958921,
+            "requestSeconds": [
+              0.026243300002533942,
+              0.0061095000128261745,
+              0.005930199986323714
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.471872499998426,
+            "responseBytes": [
+              130,
+              130,
+              130
+            ],
+            "selfPeakRssBytes": 101613568,
+            "processWallSeconds": 1.8821234999923036,
+            "sampledPeakRssBytes": 105947136
+          }
+        ]
+      },
+      {
+        "case": "main10-reasonable",
+        "runs": [
+          {
+            "case": "main10-reasonable",
+            "path": "/api/missions/run",
+            "importSeconds": 1.4016605999786407,
+            "requestSeconds": [
+              0.26177879999158904,
+              0.0050060999928973615,
+              0.004973100003553554
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.6634393999702297,
+            "responseBytes": [
+              229,
+              229,
+              229
+            ],
+            "selfPeakRssBytes": 122732544,
+            "combinedScore": 0.6002948178139932,
+            "processWallSeconds": 2.116125100001227,
+            "sampledPeakRssBytes": 125075456
+          },
+          {
+            "case": "main10-reasonable",
+            "path": "/api/missions/run",
+            "importSeconds": 1.491264800017234,
+            "requestSeconds": [
+              0.3401354999805335,
+              0.007882799982326105,
+              0.005234700016444549
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.8314002999977674,
+            "responseBytes": [
+              229,
+              229,
+              229
+            ],
+            "selfPeakRssBytes": 122068992,
+            "combinedScore": 0.6002948178139932,
+            "processWallSeconds": 2.317765200015856,
+            "sampledPeakRssBytes": 124624896
+          },
+          {
+            "case": "main10-reasonable",
+            "path": "/api/missions/run",
+            "importSeconds": 1.4699750999861863,
+            "requestSeconds": [
+              0.26251200001570396,
+              0.006286300020292401,
+              0.004217000008793548
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.7324871000018902,
+            "responseBytes": [
+              229,
+              229,
+              229
+            ],
+            "selfPeakRssBytes": 122208256,
+            "combinedScore": 0.6002948178139932,
+            "processWallSeconds": 2.2176961000077426,
+            "sampledPeakRssBytes": 125276160
+          }
+        ]
+      },
+      {
+        "case": "main10-seven-wires",
+        "runs": [
+          {
+            "case": "main10-seven-wires",
+            "path": "/api/missions/run",
+            "importSeconds": 1.543448400014313,
+            "requestSeconds": [
+              0.39555730001302436,
+              0.005231999995885417,
+              0.005179800005862489
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.9390057000273373,
+            "responseBytes": [
+              262,
+              262,
+              262
+            ],
+            "selfPeakRssBytes": 125771776,
+            "combinedScore": 0.2174031887502856,
+            "processWallSeconds": 2.3988569999928586,
+            "sampledPeakRssBytes": 130084864
+          },
+          {
+            "case": "main10-seven-wires",
+            "path": "/api/missions/run",
+            "importSeconds": 1.5711996000027284,
+            "requestSeconds": [
+              0.4200100000016391,
+              0.006666900007985532,
+              0.005548299988731742
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.9912096000043675,
+            "responseBytes": [
+              262,
+              262,
+              262
+            ],
+            "selfPeakRssBytes": 125952000,
+            "combinedScore": 0.2174031887502856,
+            "processWallSeconds": 2.467684300005203,
+            "sampledPeakRssBytes": 130269184
+          },
+          {
+            "case": "main10-seven-wires",
+            "path": "/api/missions/run",
+            "importSeconds": 1.7247425999958068,
+            "requestSeconds": [
+              0.3823025999881793,
+              0.005700299981981516,
+              0.004873300000326708
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.107045199983986,
+            "responseBytes": [
+              262,
+              262,
+              262
+            ],
+            "selfPeakRssBytes": 125894656,
+            "combinedScore": 0.2174031887502856,
+            "processWallSeconds": 2.564093699998921,
+            "sampledPeakRssBytes": 130207744
+          }
+        ]
+      },
+      {
+        "case": "sandbox-seven-wires-1024",
+        "runs": [
+          {
+            "case": "sandbox-seven-wires-1024",
+            "path": "/api/tutorial/timeline/run",
+            "importSeconds": 1.4595781000098214,
+            "requestSeconds": [
+              0.29726019999361597,
+              0.0894574000267312,
+              0.0887951000186149
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.7568383000034373,
+            "responseBytes": [
+              32571,
+              32571,
+              32571
+            ],
+            "selfPeakRssBytes": 123174912,
+            "processWallSeconds": 2.36671989999013,
+            "sampledPeakRssBytes": 127205376
+          },
+          {
+            "case": "sandbox-seven-wires-1024",
+            "path": "/api/tutorial/timeline/run",
+            "importSeconds": 1.4931276999996044,
+            "requestSeconds": [
+              0.3018669000011869,
+              0.08067920000758022,
+              0.07287460000952706
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.7949946000007913,
+            "responseBytes": [
+              32571,
+              32571,
+              32571
+            ],
+            "selfPeakRssBytes": 122859520,
+            "processWallSeconds": 2.3672973999928217,
+            "sampledPeakRssBytes": 126984192
+          },
+          {
+            "case": "sandbox-seven-wires-1024",
+            "path": "/api/tutorial/timeline/run",
+            "importSeconds": 1.4837343000108376,
+            "requestSeconds": [
+              0.29895669998950325,
+              0.07480440000654198,
+              0.07858589998795651
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.7826910000003409,
+            "responseBytes": [
+              32571,
+              32571,
+              32571
+            ],
+            "selfPeakRssBytes": 122920960,
+            "processWallSeconds": 2.366755299997749,
+            "sampledPeakRssBytes": 127209472
+          }
+        ]
+      },
+      {
+        "case": "fs6-reveal",
+        "runs": [
+          {
+            "case": "fs6-reveal",
+            "path": "/api/tutorial/timeline/reveal",
+            "importSeconds": 1.4939586999826133,
+            "requestSeconds": [
+              1.3932922999956645,
+              0.08169399999314919,
+              0.08067520000622608
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.887250999978278,
+            "responseBytes": [
+              2418,
+              2418,
+              2418
+            ],
+            "selfPeakRssBytes": 122023936,
+            "nativePauliceCost": 1.0202354230673039,
+            "referenceCandidates": 15,
+            "processWallSeconds": 3.482330600003479,
+            "sampledPeakRssBytes": 126361600
+          },
+          {
+            "case": "fs6-reveal",
+            "path": "/api/tutorial/timeline/reveal",
+            "importSeconds": 1.483018600003561,
+            "requestSeconds": [
+              1.4135818000067957,
+              0.08403239998733625,
+              0.07636050001019612
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.8966004000103567,
+            "responseBytes": [
+              2418,
+              2418,
+              2418
+            ],
+            "selfPeakRssBytes": 121901056,
+            "nativePauliceCost": 1.0202354230673039,
+            "referenceCandidates": 15,
+            "processWallSeconds": 3.4831800000101794,
+            "sampledPeakRssBytes": 126234624
+          },
+          {
+            "case": "fs6-reveal",
+            "path": "/api/tutorial/timeline/reveal",
+            "importSeconds": 1.4998348000226542,
+            "requestSeconds": [
+              1.4898146000050474,
+              0.08980479999445379,
+              0.08934939999016933
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.9896494000277016,
+            "responseBytes": [
+              2418,
+              2418,
+              2418
+            ],
+            "selfPeakRssBytes": 121942016,
+            "nativePauliceCost": 1.0202354230673039,
+            "referenceCandidates": 15,
+            "processWallSeconds": 3.600076700007776,
+            "sampledPeakRssBytes": 126275584
+          }
+        ]
+      },
+      {
+        "case": "fs2-correction-1024",
+        "runs": [
+          {
+            "case": "fs2-correction-1024",
+            "path": "/api/tutorial/protection-lab/run",
+            "importSeconds": 1.5170627000043169,
+            "requestSeconds": [
+              0.7333031000162009,
+              0.50709889997961,
+              0.5441750999889337
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.250365800020518,
+            "responseBytes": [
+              64388,
+              64388,
+              64388
+            ],
+            "selfPeakRssBytes": 141725696,
+            "processWallSeconds": 3.8007082999974955,
+            "sampledPeakRssBytes": 146014208
+          },
+          {
+            "case": "fs2-correction-1024",
+            "path": "/api/tutorial/protection-lab/run",
+            "importSeconds": 1.4804923000046983,
+            "requestSeconds": [
+              0.7658036999928299,
+              0.5089453000109643,
+              0.4824527000018861
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.2462959999975283,
+            "responseBytes": [
+              64388,
+              64388,
+              64388
+            ],
+            "selfPeakRssBytes": 141930496,
+            "processWallSeconds": 3.699379500001669,
+            "sampledPeakRssBytes": 145801216
+          },
+          {
+            "case": "fs2-correction-1024",
+            "path": "/api/tutorial/protection-lab/run",
+            "importSeconds": 1.5173834000015631,
+            "requestSeconds": [
+              0.7587635000236332,
+              0.4556462000182364,
+              0.4875857000006363
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.2761469000251964,
+            "responseBytes": [
+              64388,
+              64388,
+              64388
+            ],
+            "selfPeakRssBytes": 142082048,
+            "processWallSeconds": 3.7001272999914363,
+            "sampledPeakRssBytes": 146366464
+          }
+        ]
+      }
+    ]
+  },
+  "sources": [
+    "https://vercel.com/docs/functions/runtimes/python",
+    "https://vercel.com/docs/functions/configuring-functions/duration",
+    "https://vercel.com/docs/functions/configuring-functions/memory",
+    "https://vercel.com/docs/plans/hobby"
+  ],
+  "caveat": "Linux wheel contents measured, not an actual Vercel bundle. Timings are fresh Windows/Python3.10 processes with one CPU and single-thread numeric libraries, excluding provider boot/network. Hosted Python3.12 smoke remains required.",
+  "deployedEntrypointTiming": {
+    "entrypoint": "api.index",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python": "3.10.10 (tags/v3.10.10:aad5f6a, Feb  7 2023, 17:20:36) [MSC v.1929 64 bit (AMD64)]",
+    "singleCpuAffinity": true,
+    "threadEnvironment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "caveat": "Local fresh-process imports and ASGI timings, warm disk cache. Not Vercel cold boot, Linux execution, network RTT or a guarantee about hosted CPU speed.",
+    "cases": [
+      {
+        "case": "health",
+        "runs": [
+          {
+            "case": "health",
+            "path": "/api/health",
+            "importSeconds": 1.4181815999909304,
+            "requestSeconds": [
+              0.02540810001664795,
+              0.006787600024836138,
+              0.0066547000024002045
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.4435897000075784,
+            "responseBytes": [
+              130,
+              130,
+              130
+            ],
+            "selfPeakRssBytes": 101912576,
+            "processWallSeconds": 1.8827937000023667,
+            "sampledPeakRssBytes": 106254336
+          },
+          {
+            "case": "health",
+            "path": "/api/health",
+            "importSeconds": 1.393391599995084,
+            "requestSeconds": [
+              0.02932679999503307,
+              0.008396999997785315,
+              0.006787799997255206
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.4227183999901172,
+            "responseBytes": [
+              130,
+              130,
+              130
+            ],
+            "selfPeakRssBytes": 102055936,
+            "processWallSeconds": 1.8486145999922883,
+            "sampledPeakRssBytes": 106401792
+          },
+          {
+            "case": "health",
+            "path": "/api/health",
+            "importSeconds": 1.407008300011512,
+            "requestSeconds": [
+              0.02959230000851676,
+              0.006912100012414157,
+              0.009568000008584931
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.4366006000200287,
+            "responseBytes": [
+              130,
+              130,
+              130
+            ],
+            "selfPeakRssBytes": 101912576,
+            "processWallSeconds": 1.8477127999940421,
+            "sampledPeakRssBytes": 106246144
+          }
+        ]
+      },
+      {
+        "case": "main10-reasonable",
+        "runs": [
+          {
+            "case": "main10-reasonable",
+            "path": "/api/missions/run",
+            "importSeconds": 1.4027407999965362,
+            "requestSeconds": [
+              0.25899220001883805,
+              0.0064104000048246235,
+              0.006378199992468581
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.6617330000153743,
+            "responseBytes": [
+              229,
+              229,
+              229
+            ],
+            "selfPeakRssBytes": 122593280,
+            "combinedScore": 0.6002948178139932,
+            "processWallSeconds": 2.1025890999881085,
+            "sampledPeakRssBytes": 124940288
+          },
+          {
+            "case": "main10-reasonable",
+            "path": "/api/missions/run",
+            "importSeconds": 1.5400379999773577,
+            "requestSeconds": [
+              0.27665829999023117,
+              0.0077794000098947436,
+              0.007562900020275265
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.8166962999675889,
+            "responseBytes": [
+              229,
+              229,
+              229
+            ],
+            "selfPeakRssBytes": 122507264,
+            "combinedScore": 0.6002948178139932,
+            "processWallSeconds": 2.249648099998012,
+            "sampledPeakRssBytes": 124862464
+          },
+          {
+            "case": "main10-reasonable",
+            "path": "/api/missions/run",
+            "importSeconds": 1.4233120999997482,
+            "requestSeconds": [
+              0.27280720000271685,
+              0.0056727000046521425,
+              0.005107400007545948
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.696119300002465,
+            "responseBytes": [
+              229,
+              229,
+              229
+            ],
+            "selfPeakRssBytes": 122265600,
+            "combinedScore": 0.6002948178139932,
+            "processWallSeconds": 2.131277400010731,
+            "sampledPeakRssBytes": 126447616
+          }
+        ]
+      },
+      {
+        "case": "main10-seven-wires",
+        "runs": [
+          {
+            "case": "main10-seven-wires",
+            "path": "/api/missions/run",
+            "importSeconds": 1.4007410999911372,
+            "requestSeconds": [
+              0.3720558999921195,
+              0.005684700008714572,
+              0.005185899994103238
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.7727969999832567,
+            "responseBytes": [
+              262,
+              262,
+              262
+            ],
+            "selfPeakRssBytes": 125665280,
+            "combinedScore": 0.2174031887502856,
+            "processWallSeconds": 2.2006015999941155,
+            "sampledPeakRssBytes": 129974272
+          },
+          {
+            "case": "main10-seven-wires",
+            "path": "/api/missions/run",
+            "importSeconds": 1.4712414000241552,
+            "requestSeconds": [
+              0.3740778999926988,
+              0.005408099998021498,
+              0.005336200003512204
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.845319300016854,
+            "responseBytes": [
+              262,
+              262,
+              262
+            ],
+            "selfPeakRssBytes": 125632512,
+            "combinedScore": 0.2174031887502856,
+            "processWallSeconds": 2.2851940999971703,
+            "sampledPeakRssBytes": 129945600
+          },
+          {
+            "case": "main10-seven-wires",
+            "path": "/api/missions/run",
+            "importSeconds": 1.4334490000037476,
+            "requestSeconds": [
+              0.4028810000163503,
+              0.006276200001593679,
+              0.005511900002602488
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.836330000020098,
+            "responseBytes": [
+              262,
+              262,
+              262
+            ],
+            "selfPeakRssBytes": 125775872,
+            "combinedScore": 0.2174031887502856,
+            "processWallSeconds": 2.2983904000138864,
+            "sampledPeakRssBytes": 130084864
+          }
+        ]
+      },
+      {
+        "case": "sandbox-seven-wires-1024",
+        "runs": [
+          {
+            "case": "sandbox-seven-wires-1024",
+            "path": "/api/tutorial/timeline/run",
+            "importSeconds": 1.4956671000109054,
+            "requestSeconds": [
+              0.2952491999894846,
+              0.0790837999957148,
+              0.07374069999787025
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.79091630000039,
+            "responseBytes": [
+              98867,
+              98867,
+              98867
+            ],
+            "selfPeakRssBytes": 123363328,
+            "processWallSeconds": 2.399930600018706,
+            "sampledPeakRssBytes": 127438848
+          },
+          {
+            "case": "sandbox-seven-wires-1024",
+            "path": "/api/tutorial/timeline/run",
+            "importSeconds": 1.4564589000074193,
+            "requestSeconds": [
+              0.3098075000161771,
+              0.08854249998694286,
+              0.08585199998924509
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.7662664000235964,
+            "responseBytes": [
+              98867,
+              98867,
+              98867
+            ],
+            "selfPeakRssBytes": 123363328,
+            "processWallSeconds": 2.3840202999999747,
+            "sampledPeakRssBytes": 127700992
+          },
+          {
+            "case": "sandbox-seven-wires-1024",
+            "path": "/api/tutorial/timeline/run",
+            "importSeconds": 1.4811101999948733,
+            "requestSeconds": [
+              0.3047474999912083,
+              0.0840611000021454,
+              0.09565809997729957
+            ],
+            "coldImportPlusFirstRequestSeconds": 1.7858576999860816,
+            "responseBytes": [
+              98867,
+              98867,
+              98867
+            ],
+            "selfPeakRssBytes": 123453440,
+            "processWallSeconds": 2.4000143999874126,
+            "sampledPeakRssBytes": 127733760
+          }
+        ]
+      },
+      {
+        "case": "fs6-reveal",
+        "runs": [
+          {
+            "case": "fs6-reveal",
+            "path": "/api/tutorial/timeline/reveal",
+            "importSeconds": 1.492840899998555,
+            "requestSeconds": [
+              1.3767527000163682,
+              0.08221409999532625,
+              0.07903069999883883
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.869593600014923,
+            "responseBytes": [
+              2418,
+              2418,
+              2418
+            ],
+            "selfPeakRssBytes": 122413056,
+            "nativePauliceCost": 1.0202354230673039,
+            "referenceCandidates": 15,
+            "processWallSeconds": 3.4651793999946676,
+            "sampledPeakRssBytes": 126709760
+          },
+          {
+            "case": "fs6-reveal",
+            "path": "/api/tutorial/timeline/reveal",
+            "importSeconds": 1.4812840000085998,
+            "requestSeconds": [
+              1.3704144000075758,
+              0.08023059999686666,
+              0.08094709998113103
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.8516984000161756,
+            "responseBytes": [
+              2418,
+              2418,
+              2418
+            ],
+            "selfPeakRssBytes": 121634816,
+            "nativePauliceCost": 1.0202354230673039,
+            "referenceCandidates": 15,
+            "processWallSeconds": 3.4490685000200756,
+            "sampledPeakRssBytes": 125947904
+          },
+          {
+            "case": "fs6-reveal",
+            "path": "/api/tutorial/timeline/reveal",
+            "importSeconds": 1.4631771999993362,
+            "requestSeconds": [
+              1.5090391999983694,
+              0.09003919997485355,
+              0.08885040000313893
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.9722163999977056,
+            "responseBytes": [
+              2418,
+              2418,
+              2418
+            ],
+            "selfPeakRssBytes": 121749504,
+            "nativePauliceCost": 1.0202354230673039,
+            "referenceCandidates": 15,
+            "processWallSeconds": 3.5888210000121035,
+            "sampledPeakRssBytes": 126066688
+          }
+        ]
+      },
+      {
+        "case": "fs2-correction-1024",
+        "runs": [
+          {
+            "case": "fs2-correction-1024",
+            "path": "/api/tutorial/protection-lab/run",
+            "importSeconds": 1.4988483000197448,
+            "requestSeconds": [
+              0.7777574000065215,
+              0.5211145000066608,
+              0.5699540000059642
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.2766057000262663,
+            "responseBytes": [
+              769396,
+              769396,
+              769396
+            ],
+            "selfPeakRssBytes": 145227776,
+            "processWallSeconds": 3.8593896999955177,
+            "sampledPeakRssBytes": 149209088
+          },
+          {
+            "case": "fs2-correction-1024",
+            "path": "/api/tutorial/protection-lab/run",
+            "importSeconds": 1.4545565000153147,
+            "requestSeconds": [
+              0.7180766999954358,
+              0.46457310000550933,
+              0.5067254000168759
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.1726332000107504,
+            "responseBytes": [
+              769395,
+              769396,
+              769396
+            ],
+            "selfPeakRssBytes": 146075648,
+            "processWallSeconds": 3.6186737999960314,
+            "sampledPeakRssBytes": 148467712
+          },
+          {
+            "case": "fs2-correction-1024",
+            "path": "/api/tutorial/protection-lab/run",
+            "importSeconds": 1.4692141000123229,
+            "requestSeconds": [
+              0.7198055000044405,
+              0.46441719998256303,
+              0.505683900002623
+            ],
+            "coldImportPlusFirstRequestSeconds": 2.1890196000167634,
+            "responseBytes": [
+              769396,
+              769396,
+              769396
+            ],
+            "selfPeakRssBytes": 145735680,
+            "processWallSeconds": 3.634750899975188,
+            "sampledPeakRssBytes": 147427328
+          }
+        ]
+      }
+    ]
+  }
+}

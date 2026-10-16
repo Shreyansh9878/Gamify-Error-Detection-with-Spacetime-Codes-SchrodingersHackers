@@ -45,7 +45,7 @@ def build(number):
                 fixed=True, assisted=number >= 4, allowed=CLIFFORD + (['t', 'tdg'] if t_count else []),
                 targetScore=target, payload=[dict(id=f'u{i}', name=g, qubits=q, column=i, fixed=True) for i, (g,q) in enumerate(pairs)],
                 noise=dict(hotspotColumn=hotspot, qubit=1, timeUs=74.+number*2,
-                           t1Us=100., t2Us=200., background=.0005, checkStrength=.025,
+                           t1Us=100., t2Us=200., checkStrength=.025,
                            hardware=dict(enabled=True,bitFlip=.00015,phaseFlip=.00015,depolarizing=.0002,relaxationTimeUs=0.,t1Us=100.,t2Us=200.)),
                 protocol='main-missions-v2-all-wire')
 

@@ -4,7 +4,6 @@ import sys
 from pathlib import Path
 from itertools import product
 from importlib.metadata import version
-import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Pauli, Operator
 

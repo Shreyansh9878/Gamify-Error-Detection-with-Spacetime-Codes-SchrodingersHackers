@@ -4,13 +4,12 @@ Integer ranks are authored columns; generated fractional ranks are immediately
 before the player's final H. They never move a payload gate or change its noise.
 """
 import ast
-import json
 from functools import lru_cache
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Operator, Pauli
 from ..learning.common import fingerprint
-from ..quantum_core.pauli import single_term, gate_operator as payload_operator, opening_factor, propagate
+from ..quantum_core.pauli import single_term, opening_factor, propagate
 from ..quantum_core.checks import closing_factors
 from .models import Draft, Gate
 from .levels import get_level

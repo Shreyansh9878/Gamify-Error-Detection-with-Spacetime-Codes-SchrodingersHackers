@@ -67,7 +67,6 @@ export type MissionLevel = {
     timeUs: number;
     t1Us: number;
     t2Us: number;
-    background: number;
     checkStrength: number;
   };
 };

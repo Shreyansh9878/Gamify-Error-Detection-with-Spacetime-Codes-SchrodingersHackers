@@ -33,7 +33,6 @@ const level: MissionLevel = {
     timeUs: 80,
     t1Us: 100,
     t2Us: 200,
-    background: 0.0005,
     checkStrength: 0.025,
   },
 };

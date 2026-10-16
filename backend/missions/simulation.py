@@ -4,7 +4,7 @@ from qiskit import QuantumCircuit
 from ..learning.common import instruction
 from ..timeline_lab.models import HardwareNoise
 from ..quantum_core.noise import hardware_items
-from ..quantum_core.scoring import noise_instruction, exact_density, ideal_reference, accepted_metrics
+from ..quantum_core.scoring import exact_density, ideal_reference, accepted_metrics
 
 
 def execution_schedule(level,operations,noisy=True):

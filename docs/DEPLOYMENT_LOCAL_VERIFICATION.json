@@ -1,0 +1,498 @@
+{
+  "scope": "Local production equivalent, not a cloud deployment",
+  "origin": "http://127.0.0.1:3000",
+  "cloudDeploymentVerified": false,
+  "buildCommand": "pnpm build",
+  "buildPassed": true,
+  "typecheckPassed": true,
+  "pythonTestsPassed": 214,
+  "frontendTestsPassed": 39,
+  "browserTestsPassed": 60,
+  "browserProjects": [
+    "desktop",
+    "mobile"
+  ],
+  "apiSmoke": {
+    "origin": "http://127.0.0.1:3000",
+    "liveHost": false,
+    "requests": [
+      {
+        "path": "/api/health",
+        "seconds": 0.04287370000383817,
+        "bytes": 130,
+        "status": 200
+      },
+      {
+        "path": "/api/levels",
+        "seconds": 0.020322700001997873,
+        "bytes": 20476,
+        "status": 200
+      },
+      {
+        "path": "/",
+        "seconds": 0.03964619999169372,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?school=1",
+        "seconds": 0.003844599996227771,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?school=2",
+        "seconds": 0.0025603999965824187,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?school=3",
+        "seconds": 0.0022960999922361225,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?school=4",
+        "seconds": 0.002969599998323247,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?school=5",
+        "seconds": 0.0029110000177752227,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?school=6",
+        "seconds": 0.002359600010095164,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?mission=1",
+        "seconds": 0.0021558000007644296,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?mission=2",
+        "seconds": 0.0023444000107701868,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?mission=3",
+        "seconds": 0.0025200999807566404,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?mission=4",
+        "seconds": 0.0019351000082679093,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?mission=5",
+        "seconds": 0.0030070999928284436,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?mission=6",
+        "seconds": 0.002134100010152906,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?mission=7",
+        "seconds": 0.002230699989013374,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?mission=8",
+        "seconds": 0.0018017999827861786,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?mission=9",
+        "seconds": 0.001814499992178753,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/?mission=10",
+        "seconds": 0.0022712999780196697,
+        "bytes": 8688,
+        "status": 200
+      },
+      {
+        "path": "/tutorial-circuits/noise-bit-flip.png",
+        "seconds": 0.002560499997343868,
+        "bytes": 8108,
+        "status": 200
+      },
+      {
+        "path": "/tutorial-circuits/noise-phase-flip.png",
+        "seconds": 0.0017862000095192343,
+        "bytes": 8217,
+        "status": 200
+      },
+      {
+        "path": "/tutorial-circuits/noise-decoherence.png",
+        "seconds": 0.0017632000090088695,
+        "bytes": 9899,
+        "status": 200
+      },
+      {
+        "path": "/tutorial-circuits/school-2.png",
+        "seconds": 0.0014661999884992838,
+        "bytes": 17611,
+        "status": 200
+      },
+      {
+        "path": "/tutorial-circuits/school-3.png",
+        "seconds": 0.0017191000224556774,
+        "bytes": 16441,
+        "status": 200
+      },
+      {
+        "path": "/tutorial-circuits/school-3-fault.png",
+        "seconds": 0.0014785999956075102,
+        "bytes": 19444,
+        "status": 200
+      },
+      {
+        "path": "/tutorial-circuits/school-4.png",
+        "seconds": 0.001439499988919124,
+        "bytes": 23226,
+        "status": 200
+      },
+      {
+        "path": "/tutorial-circuits/school-5.png",
+        "seconds": 0.0014174000243656337,
+        "bytes": 14907,
+        "status": 200
+      },
+      {
+        "path": "/tutorial-circuits/school-6.png",
+        "seconds": 0.0015116999857127666,
+        "bytes": 28100,
+        "status": 200
+      },
+      {
+        "path": "/tutorial-circuits/clifford.png",
+        "seconds": 0.0015319999947678298,
+        "bytes": 7200,
+        "status": 200
+      },
+      {
+        "path": "/api/tutorial/noise-lab/run",
+        "seconds": 0.1997169000096619,
+        "bytes": 1705,
+        "status": 200
+      },
+      {
+        "path": "/api/tutorial/protection-lab/run",
+        "seconds": 0.03199349998612888,
+        "bytes": 17316,
+        "status": 200
+      },
+      {
+        "path": "/api/tutorial/protection-lab/run",
+        "seconds": 0.02432050000061281,
+        "bytes": 12982,
+        "status": 200
+      },
+      {
+        "path": "/api/tutorial/protection-lab/run",
+        "seconds": 0.181096600019373,
+        "bytes": 82747,
+        "status": 200
+      },
+      {
+        "path": "/api/tutorial/timeline/run",
+        "seconds": 0.015272899996489286,
+        "bytes": 3105,
+        "status": 200
+      },
+      {
+        "path": "/api/tutorial/timeline/run",
+        "seconds": 0.0172043000056874,
+        "bytes": 5350,
+        "status": 200
+      },
+      {
+        "path": "/api/tutorial/timeline/run",
+        "seconds": 0.012887999997474253,
+        "bytes": 3776,
+        "status": 200
+      },
+      {
+        "path": "/api/tutorial/timeline/run",
+        "seconds": 0.0694530000037048,
+        "bytes": 14843,
+        "status": 200
+      },
+      {
+        "path": "/api/tutorial/timeline/reveal",
+        "seconds": 1.0961317000037525,
+        "bytes": 2418,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.021277599997119978,
+        "bytes": 232,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.018572200002381578,
+        "bytes": 260,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.015815200022188947,
+        "bytes": 226,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.01711240000440739,
+        "bytes": 227,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.016189099987968802,
+        "bytes": 233,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.029448899993440136,
+        "bytes": 260,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.03055649998714216,
+        "bytes": 227,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.023607199982507154,
+        "bytes": 227,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.01793780000298284,
+        "bytes": 234,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.05471669998951256,
+        "bytes": 261,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.03135410000686534,
+        "bytes": 227,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.03199719998519868,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.024841200007358566,
+        "bytes": 232,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.05179249998764135,
+        "bytes": 261,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.025390900002093986,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.026769899995997548,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.024306800012709573,
+        "bytes": 233,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.05217020001146011,
+        "bytes": 262,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.026129300007596612,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.02707630000077188,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.020793900010176003,
+        "bytes": 234,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.051815400016494095,
+        "bytes": 261,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.03225119999842718,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.027187100000446662,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.027052999997977167,
+        "bytes": 234,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.08194149998598732,
+        "bytes": 261,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.026852000009967014,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.02737279998837039,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.030510299984598532,
+        "bytes": 233,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.18362630001502112,
+        "bytes": 262,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.03995560001931153,
+        "bytes": 227,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.043281200021738186,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.032477500004461035,
+        "bytes": 233,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.15478879999136552,
+        "bytes": 260,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.043693299987353384,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.048213700007181615,
+        "bytes": 228,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.0413428999891039,
+        "bytes": 234,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.19217629998456687,
+        "bytes": 262,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.043490099982591346,
+        "bytes": 229,
+        "status": 200
+      },
+      {
+        "path": "/api/missions/run",
+        "seconds": 0.042072400014149025,
+        "bytes": 229,
+        "status": 200
+      }
+    ],
+    "maxSeconds": 1.0961317000037525,
+    "scoreTolerance": 1e-09,
+    "note": "FS1\u20135 use experiment/knowledge evidence, not numeric pass scores. Browser tests certify their completion and ordered unlocks."
+  },
+  "cli": {
+    "version": "64.2.0",
+    "accountStatus": "Logged out",
+    "persistentDeploymentAttempted": false
+  },
+  "unchanged": "No mission/tutorial payload, target, scoring formula or layout was changed. Portable state data changes transport only."
+}

@@ -1,7 +1,2 @@
-qiskit>=2.1.2,<3
-qiskit-aer>=0.17.1
-qiskit-paulice>=0.2.0
-numpy>=1.26
-rich>=13.0
-pymupdf>=1.28
-
+# Local runtime and Vercel use the same pinned API dependencies.
+-r requirements-deploy.txt

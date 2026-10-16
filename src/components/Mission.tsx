@@ -1,18 +1,25 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import {
-  Play,
-  ArrowLeft,
-  Star,
-  Download,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
-import type { Level, Gate, Check, Result } from "@/lib/types";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, Play, Volume2, VolumeX } from "lucide-react";
 import { api } from "@/lib/api";
-import { CircuitBuilder } from "./CircuitBuilder";
-import { StateView, pct } from "./Visualizers";
-import { ResearchLab } from "./ResearchLab";
+import { useWorkbench } from "@/lib/learning/useWorkbench";
+import {
+  checkDraft,
+  draftSchema,
+  generate,
+  initialDraft,
+  type Draft,
+  type MissionLevel,
+  type Outcome,
+  type Validation,
+} from "@/lib/missions/contracts";
+import {
+  LearningWorkspace,
+  type MobilePane,
+} from "./workspace/LearningWorkspace";
+import { CodeEditor, LabFeedback } from "./learning/LabFrame";
+import { MissionCanvas } from "./circuit-workspace/MissionCanvas";
+
 export function Mission({
   level: l,
   onBack,
@@ -20,303 +27,327 @@ export function Mission({
   sound,
   onSound,
 }: {
-  level: Level;
+  level: MissionLevel;
   onBack: () => void;
-  onWin: (r: Result) => void;
+  onWin: (r: Outcome) => void;
   sound: boolean;
   onSound: () => void;
 }) {
-  const [gates, setGates] = useState<Gate[]>(structuredClone(l.starter)),
-    [checks, setChecks] = useState<Check[]>([]),
-    [noise, setNoise] = useState(1),
-    [result, setResult] = useState<Result | null>(null),
-    [history, setHistory] = useState<Result[]>([]),
-    [busy, setBusy] = useState(false),
-    [error, setError] = useState(""),
-    [stale, setStale] = useState(false);
-  const dialog = useRef<HTMLDialogElement>(null);
-  useEffect(() => () => dialog.current?.close(), []);
-  function changed() {
-    setStale(true);
-    setError("");
+  const [mobile, setMobile] = useState<MobilePane>("Theory"),
+    [validation, setValidation] = useState<Validation | null>(null),
+    [outcome, setOutcome] = useState<Outcome | null>(null),
+    [gap, setGap] = useState(1),
+    [validating, setValidating] = useState(false);
+  const schema = useMemo(
+    () =>
+      draftSchema.superRefine((d, ctx) => {
+        try {
+          checkDraft(d, l);
+        } catch (e) {
+          ctx.addIssue({ code: "custom", message: (e as Error).message });
+        }
+      }),
+    [l],
+  );
+  const b = useWorkbench<Draft>(
+    `quantum-shield.mission.v1.${l.id}`,
+    initialDraft(l),
+    schema,
+    generate,
+    "missions/compile",
+    "draft",
+    () => ({ levelId: l.id }),
+  );
+  useEffect(() => {
+    let cancelled = false;
+    setValidation(null);
+    if (!b.ready || b.dirty) {
+      setValidating(false);
+      return;
+    }
+    setValidating(true);
+    const timer = setTimeout(() => {
+      void api<Validation>("missions/validate", { draft: b.model })
+        .then((v) => {
+          if (!cancelled) setValidation(v);
+        })
+        .catch((e) => {
+          if (!cancelled) b.setError(e.message);
+        })
+        .finally(() => {
+          if (!cancelled) setValidating(false);
+        });
+    }, 200);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [b.model, b.ready, b.dirty]);
+  function change(d: Draft) {
+    b.change(d);
+  }
+  function resize(delta: number) {
+    const count = b.model.bands[String(gap)] || 0,
+      next = count + delta;
+    if (next < 0 || next > 8) return;
+    if (b.model.operations.some((g) => g.boundary === gap && g.slot >= next)) {
+      b.setError("Move gates to the Dustbin before removing their columns.");
+      return;
+    }
+    change({ ...b.model, bands: { ...b.model.bands, [String(gap)]: next } });
   }
   async function run() {
-    setBusy(true);
-    setError("");
-    try {
-      const r = await api<Result>("run-circuit", {
-        levelId: l.id,
-        gates,
-        checks,
-        noiseScale: noise,
-      });
-      setResult(r);
-      setStale(false);
-      setHistory((h) => [r, ...h].slice(0, 4));
-      if (r.eligible) onWin(r);
-      if (r.passed) {
-        dialog.current?.showModal();
-        if (sound) {
-          const ctx = new AudioContext(),
-            osc = ctx.createOscillator(),
-            gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.frequency.setValueAtTime(523, ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(
-            1046,
-            ctx.currentTime + 0.2,
-          );
-          gain.gain.setValueAtTime(0.08, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-          osc.start();
-          osc.stop(ctx.currentTime + 0.4);
-          osc.onended = () => {
-            void ctx.close();
-          };
+    await b.execute<Outcome>(
+      "missions/run",
+      (d) => ({ draft: d }),
+      (r) => {
+        setOutcome(r);
+        setMobile("Results");
+        if (r.passed) {
+          onWin(r);
+          if (sound) {
+            try {
+              const audio = new AudioContext();
+              const oscillator = audio.createOscillator();
+              const gain = audio.createGain();
+              oscillator.connect(gain);
+              gain.connect(audio.destination);
+              gain.gain.value = 0.025;
+              oscillator.frequency.value = 660;
+              oscillator.start();
+              oscillator.stop(audio.currentTime + 0.15);
+              oscillator.onended = () => {
+                void audio.close();
+              };
+            } catch {
+              /* Sound is optional. */
+            }
+          }
         }
-      }
-    } catch (e) {
-      setError((e as Error).message);
-    } finally {
-      setBusy(false);
-    }
-  }
-  function download() {
-    if (!result) return;
-    const blob = new Blob(
-      [
-        JSON.stringify(
-          { level: l, request: { gates, checks, noiseScale: noise }, result },
-          null,
-          2,
-        ),
-      ],
-      { type: "application/json" },
+      },
     );
-    const url = URL.createObjectURL(blob),
-      a = document.createElement("a");
-    a.href = url;
-    a.download = `quantum-shield-mission-${l.id}.json`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
+  const invalid = validation?.hasChecks && !validation.valid;
   return (
-    <section>
-      <button className="back ghost" onClick={onBack}>
-        <ArrowLeft size={16} /> Mission control
-      </button>
-      <div className="section-heading">
-        <div>
-          <p className="eyebrow">
-            MISSION {String(l.id).padStart(2, "0")} / {l.chapter}
-          </p>
-          <h1>{l.title}</h1>
-          <p className="muted">{l.description}</p>
-        </div>
-        <button
-          className="ghost"
-          aria-label={sound ? "Mute sound" : "Enable sound"}
-          onClick={onSound}
-        >
-          {sound ? <Volume2 /> : <VolumeX />}
-        </button>
-      </div>
-      <div className="goal-strip">
-        <div>
-          <small>TARGET STATE</small>
-          <b>{l.targetLabel}</b>
-        </div>
-        <div>
-          <small>FIDELITY GOAL</small>
-          <b>≥ {pct(l.fidelityGoal)}</b>
-        </div>
-        <div>
-          <small>KEEP AT LEAST</small>
-          <b>{pct(l.retentionGoal)}</b>
-        </div>
-        <div>
-          <small>NOISE CHANNEL</small>
-          <b>{l.channel}</b>
-        </div>
-      </div>
-      <div className="lab-grid">
-        <div>
-          <CircuitBuilder
-            level={l}
-            gates={gates}
-            checks={checks}
-            disabled={busy}
-            onChange={(g) => {
-              setGates(g);
-              changed();
-            }}
-            onChecks={(c) => {
-              setChecks(c);
-              changed();
-            }}
-          />
-          <div className="panel run-panel">
-            <label className="range-label">
-              Noise Radar sandbox <b>{Math.round(noise * 100)}%</b>
-              <input
-                aria-label="Mission noise strength"
-                disabled={busy}
-                type="range"
-                min="0"
-                max="1.5"
-                step=".1"
-                value={noise}
-                onChange={(e) => {
-                  setNoise(+e.target.value);
-                  changed();
-                }}
-              />
-            </label>
-            <p className="muted">
-              Stars use 100% noise. Other settings are experiments. Base idle
-              noise: {pct(l.noise)}.
-            </p>
-            <button className="primary run" disabled={busy} onClick={run}>
-              <Play size={17} />
-              {busy ? "Running Qiskit…" : "Run circuit"}
-            </button>
-            {error && (
-              <p role="alert" className="error">
-                {error}
-              </p>
-            )}
-            <details>
-              <summary>Need a hint?</summary>
-              <p>{l.hint}</p>
-              <p className="muted">{l.concept}</p>
-            </details>
-          </div>
-        </div>
-        <article className="panel output" aria-live="polite" aria-busy={busy}>
-          <div className="panel-title">
-            <h2>Signal monitor</h2>
-            <span className="chip">
-              {stale && result ? "Previous run" : "Qiskit density matrix"}
+    <LearningWorkspace
+      mobilePane={mobile}
+      onMobilePane={setMobile}
+      header={
+        <header className="nw-header">
+          <button className="nw-back" onClick={onBack}>
+            <ArrowLeft size={16} />
+            Mission control
+          </button>
+          <div className="nw-header-title">
+            <b>QUANTUM SHIELD</b>
+            <span>/</span>
+            <span>
+              {String(l.id).padStart(2, "0")} · {l.title}
             </span>
           </div>
-          {result ? (
-            <>
-              <div className="metrics">
-                <div>
-                  <strong>{pct(result.fidelity)}</strong>
-                  <span>Retained fidelity</span>
-                </div>
-                <div>
-                  <strong>{pct(result.retention)}</strong>
-                  <span>Runs kept</span>
-                </div>
-                <div>
-                  <strong>{result.score}</strong>
-                  <span>
-                    {result.eligible ? "Mission score" : "Sandbox score"}
-                  </span>
-                </div>
-              </div>
-              <p className="muted">
-                Unprotected: {pct(result.baseline)} · noiseless target match:{" "}
-                {pct(result.idealMatch)}
-              </p>
-              <StateView result={result} />
-              <p>{result.feedback.join(" ")}</p>
-              <div className="chips">
-                <span>Depth {result.depth}</span>
-                <span>+{result.addedGates} operations</span>
-                <span>+{result.addedTwoQubit} two-qubit gates</span>
-                <span>
-                  {result.keptShots}/{result.shots} sampled shots kept
-                </span>
-              </div>
-              {result.checkDetails.map((c, i) => (
-                <p className="muted" key={i}>
-                  Helper {i + 1}: {c.opening} → {c.closing}, boundaries{" "}
-                  {c.start}–{c.end}
-                </p>
-              ))}
-              <button disabled={stale} onClick={download}>
-                <Download size={16} /> Export this experiment
+          <button
+            onClick={onSound}
+            aria-label={sound ? "Mute sound" : "Enable sound"}
+          >
+            {sound ? <Volume2 size={16} /> : <VolumeX size={16} />}
+          </button>
+        </header>
+      }
+      theory={
+        <div className="nw-theory mission-briefing">
+          <p className="eyebrow">MAIN MISSION {l.id}</p>
+          <h1>{l.title}</h1>
+          <p>{l.overview}</p>
+          <h2>Objective</h2>
+          <p>
+            Combined score = post-selected fidelity × kept-shot fraction. Close
+            the green invariant loop and reach {l.targetScore.toFixed(2)}.
+          </p>
+          {l.id === 1 && (
+            <p>
+              Use “Insert columns” to open space between locked payload gates.
+              Place checks there to protect a smaller, noisier region without
+              wrapping the entire circuit.
+            </p>
+          )}
+          <p>
+            Drag H, controlled Pauli checks, final H and M from the palette. The
+            orange crossing is noisier. Discarded shots reduce your combined
+            score.
+          </p>
+          <p>
+            {l.assisted
+              ? "Your final H chooses the end of each check window. Every closing operator and its phase correction appears locked immediately before it."
+              : "Place the closing controlled Pauli product yourself, followed by H and M on the ancilla."}
+          </p>
+        </div>
+      }
+      experiment={
+        <div className="mission-experiment">
+          <LabFeedback
+            error={b.error}
+            notice={b.notice}
+            onErrorPane={() => setMobile("Experiment")}
+          />
+          <div
+            className="nw-toolbar"
+            role="toolbar"
+            aria-label="Mission editor"
+          >
+            {(["Visual", "Code"] as const).map((mode) => (
+              <button
+                key={mode}
+                aria-pressed={b.editor === mode}
+                onClick={() => b.setEditor(mode)}
+              >
+                {mode}
               </button>
+            ))}
+            <button
+              disabled={!b.canUndo || b.busy}
+              onClick={() => b.history("undo")}
+            >
+              Undo
+            </button>
+            <button
+              disabled={!b.canRedo || b.busy}
+              onClick={() => b.history("redo")}
+            >
+              Redo
+            </button>
+            <button
+              disabled={b.busy || b.dirty}
+              onClick={() => change(initialDraft(l))}
+            >
+              Reset checks
+            </button>
+            <button
+              className="primary"
+              disabled={
+                b.busy ||
+                !b.ready ||
+                (!b.dirty && (validating || !validation || !!invalid))
+              }
+              onClick={() => void run()}
+            >
+              <Play size={14} />
+              {b.busy ? "Running…" : "Run mission"}
+            </button>
+          </div>
+          {b.dirty && (
+            <p className="nw-notice">
+              Apply code or{" "}
+              <button onClick={b.discardSource}>discard changes</button> before
+              visual editing.
+            </p>
+          )}
+          {b.editor === "Visual" ? (
+            <>
+              <div className="mission-columns">
+                <label>
+                  Insert between payload gates{" "}
+                  <select
+                    aria-label="Payload insertion boundary"
+                    value={gap}
+                    onChange={(e) => setGap(+e.target.value)}
+                  >
+                    {Array.from({ length: l.payload.length + 1 }, (_, i) => (
+                      <option key={i} value={i}>
+                        {i === 0 ? "Before payload" : i === l.payload.length ? "After payload" : `After gate ${i}`}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <button
+                  disabled={
+                    b.busy || b.dirty || (b.model.bands[String(gap)] || 0) >= 8
+                  }
+                  onClick={() => resize(4)}
+                >
+                  Insert columns
+                </button>
+                <button
+                  disabled={
+                    b.busy || b.dirty || !(b.model.bands[String(gap)] || 0)
+                  }
+                  onClick={() => resize(-4)}
+                >
+                  Remove columns
+                </button>
+              </div>
+              <MissionCanvas
+                level={l}
+                draft={b.model}
+                validation={validation}
+                onChange={change}
+                onError={b.setError}
+                disabled={b.busy || b.dirty}
+              />
+              <p className="mission-validation" role="status">
+                {validating
+                  ? "Checking invariant…"
+                  : invalid
+                    ? validation?.checks.find((c) => !c.valid)?.message
+                    : validation?.valid
+                      ? "✓ Closed invariant"
+                      : "Build a check around the noisy crossing."}
+              </p>
             </>
           ) : (
-            <div className="empty">
-              <div className="orb">ψ</div>
-              <h3>Build. Protect. Measure.</h3>
-              <p>Your real simulation results will appear here.</p>
-            </div>
+            <>
+              <CodeEditor
+                source={b.source}
+                dirty={b.dirty}
+                onChange={b.editSource}
+                diagnostics={b.diagnostics}
+                busy={b.busy}
+                onApply={() => void b.applySource()}
+                wrapper="MissionCircuit"
+                label="Mission circuit code"
+              />
+              <details>
+                <summary>Read-only Qiskit circuit</summary>
+                <pre>
+                  {[
+                    "from qiskit import QuantumCircuit",
+                    `qc = QuantumCircuit(${l.qubits + l.ancillas}, ${l.ancillas})`,
+                    "# Score includes the authoritative mission noise model.",
+                    ...(validation?.operations || []).map((g) =>
+                      g.name === "m"
+                        ? `qc.measure(${g.qubits[0]}, ${g.qubits[0] - l.qubits})`
+                        : `qc.${g.name}(${g.qubits.join(", ")})`,
+                    ),
+                  ].join("\n")}
+                </pre>
+              </details>
+            </>
           )}
-        </article>
-      </div>
-      {history.length > 1 && (
-        <article className="panel">
-          <h3>Compare recent runs</h3>
-          <div className="table-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>Run</th>
-                  <th>Fidelity</th>
-                  <th>Kept</th>
-                  <th>Depth</th>
-                  <th>Extra 2Q</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {history.map((r, i) => (
-                  <tr key={i}>
-                    <td>{i === 0 ? "Latest" : `−${i}`}</td>
-                    <td>{pct(r.fidelity)}</td>
-                    <td>{pct(r.retention)}</td>
-                    <td>{r.depth}</td>
-                    <td>{r.addedTwoQubit}</td>
-                    <td>
-                      {r.score}
-                      {!r.eligible ? " sandbox" : ""}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
-      )}
-      <ResearchLab level={l} />
-      <dialog ref={dialog} className="win-dialog">
-        <div className="confetti" aria-hidden="true">
-          ✦ · ✧ · ✦ · ✧ · ✦
         </div>
-        <p className="eyebrow">SIGNAL PROTECTED</p>
-        <h2>Mission complete.</h2>
-        <div className="stars">
-          {[1, 2, 3].map((s) => (
-            <Star
-              key={s}
-              fill={s <= (result?.stars || 0) ? "currentColor" : "none"}
-            />
-          ))}
+      }
+      results={
+        <div className="mission-outcome" aria-live="polite">
+          <h2>Outcome</h2>
+          {!outcome || b.stale ? (
+            <p>
+              {outcome
+                ? "Circuit changed. Run again."
+                : "Run your circuit to see its outcome."}
+            </p>
+          ) : (
+            <>
+              <strong className="mission-combined" data-testid="combined-score">
+                {outcome.combinedScore.toFixed(4)}
+              </strong>
+              <span
+                className={outcome.passed ? "mission-pass" : "mission-fail"}
+              >
+                {outcome.passed ? "PASS" : "FAIL"}
+              </span>
+              <p>{outcome.status}</p>
+            </>
+          )}
         </div>
-        <p>
-          {result?.score} points · {pct(result?.fidelity || 0)} fidelity
-        </p>
-        <p>Your personal best is saved on this device.</p>
-        <button className="primary" onClick={() => dialog.current?.close()}>
-          Keep experimenting
-        </button>
-        <button
-          className="ghost"
-          onClick={() => {
-            dialog.current?.close();
-            onBack();
-          }}
-        >
-          Return to missions
-        </button>
-      </dialog>
-    </section>
+      }
+    />
   );
 }

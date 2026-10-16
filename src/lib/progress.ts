@@ -1,9 +1,10 @@
 import { z } from "zod";
 const schema = z.object({
-  version: z.literal(1),
+  version: z.literal(2),
   tutorial: z.enum(["new", "complete", "skipped"]),
   step: z.number().int().min(0).max(5),
   sound: z.boolean(),
+  missionVersion: z.union([z.literal(1), z.literal(2)]).optional(),
   best: z.record(
     z.string(),
     z.object({
@@ -14,13 +15,13 @@ const schema = z.object({
 });
 export type Progress = z.infer<typeof schema>;
 export const initial: Progress = {
-  version: 1,
+  version: 2,
   tutorial: "new",
   step: 0,
   sound: false,
   best: {},
 };
-export const STORAGE_KEY = "quantum-shield-v1";
+export const STORAGE_KEY = "quantum-shield-qed-v2";
 export function parseProgress(raw: string | null): Progress {
   try {
     return schema.parse(JSON.parse(raw || "null"));
@@ -45,4 +46,9 @@ export function recordBest(
       },
     },
   };
+}
+
+export const MISSION_VERSION = 2;
+export function missionUnlocked(p: Progress, id: number): boolean {
+  return p.tutorial === "skipped" || (p.tutorial === "complete" && (id === 1 || (p.best[id-1]?.stars || 0) > 0));
 }

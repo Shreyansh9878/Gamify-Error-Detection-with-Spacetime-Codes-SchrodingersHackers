@@ -1,0 +1,201 @@
+{
+  "noise": "Synthetic Paulice NoiseModel(gate_noise=0.01, readout_noise=0).",
+  "distinction": "Native gamma/windowed suggestions, not game-score optima. Reachable game references are separately enumerated and Aer-rescored. No T circuit is passed to Paulice.",
+  "flightSchool6": {
+    "available": true,
+    "ancillaLimit": 1,
+    "addedAncillas": 0,
+    "packageVersion": "0.2.1",
+    "nativeCost": 1.0202354230673039,
+    "instructions": [
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "h",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "h",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "cx",
+        "qubits": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "h",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "s",
+        "qubits": [
+          1
+        ]
+      },
+      {
+        "name": "measure",
+        "qubits": [
+          0
+        ]
+      },
+      {
+        "name": "measure",
+        "qubits": [
+          1
+        ]
+      }
+    ],
+    "checkSupport": [],
+    "message": "Actual Paulice gamma/windowed research suggestion. Its native depolarizing gate-cost model differs from the game layer-noise protocol; it is not a certified global maximum or assigned a misleading game score."
+  },
+  "missions": [
+    {
+      "level": 1,
+      "ancillaLimit": 1,
+      "addedAncillas": 1,
+      "targets": [
+        0
+      ],
+      "nativeGamma": 1.037410717419716
+    },
+    {
+      "level": 2,
+      "ancillaLimit": 1,
+      "addedAncillas": 1,
+      "targets": [
+        0
+      ],
+      "nativeGamma": 1.0584031621812593
+    },
+    {
+      "level": 3,
+      "ancillaLimit": 2,
+      "addedAncillas": 2,
+      "targets": [
+        0,
+        1
+      ],
+      "nativeGamma": 1.07622099661729
+    },
+    {
+      "level": 4,
+      "ancillaLimit": 2,
+      "addedAncillas": 2,
+      "targets": [
+        0,
+        1
+      ],
+      "nativeGamma": 1.0979987837977563
+    },
+    {
+      "level": 5,
+      "ancillaLimit": 2,
+      "addedAncillas": 2,
+      "targets": [
+        0,
+        1
+      ],
+      "nativeGamma": 1.0744257977084224
+    },
+    {
+      "level": 6,
+      "ancillaLimit": 2,
+      "addedAncillas": 2,
+      "targets": [
+        0,
+        1
+      ],
+      "nativeGamma": 1.078019195025173
+    },
+    {
+      "level": 7,
+      "ancillaLimit": 3,
+      "addedAncillas": 3,
+      "targets": [
+        0,
+        1,
+        2
+      ],
+      "nativeGamma": 1.0637173141310472
+    }
+  ]
+}

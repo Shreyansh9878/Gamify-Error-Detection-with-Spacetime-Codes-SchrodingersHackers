@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "cliffordAgreement": [
+    {
+      "level": 1,
+      "maxMetricDifference": 2.220446049250313e-16
+    },
+    {
+      "level": 2,
+      "maxMetricDifference": 2.220446049250313e-16
+    },
+    {
+      "level": 3,
+      "maxMetricDifference": 5.551115123125783e-16
+    },
+    {
+      "level": 4,
+      "maxMetricDifference": 4.440892098500626e-16
+    },
+    {
+      "level": 5,
+      "maxMetricDifference": 5.551115123125783e-16
+    },
+    {
+      "level": 6,
+      "maxMetricDifference": 5.551115123125783e-16
+    },
+    {
+      "level": 7,
+      "maxMetricDifference": 7.771561172376096e-16
+    }
+  ],
+  "smallCliffordDensityDifference": 2.7755575615628914e-16,
+  "tLevels": [
+    {
+      "level": 8,
+      "engine": "Aer density_matrix; statevector ideal; custom I/Z-at-T placement search",
+      "physicalQubits": 7,
+      "noiselessZ": {
+        "fidelity": 1.0,
+        "retention": 1.0,
+        "score": 1.0
+      },
+      "invalidXYRejected": true,
+      "smallTDensityDifference": 2.220446049250313e-16,
+      "coldRunSeconds": [
+        0.2359979999891948,
+        0.23263620000216179,
+        0.23222089998307638
+      ],
+      "maxRunSeconds": 0.2359979999891948,
+      "interactiveTwoSecondGoalMet": true,
+      "scoreSpread": 0.0
+    },
+    {
+      "level": 9,
+      "engine": "Aer density_matrix; statevector ideal; custom I/Z-at-T placement search",
+      "physicalQubits": 7,
+      "noiselessZ": {
+        "fidelity": 1.0,
+        "retention": 1.0,
+        "score": 1.0
+      },
+      "invalidXYRejected": true,
+      "smallTDensityDifference": 2.220446049250313e-16,
+      "coldRunSeconds": [
+        0.26891689997864887,
+        0.2552583000215236,
+        0.279779900010908
+      ],
+      "maxRunSeconds": 0.279779900010908,
+      "interactiveTwoSecondGoalMet": true,
+      "scoreSpread": 0.0
+    },
+    {
+      "level": 10,
+      "engine": "Aer density_matrix; statevector ideal; custom I/Z-at-T placement search",
+      "physicalQubits": 7,
+      "noiselessZ": {
+        "fidelity": 1.0,
+        "retention": 1.0,
+        "score": 1.0
+      },
+      "invalidXYRejected": true,
+      "smallTDensityDifference": 2.220446049250313e-16,
+      "coldRunSeconds": [
+        0.28792020000400953,
+        0.333408899983624,
+        0.28828429998247884
+      ],
+      "maxRunSeconds": 0.333408899983624,
+      "interactiveTwoSecondGoalMet": true,
+      "scoreSpread": 0.0
+    }
+  ],
+  "tradeoff": "Exact density matrices avoid shot noise; physical width is capped at seven. Idle unmeasured independent ancillas may be eliminated, but timing uses all three active helpers."
+}

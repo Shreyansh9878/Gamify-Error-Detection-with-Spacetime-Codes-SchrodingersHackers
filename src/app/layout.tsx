@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./noise-lab.css";
+import "./learning-labs.css";
 export const metadata: Metadata = {
-  title: "Quantum Shield — Protect the signal",
+  title: "Quantum Shield — Spacetime Code Defender",
   description:
     "Learn quantum noise and low-overhead spacetime error detection through ten interactive Qiskit missions.",
 };

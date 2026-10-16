@@ -1,0 +1,188 @@
+{
+  "protocol": "timeline-hardware-layers-v3-two-data-one-helper",
+  "qiskitVersion": "2.5.2",
+  "hardware": {
+    "enabled": true,
+    "bitFlip": 0.001,
+    "phaseFlip": 0.001,
+    "depolarizing": 0,
+    "relaxationTimeUs": 0,
+    "t1Us": 100,
+    "t2Us": 80
+  },
+  "threshold": 0.62,
+  "exactReferenceMaximum": 0.6861194292789656,
+  "referenceScope": "Exact maximum over 15 single-ancilla full-payload Pauli-product shells; fixed tap order and terminal readout. Arbitrary placements and multi-check circuits are outside this certificate.",
+  "results": {
+    "unchecked": {
+      "baselineScore": 0.4941321616879697,
+      "qualificationThreshold": 0.62,
+      "fidelity": 0.49413216168796986,
+      "retention": 1.0,
+      "score": 0.49413216168796986,
+      "samplingOverhead": 1.0,
+      "validCheck": false,
+      "operations": []
+    },
+    "sensible": {
+      "baselineScore": 0.4941321616879697,
+      "qualificationThreshold": 0.62,
+      "fidelity": 0.8161864745343561,
+      "retention": 0.8186074953380253,
+      "score": 0.6681363656473422,
+      "samplingOverhead": 1.2215866647874667,
+      "validCheck": true,
+      "operations": [
+        {
+          "id": "h0",
+          "name": "h",
+          "qubits": [
+            2
+          ],
+          "column": 0,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        },
+        {
+          "id": "o00",
+          "name": "cx",
+          "qubits": [
+            2,
+            0
+          ],
+          "column": 1,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        },
+        {
+          "id": "c00",
+          "name": "cz",
+          "qubits": [
+            2,
+            0
+          ],
+          "column": 9,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        },
+        {
+          "id": "c01",
+          "name": "cy",
+          "qubits": [
+            2,
+            1
+          ],
+          "column": 10,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        },
+        {
+          "id": "f0",
+          "name": "h",
+          "qubits": [
+            2
+          ],
+          "column": 13,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        },
+        {
+          "id": "m0",
+          "name": "m",
+          "qubits": [
+            2
+          ],
+          "column": 14,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        }
+      ]
+    },
+    "everywhere": {
+      "baselineScore": 0.4941321616879697,
+      "qualificationThreshold": 0.62,
+      "fidelity": 0.47858888607131456,
+      "retention": 0.9548491980092424,
+      "score": 0.4569802140413314,
+      "samplingOverhead": 1.0472857934895816,
+      "validCheck": true,
+      "operations": [
+        {
+          "id": "h0",
+          "name": "h",
+          "qubits": [
+            2
+          ],
+          "column": 0,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        },
+        {
+          "id": "o00",
+          "name": "cx",
+          "qubits": [
+            2,
+            0
+          ],
+          "column": 1,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        },
+        {
+          "id": "o01",
+          "name": "cx",
+          "qubits": [
+            2,
+            1
+          ],
+          "column": 2,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        },
+        {
+          "id": "c00",
+          "name": "cz",
+          "qubits": [
+            2,
+            0
+          ],
+          "column": 9,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        },
+        {
+          "id": "f0",
+          "name": "h",
+          "qubits": [
+            2
+          ],
+          "column": 13,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        },
+        {
+          "id": "m0",
+          "name": "m",
+          "qubits": [
+            2
+          ],
+          "column": 14,
+          "timeUs": 30,
+          "t1Us": 100,
+          "t2Us": 80
+        }
+      ]
+    }
+  }
+}

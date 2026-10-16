@@ -1,0 +1,1648 @@
+{
+  "pauliceObservableBenchmarks": [
+    {
+      "repetitions": 1,
+      "targets": [
+        0
+      ],
+      "metricId": "paulice-observable-v1",
+      "fidelity": 0.924072265625,
+      "baseline": 0.924560546875,
+      "gammaCosts": [
+        {
+          "setting": 0,
+          "cost": 1.0730724932797118,
+          "metric": "gamma",
+          "targets": [],
+          "support": []
+        },
+        {
+          "setting": 1,
+          "cost": 1.1062603023502184,
+          "metric": "gamma",
+          "targets": [],
+          "support": []
+        },
+        {
+          "setting": 2,
+          "cost": 1.1062603023502184,
+          "metric": "gamma",
+          "targets": [],
+          "support": []
+        },
+        {
+          "setting": 3,
+          "cost": 1.1062603023502184,
+          "metric": "gamma",
+          "targets": [],
+          "support": []
+        },
+        {
+          "setting": 4,
+          "cost": 1.0443615235598533,
+          "metric": "gamma",
+          "targets": [],
+          "support": []
+        },
+        {
+          "setting": 5,
+          "cost": 1.076661364494694,
+          "metric": "gamma",
+          "targets": [],
+          "support": []
+        },
+        {
+          "setting": 6,
+          "cost": 1.0730724932797118,
+          "metric": "gamma",
+          "targets": [],
+          "support": []
+        }
+      ],
+      "optimizer": "gamma / windowed",
+      "exactReference": 0.8101762471686207,
+      "retention": 1.0,
+      "shots": 7168,
+      "keptShots": 7168,
+      "checks": 0,
+      "depth": 6,
+      "addedDepth": 0,
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "tCount": 0,
+      "label": "Paulice stabilizer benchmark",
+      "warning": "Finite-shot estimator with observable-specific checks, not one common retained density matrix. Includes readout noise; no mission stars are awarded. Idle markers are omitted from this research protocol.",
+      "settings": 7,
+      "engineVersion": "shield-qed-2.0.0"
+    },
+    {
+      "repetitions": 1,
+      "targets": [
+        1
+      ],
+      "metricId": "paulice-observable-v1",
+      "fidelity": 0.9433857409719273,
+      "baseline": 0.924560546875,
+      "gammaCosts": [
+        {
+          "setting": 0,
+          "cost": 1.0270711521801472,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 1,
+          "cost": 1.0339526816949838,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 2,
+          "cost": 1.037410717419716,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 3,
+          "cost": 1.0513589011351863,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 4,
+          "cost": 1.0478543714647357,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 5,
+          "cost": 1.037410717419716,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 6,
+          "cost": 1.0730724932797118,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              3
+            ]
+          ]
+        }
+      ],
+      "optimizer": "gamma / windowed",
+      "exactReference": 0.8101762471686207,
+      "retention": 0.9415457589285714,
+      "shots": 7168,
+      "keptShots": 6749,
+      "checks": 1,
+      "depth": 16,
+      "addedDepth": 10,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "tCount": 0,
+      "label": "Paulice stabilizer benchmark",
+      "warning": "Finite-shot estimator with observable-specific checks, not one common retained density matrix. Includes readout noise; no mission stars are awarded. Idle markers are omitted from this research protocol.",
+      "settings": 7,
+      "engineVersion": "shield-qed-2.0.0"
+    },
+    {
+      "repetitions": 1,
+      "targets": [
+        0,
+        1
+      ],
+      "metricId": "paulice-observable-v1",
+      "fidelity": 0.9433857409719273,
+      "baseline": 0.924560546875,
+      "gammaCosts": [
+        {
+          "setting": 0,
+          "cost": 1.0270711521801472,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 1,
+          "cost": 1.0339526816949838,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 2,
+          "cost": 1.037410717419716,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 3,
+          "cost": 1.0513589011351863,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 4,
+          "cost": 1.0478543714647357,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 5,
+          "cost": 1.037410717419716,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 6,
+          "cost": 1.0730724932797118,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              3
+            ]
+          ]
+        }
+      ],
+      "optimizer": "gamma / windowed",
+      "exactReference": 0.8101762471686207,
+      "retention": 0.9415457589285714,
+      "shots": 7168,
+      "keptShots": 6749,
+      "checks": 1,
+      "depth": 16,
+      "addedDepth": 10,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "tCount": 0,
+      "label": "Paulice stabilizer benchmark",
+      "warning": "Finite-shot estimator with observable-specific checks, not one common retained density matrix. Includes readout noise; no mission stars are awarded. Idle markers are omitted from this research protocol.",
+      "settings": 7,
+      "engineVersion": "shield-qed-2.0.0"
+    },
+    {
+      "repetitions": 1,
+      "targets": [
+        1,
+        0
+      ],
+      "metricId": "paulice-observable-v1",
+      "fidelity": 0.9433857409719273,
+      "baseline": 0.924560546875,
+      "gammaCosts": [
+        {
+          "setting": 0,
+          "cost": 1.0270711521801472,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 1,
+          "cost": 1.0339526816949838,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 2,
+          "cost": 1.037410717419716,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 3,
+          "cost": 1.0513589011351863,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 4,
+          "cost": 1.0478543714647357,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 5,
+          "cost": 1.037410717419716,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 6,
+          "cost": 1.0730724932797118,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              3
+            ]
+          ]
+        }
+      ],
+      "optimizer": "gamma / windowed",
+      "exactReference": 0.8101762471686207,
+      "retention": 0.9415457589285714,
+      "shots": 7168,
+      "keptShots": 6749,
+      "checks": 1,
+      "depth": 16,
+      "addedDepth": 10,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "tCount": 0,
+      "label": "Paulice stabilizer benchmark",
+      "warning": "Finite-shot estimator with observable-specific checks, not one common retained density matrix. Includes readout noise; no mission stars are awarded. Idle markers are omitted from this research protocol.",
+      "settings": 7,
+      "engineVersion": "shield-qed-2.0.0"
+    },
+    {
+      "repetitions": 3,
+      "targets": [
+        0
+      ],
+      "metricId": "paulice-observable-v1",
+      "fidelity": 0.9370291139090223,
+      "baseline": 0.8974609375,
+      "gammaCosts": [
+        {
+          "setting": 0,
+          "cost": 1.1095061820796805,
+          "metric": "gamma",
+          "targets": [
+            0
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 1,
+          "cost": 1.0690581479842485,
+          "metric": "gamma",
+          "targets": [
+            0
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 2,
+          "cost": 1.0690581479842485,
+          "metric": "gamma",
+          "targets": [
+            0
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 3,
+          "cost": 1.1095061820796805,
+          "metric": "gamma",
+          "targets": [
+            0
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 4,
+          "cost": 1.1095061820796805,
+          "metric": "gamma",
+          "targets": [
+            0
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 5,
+          "cost": 1.083431837401775,
+          "metric": "gamma",
+          "targets": [
+            0
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 6,
+          "cost": 1.083431837401775,
+          "metric": "gamma",
+          "targets": [
+            0
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        }
+      ],
+      "optimizer": "gamma / windowed",
+      "exactReference": 0.5620592208747083,
+      "retention": 0.9222935267857143,
+      "shots": 7168,
+      "keptShots": 6611,
+      "checks": 1,
+      "depth": 19,
+      "addedDepth": 7,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "tCount": 0,
+      "label": "Paulice stabilizer benchmark",
+      "warning": "Finite-shot estimator with observable-specific checks, not one common retained density matrix. Includes readout noise; no mission stars are awarded. Idle markers are omitted from this research protocol.",
+      "settings": 7,
+      "engineVersion": "shield-qed-2.0.0"
+    },
+    {
+      "repetitions": 3,
+      "targets": [
+        1
+      ],
+      "metricId": "paulice-observable-v1",
+      "fidelity": 0.9500598247374825,
+      "baseline": 0.8974609375,
+      "gammaCosts": [
+        {
+          "setting": 0,
+          "cost": 1.083431837401775,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 1,
+          "cost": 1.083431837401775,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              1,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 2,
+          "cost": 1.083431837401775,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              1,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 3,
+          "cost": 1.083431837401775,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 4,
+          "cost": 1.083431837401775,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 5,
+          "cost": 1.0852420840065051,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              1,
+              2,
+              3
+            ]
+          ]
+        },
+        {
+          "setting": 6,
+          "cost": 1.0852420840065051,
+          "metric": "gamma",
+          "targets": [
+            1
+          ],
+          "support": [
+            [
+              0,
+              1,
+              2,
+              3
+            ]
+          ]
+        }
+      ],
+      "optimizer": "gamma / windowed",
+      "exactReference": 0.5620592208747083,
+      "retention": 0.9140625,
+      "shots": 7168,
+      "keptShots": 6552,
+      "checks": 1,
+      "depth": 21,
+      "addedDepth": 10,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "tCount": 0,
+      "label": "Paulice stabilizer benchmark",
+      "warning": "Finite-shot estimator with observable-specific checks, not one common retained density matrix. Includes readout noise; no mission stars are awarded. Idle markers are omitted from this research protocol.",
+      "settings": 7,
+      "engineVersion": "shield-qed-2.0.0"
+    },
+    {
+      "repetitions": 3,
+      "targets": [
+        0,
+        1
+      ],
+      "metricId": "paulice-observable-v1",
+      "fidelity": 0.9754415518598205,
+      "baseline": 0.8974609375,
+      "gammaCosts": [
+        {
+          "setting": 0,
+          "cost": 1.0531155588366037,
+          "metric": "gamma",
+          "targets": [
+            0,
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              0,
+              1,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 1,
+          "cost": 1.037410717419716,
+          "metric": "gamma",
+          "targets": [
+            0,
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              0,
+              1,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 2,
+          "cost": 1.037410717419716,
+          "metric": "gamma",
+          "targets": [
+            0,
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              0,
+              1,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 3,
+          "cost": 1.0531155588366037,
+          "metric": "gamma",
+          "targets": [
+            0,
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              0,
+              1,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 4,
+          "cost": 1.0531155588366037,
+          "metric": "gamma",
+          "targets": [
+            0,
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              0,
+              1,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 5,
+          "cost": 1.0566376844514418,
+          "metric": "gamma",
+          "targets": [
+            0,
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              0,
+              1,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 6,
+          "cost": 1.0566376844514418,
+          "metric": "gamma",
+          "targets": [
+            0,
+            1
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              0,
+              1,
+              4
+            ]
+          ]
+        }
+      ],
+      "optimizer": "gamma / windowed",
+      "exactReference": 0.5620592208747083,
+      "retention": 0.8585379464285714,
+      "shots": 7168,
+      "keptShots": 6154,
+      "checks": 2,
+      "depth": 24,
+      "addedDepth": 12,
+      "addedAncillas": 2,
+      "addedTwoQubit": 6,
+      "tCount": 0,
+      "label": "Paulice stabilizer benchmark",
+      "warning": "Finite-shot estimator with observable-specific checks, not one common retained density matrix. Includes readout noise; no mission stars are awarded. Idle markers are omitted from this research protocol.",
+      "settings": 7,
+      "engineVersion": "shield-qed-2.0.0"
+    },
+    {
+      "repetitions": 3,
+      "targets": [
+        1,
+        0
+      ],
+      "metricId": "paulice-observable-v1",
+      "fidelity": 0.959402264603711,
+      "baseline": 0.8974609375,
+      "gammaCosts": [
+        {
+          "setting": 0,
+          "cost": 1.0548751516406552,
+          "metric": "gamma",
+          "targets": [
+            1,
+            0
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              0,
+              2,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 1,
+          "cost": 1.065494620824301,
+          "metric": "gamma",
+          "targets": [
+            1,
+            0
+          ],
+          "support": [
+            [
+              0,
+              1,
+              2,
+              3
+            ],
+            [
+              0,
+              2,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 2,
+          "cost": 1.065494620824301,
+          "metric": "gamma",
+          "targets": [
+            1,
+            0
+          ],
+          "support": [
+            [
+              0,
+              1,
+              2,
+              3
+            ],
+            [
+              0,
+              2,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 3,
+          "cost": 1.0548751516406552,
+          "metric": "gamma",
+          "targets": [
+            1,
+            0
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              0,
+              2,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 4,
+          "cost": 1.0548751516406552,
+          "metric": "gamma",
+          "targets": [
+            1,
+            0
+          ],
+          "support": [
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              0,
+              2,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 5,
+          "cost": 1.06194297208822,
+          "metric": "gamma",
+          "targets": [
+            1,
+            0
+          ],
+          "support": [
+            [
+              0,
+              1,
+              2,
+              3
+            ],
+            [
+              0,
+              2,
+              4
+            ]
+          ]
+        },
+        {
+          "setting": 6,
+          "cost": 1.0619429720882199,
+          "metric": "gamma",
+          "targets": [
+            1,
+            0
+          ],
+          "support": [
+            [
+              0,
+              1,
+              2,
+              3
+            ],
+            [
+              0,
+              2,
+              4
+            ]
+          ]
+        }
+      ],
+      "optimizer": "gamma / windowed",
+      "exactReference": 0.5620592208747083,
+      "retention": 0.8565848214285714,
+      "shots": 7168,
+      "keptShots": 6140,
+      "checks": 2,
+      "depth": 23,
+      "addedDepth": 12,
+      "addedAncillas": 2,
+      "addedTwoQubit": 7,
+      "tCount": 0,
+      "label": "Paulice stabilizer benchmark",
+      "warning": "Finite-shot estimator with observable-specific checks, not one common retained density matrix. Includes readout noise; no mission stars are awarded. Idle markers are omitted from this research protocol.",
+      "settings": 7,
+      "engineVersion": "shield-qed-2.0.0"
+    }
+  ],
+  "seed": 2026,
+  "packages": {
+    "qiskit": "2.5.2",
+    "qiskit-aer": "0.17.2",
+    "qiskit-paulice": "0.2.1",
+    "numpy": "2.2.6"
+  },
+  "noise": "Uniform synthetic depolarizing lambda=.01 after each serialized gate on every live wire; identities retain doping slots. Separate Paulice observable benchmarks use gate_noise=.01, readout_noise=.015 and the documented legacy gate-local Aer noise; do not numerically merge those estimators with coherent state-fidelity rows. No readout error, hardware execution or calibration claim.",
+  "scope": "Matched 3-data-qubit backbone, repetitions 1/3 and four identity-or-T doping slots. Separate Paulice Clifford benchmarks: budgets 1/2 and orders [0,1]/[1,0]. T search enumerates seven full-span Z/I openings with one helper; best found, not an unrestricted optimum.",
+  "rows": [
+    {
+      "repetitions": 1,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "unchecked",
+      "uncheckedFidelity": 0.8540892785332932,
+      "fidelity": 0.8540892785332932,
+      "retention": 1.0,
+      "score": 0.8540892785332932,
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0,
+      "engine": "none",
+      "targets": []
+    },
+    {
+      "repetitions": 1,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332932,
+      "fidelity": 0.8530983077451619,
+      "retention": 0.8344858792848486,
+      "score": 0.7118984914551378,
+      "addedAncillas": 1,
+      "addedTwoQubit": 4,
+      "addedDepth": 6,
+      "engine": "custom full-span Z/I search",
+      "opening": "IIZ"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332932,
+      "fidelity": 0.8388949308383261,
+      "retention": 0.8698501866941482,
+      "score": 0.7297129122064925,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 5,
+      "engine": "custom full-span Z/I search",
+      "opening": "IZI"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332932,
+      "fidelity": 0.8376743221927266,
+      "retention": 0.8773596436018245,
+      "score": 0.7349416447734105,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 5,
+      "engine": "custom full-span Z/I search",
+      "opening": "IZZ"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332932,
+      "fidelity": 0.8385802249966241,
+      "retention": 0.8698501866941482,
+      "score": 0.7294391652713342,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZII"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332932,
+      "fidelity": 0.8597834945293238,
+      "retention": 0.8117626974456091,
+      "score": 0.697940168738336,
+      "addedAncillas": 1,
+      "addedTwoQubit": 5,
+      "addedDepth": 6,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZIZ"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332932,
+      "fidelity": 0.846951516449528,
+      "retention": 0.8447245429345474,
+      "score": 0.7154407326205493,
+      "addedAncillas": 1,
+      "addedTwoQubit": 4,
+      "addedDepth": 5,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZZI"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332932,
+      "fidelity": 0.8564699190294974,
+      "retention": 0.7994780032330893,
+      "score": 0.6847288606949082,
+      "addedAncillas": 1,
+      "addedTwoQubit": 6,
+      "addedDepth": 7,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZZZ"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 1,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "unchecked",
+      "uncheckedFidelity": 0.8540892785332925,
+      "fidelity": 0.8540892785332925,
+      "retention": 1.0,
+      "score": 0.8540892785332925,
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0,
+      "engine": "none",
+      "targets": []
+    },
+    {
+      "repetitions": 1,
+      "tCount": 1,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332925,
+      "fidelity": 0.8388949308383256,
+      "retention": 0.8698501866941482,
+      "score": 0.729712912206492,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 5,
+      "engine": "custom full-span Z/I search",
+      "opening": "IZI"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 1,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332925,
+      "fidelity": 0.8385802249966234,
+      "retention": 0.8698501866941482,
+      "score": 0.7294391652713337,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZII"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 1,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332925,
+      "fidelity": 0.8469515164495276,
+      "retention": 0.8447245429345474,
+      "score": 0.715440732620549,
+      "addedAncillas": 1,
+      "addedTwoQubit": 4,
+      "addedDepth": 5,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZZI"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 2,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "unchecked",
+      "uncheckedFidelity": 0.8540892785332925,
+      "fidelity": 0.8540892785332925,
+      "retention": 1.0,
+      "score": 0.8540892785332925,
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0,
+      "engine": "none",
+      "targets": []
+    },
+    {
+      "repetitions": 1,
+      "tCount": 2,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.8540892785332925,
+      "fidelity": 0.8385802249966238,
+      "retention": 0.8698501866941479,
+      "score": 0.7294391652713338,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZII"
+    },
+    {
+      "repetitions": 1,
+      "tCount": 4,
+      "dataQubits": 3,
+      "payloadDepth": 4,
+      "method": "unchecked",
+      "uncheckedFidelity": 0.8540892785332921,
+      "fidelity": 0.8540892785332921,
+      "retention": 1.0,
+      "score": 0.8540892785332921,
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0,
+      "engine": "none",
+      "targets": []
+    },
+    {
+      "repetitions": 3,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "unchecked",
+      "uncheckedFidelity": 0.7157447764917075,
+      "fidelity": 0.7157447764917075,
+      "retention": 1.0,
+      "score": 0.7157447764917075,
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0,
+      "engine": "none",
+      "targets": []
+    },
+    {
+      "repetitions": 3,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917075,
+      "fidelity": 0.7578013981033388,
+      "retention": 0.7935183909687538,
+      "score": 0.6013293460968334,
+      "addedAncillas": 1,
+      "addedTwoQubit": 2,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "IIZ"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917075,
+      "fidelity": 0.7680686329762646,
+      "retention": 0.7627982437627926,
+      "score": 0.5858814043235836,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 5,
+      "engine": "custom full-span Z/I search",
+      "opening": "IZI"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917075,
+      "fidelity": 0.7388194084613147,
+      "retention": 0.7601702613251654,
+      "score": 0.5616285428021417,
+      "addedAncillas": 1,
+      "addedTwoQubit": 5,
+      "addedDepth": 7,
+      "engine": "custom full-span Z/I search",
+      "opening": "IZZ"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917075,
+      "fidelity": 0.7489717874249049,
+      "retention": 0.7819525952262054,
+      "score": 0.5856604329281142,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZII"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917075,
+      "fidelity": 0.7803343375359529,
+      "retention": 0.7193087509049669,
+      "score": 0.5613013176212411,
+      "addedAncillas": 1,
+      "addedTwoQubit": 5,
+      "addedDepth": 6,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZIZ"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917075,
+      "fidelity": 0.7633177037518564,
+      "retention": 0.7352933207928369,
+      "score": 0.5612624092116654,
+      "addedAncillas": 1,
+      "addedTwoQubit": 4,
+      "addedDepth": 6,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZZI"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 0,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917075,
+      "fidelity": 0.758776751070927,
+      "retention": 0.7085604399666219,
+      "score": 0.5376391885752599,
+      "addedAncillas": 1,
+      "addedTwoQubit": 6,
+      "addedDepth": 8,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZZZ"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 1,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "unchecked",
+      "uncheckedFidelity": 0.7157447764917063,
+      "fidelity": 0.7157447764917063,
+      "retention": 1.0,
+      "score": 0.7157447764917063,
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0,
+      "engine": "none",
+      "targets": []
+    },
+    {
+      "repetitions": 3,
+      "tCount": 1,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917063,
+      "fidelity": 0.7578013981033376,
+      "retention": 0.7935183909687535,
+      "score": 0.6013293460968323,
+      "addedAncillas": 1,
+      "addedTwoQubit": 2,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "IIZ"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 1,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917063,
+      "fidelity": 0.7489717874249034,
+      "retention": 0.7819525952262054,
+      "score": 0.5856604329281131,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZII"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 1,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917063,
+      "fidelity": 0.7803343375359517,
+      "retention": 0.7193087509049669,
+      "score": 0.5613013176212402,
+      "addedAncillas": 1,
+      "addedTwoQubit": 5,
+      "addedDepth": 6,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZIZ"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 2,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "unchecked",
+      "uncheckedFidelity": 0.7157447764917062,
+      "fidelity": 0.7157447764917062,
+      "retention": 1.0,
+      "score": 0.7157447764917062,
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0,
+      "engine": "none",
+      "targets": []
+    },
+    {
+      "repetitions": 3,
+      "tCount": 2,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917062,
+      "fidelity": 0.7578013981033375,
+      "retention": 0.7935183909687535,
+      "score": 0.6013293460968322,
+      "addedAncillas": 1,
+      "addedTwoQubit": 2,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "IIZ"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 2,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917062,
+      "fidelity": 0.7489717874249038,
+      "retention": 0.7819525952262052,
+      "score": 0.5856604329281132,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZII"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 2,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.7157447764917062,
+      "fidelity": 0.7803343375359517,
+      "retention": 0.7193087509049667,
+      "score": 0.5613013176212401,
+      "addedAncillas": 1,
+      "addedTwoQubit": 5,
+      "addedDepth": 6,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZIZ"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 4,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "unchecked",
+      "uncheckedFidelity": 0.715744776491706,
+      "fidelity": 0.715744776491706,
+      "retention": 1.0,
+      "score": 0.715744776491706,
+      "addedAncillas": 0,
+      "addedTwoQubit": 0,
+      "addedDepth": 0,
+      "engine": "none",
+      "targets": []
+    },
+    {
+      "repetitions": 3,
+      "tCount": 4,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.715744776491706,
+      "fidelity": 0.7578013981033374,
+      "retention": 0.7935183909687535,
+      "score": 0.6013293460968321,
+      "addedAncillas": 1,
+      "addedTwoQubit": 2,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "IIZ"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 4,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.715744776491706,
+      "fidelity": 0.7489717874249037,
+      "retention": 0.7819525952262051,
+      "score": 0.585660432928113,
+      "addedAncillas": 1,
+      "addedTwoQubit": 3,
+      "addedDepth": 4,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZII"
+    },
+    {
+      "repetitions": 3,
+      "tCount": 4,
+      "dataQubits": 3,
+      "payloadDepth": 10,
+      "method": "custom-Z-search",
+      "uncheckedFidelity": 0.715744776491706,
+      "fidelity": 0.7803343375359516,
+      "retention": 0.7193087509049667,
+      "score": 0.56130131762124,
+      "addedAncillas": 1,
+      "addedTwoQubit": 5,
+      "addedDepth": 6,
+      "engine": "custom full-span Z/I search",
+      "opening": "ZIZ"
+    }
+  ]
+}

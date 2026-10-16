@@ -10,14 +10,17 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { api } from "@/lib/api";
+import { readDeepLink, writeDeepLink } from "@/lib/location";
 import {
   initial,
   parseProgress,
   recordBest,
   STORAGE_KEY,
+  MISSION_VERSION,
+  missionUnlocked,
   type Progress,
 } from "@/lib/progress";
-import type { Level, Result } from "@/lib/types";
+import type { MissionLevel as Level, Outcome } from "@/lib/missions/contracts";
 import { Tutorial } from "./Tutorial";
 import { Mission } from "./Mission";
 export function Game() {
@@ -26,6 +29,8 @@ export function Game() {
     [ready, setReady] = useState(false),
     [screen, setScreen] = useState<"map" | "tutorial" | "mission">("map"),
     [selected, setSelected] = useState<Level | null>(null),
+    [entrySchool, setEntrySchool] = useState<number | null>(null),
+    [pendingMission, setPendingMission] = useState<number | null>(null),
     [error, setError] = useState(""),
     [storageError, setStorageError] = useState("");
   async function load() {
@@ -38,9 +43,37 @@ export function Game() {
   }
   useEffect(() => {
     try {
-      const saved = parseProgress(localStorage.getItem(STORAGE_KEY));
+      let saved = parseProgress(localStorage.getItem(STORAGE_KEY));
+      if (saved.missionVersion !== MISSION_VERSION) {
+        if (Object.keys(saved.best).length)
+          try {
+            localStorage.setItem(
+              saved.missionVersion === 1
+                ? "quantum-shield.archived-missions-v1"
+                : "quantum-shield.archived-missions-v2",
+              JSON.stringify(saved.best),
+            );
+          } catch {
+            setStorageError(
+              "Previous mission scores could not be archived; tutorial progress is retained.",
+            );
+          }
+        saved = { ...saved, best: {}, missionVersion: MISSION_VERSION };
+      }
       setProgress(saved);
-      if (saved.tutorial === "new") setScreen("tutorial");
+      const link = readDeepLink(window.location.search);
+      if (link?.kind === "school") {
+        const allowed = saved.tutorial !== "new" || link.id - 1 <= saved.step;
+        setEntrySchool(allowed ? link.id - 1 : saved.step);
+        setScreen("tutorial");
+        if (!allowed)
+          setStorageError(
+            "Complete the preceding Flight Schools or use the visible tutorial skip.",
+          );
+      } else if (link?.kind === "mission" && missionUnlocked(saved, link.id)) {
+        setPendingMission(link.id);
+        setScreen("mission");
+      } else if (saved.tutorial === "new") setScreen("tutorial");
     } catch {
       setStorageError(
         "Storage is unavailable. Progress will last for this session only.",
@@ -50,6 +83,18 @@ export function Game() {
     setReady(true);
     void load();
   }, []);
+  useEffect(() => {
+    if (pendingMission && levels.length) {
+      setSelected(levels.find((level) => level.id === pendingMission) || null);
+      setPendingMission(null);
+    }
+  }, [pendingMission, levels]);
+  useEffect(() => {
+    if (!ready) return;
+    if (screen === "map") writeDeepLink(null);
+    else if (screen === "mission" && selected)
+      writeDeepLink({ kind: "mission", id: selected.id });
+  }, [ready, screen, selected]);
   useEffect(() => {
     if (ready)
       try {
@@ -70,8 +115,21 @@ export function Game() {
     setProgress((p) => ({ ...p, tutorial: status }));
     setScreen("map");
   }
-  function win(r: Result) {
-    setProgress((p) => recordBest(p, r.levelId, r.score, r.stars));
+  function win(r: Outcome) {
+    setProgress((p) =>
+      recordBest(
+        p,
+        r.levelId,
+        Math.round(r.combinedScore * 1000),
+        r.passed
+          ? r.combinedScore >= r.target + 0.05
+            ? 3
+            : r.combinedScore >= r.target + 0.025
+              ? 2
+              : 1
+          : 0,
+      ),
+    );
   }
   return (
     <div className="app-shell">
@@ -146,10 +204,15 @@ export function Game() {
             <div className="empty">Loading your expedition…</div>
           ) : screen === "tutorial" ? (
             <Tutorial
-              start={unlocked ? 0 : progress.step}
+              start={entrySchool ?? (unlocked ? 0 : progress.step)}
+              onNavigate={(step) =>
+                writeDeepLink({ kind: "school", id: step + 1 })
+              }
               onStep={(step) => setProgress((p) => ({ ...p, step }))}
               onFinish={() => unlock("complete")}
               onSkip={() => unlock("skipped")}
+              onBack={() => setScreen("map")}
+              unlocked={unlocked}
             />
           ) : screen === "mission" && selected ? (
             <Mission
@@ -174,7 +237,7 @@ export function Game() {
                     <em>A clearer signal.</em>
                   </h1>
                   <p>
-                    Build quantum circuits. Catch invisible glitches.
+                    Protect fixed circuits. Catch invisible glitches.
                     <br />
                     Discover how a little protection goes a long way.
                   </p>
@@ -241,6 +304,15 @@ export function Game() {
                   <span>Real quantum simulation</span>
                 </div>
               </div>
+              {(progress.best[10]?.stars || 0) > 0 && (
+                <div className="notice">
+                  <ShieldCheck size={20} />
+                  <strong>Master Spacetime Architect</strong>
+                  <span>
+                    Final mission certification earned · saved on this device
+                  </span>
+                </div>
+              )}
               <div className="section-heading mission-heading">
                 <div>
                   <p className="eyebrow">CHOOSE YOUR NEXT EXPERIMENT</p>
@@ -248,7 +320,11 @@ export function Game() {
                 </div>
                 <span className="chip">
                   {unlocked
-                    ? "All missions unlocked"
+                    ? progress.tutorial === "skipped"
+                      ? "All missions unlocked"
+                      : completed === 10
+                        ? "Expedition complete"
+                        : "Next mission ready"
                     : "Complete flight school to unlock"}
                 </span>
               </div>
@@ -265,7 +341,7 @@ export function Game() {
                   <button
                     className={`mission-card ${progress.best[l.id]?.stars ? "completed" : ""}`}
                     key={l.id}
-                    disabled={!unlocked}
+                    disabled={!missionUnlocked(progress, l.id)}
                     onClick={() => {
                       setSelected(l);
                       setScreen("mission");
@@ -321,9 +397,9 @@ export function Game() {
                   <h3>Small checks. Big questions.</h3>
                   <p>
                     These ten authored missions translate the advanced-track
-                    experiments into a learning journey. Explore automatic
-                    Paulice checks, target ordering, circuit depth, and
-                    non-Clifford T gates in each mission’s Research Lab.
+                    experiments into a learning journey. Explore automatic Pauli
+                    checks, localized protection, and non-Clifford T gates in
+                    the shared circuit workspace.
                   </p>
                   <a
                     href="https://arxiv.org/abs/2504.15725"

@@ -38,7 +38,7 @@ TUTORIALS = json.loads((ROOT / 'backend/reference_solutions/tutorials.json').rea
 REFERENCES = json.loads((ROOT / 'backend/missions/references.json').read_text(encoding='utf-8'))
 SEED = TUTORIALS[0]['request']['sampleSeed']
 SHOTS = TUTORIALS[0]['request']['shots']
-STRATEGIES = ('baseline', 'everywhere', 'reasonable', 'optimal')
+STRATEGIES = ('baseline', 'everywhere', 'reasonable', 'optimal', 'misplaced', 'tooSmall', 'overchecked')
 STYLE = {'fontsize': 9, 'subfontsize': 7, 'backgroundcolor': '#ffffff'}
 
 
@@ -212,7 +212,7 @@ def protection_school():
 
 
 def unscored_row(number, data, ancillas, demonstration):
-    return dict(level=f'FS{number}', data=data, ancillas=ancillas, tCount=0,
+    return dict(level=f'FS{number}', data=data, ancillas=ancillas, tCount=0,minimumKept=None,
                 baseline=None, everywhere=None, reasonable=None, optimal=None,
                 target=None, spread=None, completion=TUTORIALS[number-1]['criteria'],
                 demonstratedFidelity=demonstration)
@@ -291,7 +291,7 @@ def capstone():
         repeats = [timeline.evaluate(sample, visuals=False) for _ in range(3)]
         result = repeats[0]
         rows.append(dict(strategy=name, fidelity=result['fidelity'], kept=result['retention'],
-                         score=result['score'], target=result['qualificationThreshold'],
+                         score=result['score'], correct_shot_yield=result['correct_shot_yield'],minimumKept=result['minimumKept'],target=result['qualificationThreshold'],
                          spread=max(r['score'] for r in repeats)-min(r['score'] for r in repeats),
                          valid=timeline.validation(sample)['valid']))
     target = rows[2]['target']
@@ -299,12 +299,14 @@ def capstone():
     panels([('FS6 locked payload', timeline.circuit(fixed_payload(6), draft.dataQubits)),
             ('Reasonable single-helper reference', tutorial_picture(draft))])
     table(rows)
-    score_plot(rows, target, 'FS6: exact score and qualification target')
+    extra=json.loads((ROOT/'backend/reference_solutions/capstone.json').read_text())
+    table([dict(strategy=k,**timeline.evaluate(TutorialDraft.model_validate(extra[k+'Draft']),visuals=False)) for k in ('misplaced','tooSmall','overchecked')])
+    score_plot(rows, target, 'FS6: Trusted Fidelity and qualification target')
     with warnings.catch_warnings(record=True) as caught:
         native = timeline.paulice_search(json.dumps(draft.hardware.model_dump(), sort_keys=True))
     print('Game reference search:', comparison['scope'], 'Candidates:', comparison['candidates'])
     print('Separate native Paulice gamma:', native['nativeCost'], 'added helpers:', native['addedAncillas'])
-    return dict(level='FS6', data=draft.dataQubits, ancillas=draft.ancillas, tCount=0,
+    return dict(level='FS6', data=draft.dataQubits, ancillas=draft.ancillas, tCount=0,minimumKept=timeline.CAPSTONE_MINIMUM_KEPT,
                 **{r['strategy']: r['score'] for r in rows}, target=target,
                 spread=max(r['spread'] for r in rows), completion=TUTORIALS[5]['criteria'], demonstratedFidelity=None)
 
@@ -313,7 +315,7 @@ def score_plot(rows, target, title):
     fig, ax = plt.subplots(figsize=(7, 2.6))
     ax.bar([r['strategy'] for r in rows], [r['score'] for r in rows], color=['#94a3b8', '#d8a078', '#52a990', '#5b85ba'])
     ax.axhline(target, color='#b42318', ls='--', label=f'Target {target:.2f}')
-    ax.set(title=title, ylabel='F_ps × S_keep', ylim=(0, 1))
+    ax.set(title=title, ylabel='Trusted Fidelity', ylim=(0, 1))
     ax.legend(); figure(fig)
 
 
@@ -334,9 +336,9 @@ def main_level(number, cache):
         check = missions.validate(draft)
         spread = max(r['combinedScore'] for r in repeats)-min(r['combinedScore'] for r in repeats)
         assert abs(result['combinedScore']-stored[name]) <= stored['spread']+1e-9
-        assert result['passed'] == (name in ('reasonable', 'optimal'))
+        assert result['passed'] == (name!='baseline' and stored[name]>=stored['target'])
         results.append(dict(strategy=name, fidelity=result['fidelity'], kept=result['retention'],
-                            score=result['combinedScore'], target=result['target'], spread=spread,
+                            score=result['combinedScore'], correct_shot_yield=result['correct_shot_yield'],minimumKept=result['minimumKept'],target=result['target'], spread=spread,
                             valid=check['valid'], passed=result['passed'], checkLoops=len(check['checks']),
                             controlledPaulis=sum(g['owner'] != 'fixed-fixture' and g['name'] in ('cx','cy','cz') for g in check['operations'])))
     reasonable = MissionDraft.model_validate(stored['reasonableDraft'])
@@ -366,7 +368,7 @@ def main_level(number, cache):
           'cached search seconds:',round(search['seconds'],3))
     print('Scope:',search['result']['scope'])
     print('Scorer: Aer density_matrix;', 'statevector ideal; no Paulice' if number>=8 else 'stabilizer ideal')
-    row = dict(level=f'Main{number}', data=level['qubits'], ancillas=level['ancillas'],
+    row = dict(level=f'Main{number}', data=level['qubits'], ancillas=level['ancillas'],minimumKept=level['minimumKept'],
                tCount=sum(g['name'] in ('t','tdg') for g in level['payload']),
                **{r['strategy']: r['score'] for r in results}, target=level['targetScore'],
                spread=max(r['spread'] for r in results), completion='Score target with a valid invariant', demonstratedFidelity=None)
@@ -381,7 +383,7 @@ def cross_level(summary, strategy_rows):
     for key, label in [('baseline', 'No checks'), ('reasonable', 'Reasonable'), ('optimal', 'Best in family'), ('target', 'Target')]:
         axes[0].plot(x, [r[key] for r in scored], 'o-', label=label)
     axes[0].set_xticks(x, [r['level'] for r in scored], rotation=45)
-    axes[0].set(ylabel='Combined score', title='Exact validation scores'); axes[0].legend(fontsize=8)
+    axes[0].set(ylabel='Trusted Fidelity', title='Exact validation scores'); axes[0].legend(fontsize=8)
     positions = [(r['target']-r['baseline'])/(r['optimal']-r['baseline']) for r in scored]
     axes[1].bar(x, positions)
     axes[1].set_xticks(x, [r['level'] for r in scored], rotation=45)
@@ -390,7 +392,7 @@ def cross_level(summary, strategy_rows):
     fig, axes = plt.subplots(1, 3, figsize=(13, 3))
     for ax, number in zip(axes, (3, 7, 10)):
         rows = strategy_rows[number]
-        for key, marker, label in [('fidelity','o','Postselected fidelity'), ('kept','s','Kept fraction'), ('score','^','Combined score')]:
+        for key, marker, label in [('fidelity','o','Postselected fidelity'), ('kept','s','Kept fraction'), ('score','^','Trusted Fidelity')]:
             ax.scatter([r['checkLoops'] for r in rows], [r[key] for r in rows], marker=marker, label=label)
         for r in rows:
             ax.annotate(r['strategy'], (r['checkLoops'],r['score']), fontsize=7, xytext=(3,-10), textcoords='offset points')

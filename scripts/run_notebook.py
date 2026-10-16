@@ -38,7 +38,7 @@ def expected_scores():
     result = {'FS6': dict(baseline=fs6['unchecked']['score'], everywhere=fs6['everywhere']['score'],
                           reasonable=fs6['sensible']['score'], optimal=capstone['exactReferenceMaximum'],
                           target=capstone['threshold'], spread=0., qubits=tutorial['qubits'],
-                          ancillas=tutorial['ancillas'], tCount=tutorial['tCount'])}
+                          ancillas=tutorial['ancillas'], tCount=tutorial['tCount'],minimumKept=capstone['minimumKept'])}
     result.update({f'Main{row["id"]}': row for row in refs['levels']})
     return result
 
@@ -51,7 +51,7 @@ def validate_manifest(manifest):
     expected = expected_scores()
     for row in rows:
         name = row['level']
-        for key in ('baseline', 'everywhere', 'reasonable', 'optimal', 'target', 'spread'):
+        for key in ('minimumKept','baseline', 'everywhere', 'reasonable', 'optimal', 'target', 'spread'):
             value = row[key]
             if name not in expected:
                 if value is not None:
@@ -78,11 +78,11 @@ def validate_manifest(manifest):
     # agrees, while full precision above uses the existing 1e-9 tolerance.
     for line in (ROOT / 'docs/LEVEL_VALIDATION.md').read_text(encoding='utf-8').splitlines():
         cells = [part.strip() for part in line.split('|')[1:-1]]
-        if not cells or not (cells[0] == 'FS6' or cells[0].isdigit()):
+        if len(cells)!=11 or not (cells[0] == 'FS6' or cells[0].isdigit()):
             continue
         name = cells[0] if cells[0] == 'FS6' else 'Main' + cells[0]
         row = next(r for r in rows if r['level'] == name)
-        for key, rounded in zip(('baseline','everywhere','reasonable','optimal','target','spread'), cells[4:]):
+        for key, rounded in zip(('minimumKept','baseline','everywhere','reasonable','optimal','target','spread'), cells[4:]):
             decimals = len(rounded.split('.')[1]) if '.' in rounded else 0
             if abs(row[key] - float(rounded)) > .5 * 10**(-decimals) + 1e-9:
                 raise ValueError(f'{name}: summary disagrees with the rounded LEVEL_VALIDATION.md table.')

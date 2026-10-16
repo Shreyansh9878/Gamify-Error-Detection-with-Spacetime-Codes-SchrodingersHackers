@@ -12,7 +12,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def main():
-    path=ROOT/'notebooks/track_experiments.ipynb';notebook=json.loads(path.read_text())
+    path=ROOT/'notebooks/track_experiments.ipynb';notebook=json.loads(path.read_text(encoding='utf-8'))
     scope={'__name__':'__notebook__'};counter=0
     for cell in notebook['cells']:
         if cell['cell_type']!='code':continue

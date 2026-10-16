@@ -89,7 +89,7 @@ def experiment():
                 assert abs(ideal['fidelity']-1)<1e-8 and abs(ideal['retention']-1)<1e-8
                 metrics=score(circuit,base)
                 rows.append(dict(repetitions=repetitions,tCount=t_count,dataQubits=3,payloadDepth=base.depth(),
-                    method=name,uncheckedFidelity=baseline['fidelity'],**metrics,**resources(circuit,base),**metadata))
+                    method=name,uncheckedFidelity=baseline['fidelity'],**metrics,minimumKept=None,trusted_fidelity=None,**resources(circuit,base),**metadata))
     from backend.research import run_research
     from backend.models import ResearchRequest
     paulice=[]
@@ -97,7 +97,7 @@ def experiment():
         for targets in ([0],[1],[0,1],[1,0]):
             result=run_research(ResearchRequest(levelId=7,targets=targets,repetitions=repetitions))
             paulice.append(dict(repetitions=repetitions,targets=targets,**result))
-    return dict(pauliceObservableBenchmarks=paulice,seed=2026,packages={n:version(n) for n in ('qiskit','qiskit-aer','qiskit-paulice','numpy')},
+    return dict(objective='Unbudgeted matched study: correct_shot_yield; score is its legacy alias. Trusted Fidelity is not applicable without an assigned level budget. F_ps and S_keep are unchanged.',pauliceObservableBenchmarks=paulice,seed=2026,packages={n:version(n) for n in ('qiskit','qiskit-aer','qiskit-paulice','numpy')},
         noise='Uniform synthetic depolarizing lambda=.01 after each serialized gate on every live wire; identities retain doping slots. Separate Paulice observable benchmarks use gate_noise=.01, readout_noise=.015 and the documented legacy gate-local Aer noise; do not numerically merge those estimators with coherent state-fidelity rows. No readout error, hardware execution or calibration claim.',
         scope='Matched 3-data-qubit backbone, repetitions 1/3 and four identity-or-T doping slots. Separate Paulice Clifford benchmarks: budgets 1/2 and orders [0,1]/[1,0]. T search enumerates seven full-span Z/I openings with one helper; best found, not an unrestricted optimum.',rows=rows)
 

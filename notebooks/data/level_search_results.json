@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "generator": "python scripts/cache_level_searches.py",
   "implementation": "backend.missions.reference.optimize",
-  "generatedAtUtc": "2026-10-16T11:43:12.654167+00:00",
-  "seconds": 390.014906299999,
+  "generatedAtUtc": "2026-10-16T12:38:03.338417+00:00",
+  "seconds": 401.5582005000033,
   "seed": 2026,
   "signature": {
     "files": {
@@ -35,11 +35,11 @@
       "backend/learning/visualization.py": "f5042f6d1bf0a13fa42c1887bd7e79e917b603f4254f57bd543e9e5e6cc5eece",
       "backend/levels.py": "48d64b38ae6b14e8c4e9352f33452e646159501a992a13eb9383941af42a91c6",
       "backend/missions/__init__.py": "377e9d3fd05af0b00682e3eee2b91a110f268dded58291127daeee1cc10828b1",
-      "backend/missions/levels.py": "83b8a0b5865edd2d9baccff9e0e6ff066b56127d0413b5c6ad6c49c71d372f34",
+      "backend/missions/levels.py": "35ccb9800f3c6a46f71af4fb62fdac9c55ddc00c62dd60f897e7bfe9ab04adb6",
       "backend/missions/models.py": "b6f465322baac422fceb29a7bbaf53579e996989694846c5218ff3f7942a01b4",
-      "backend/missions/reference.py": "999222ee2a40fc01bf3b4b1977b039fc4f6cc2c123befb9e1c58494c4036d9c6",
-      "backend/missions/service.py": "0f321f8a40d6820e9bd8cf5921badb2f8ce76b7665be49e16c4fe15f62aec55f",
-      "backend/missions/simulation.py": "42b5fa9ecf0b962cfb469eb0d52764be89722e317e543f02bba470329a23928c",
+      "backend/missions/reference.py": "8ea20d3180da219e3f2ead2942430d7a707cde65cf60305c3f9b6359d1dc7eef",
+      "backend/missions/service.py": "4b74fb4b3a41a0c14622c6198bc7f7fdedf5b1a51da53a38a4b2fb0a16dbee66",
+      "backend/missions/simulation.py": "5b051ee3f8e2a96594c3081d55d16ed61d1c1402d2a57756be54c0ea134e7de6",
       "backend/models.py": "4ed8876c840a0fa95c3b9f856f5ad6372e5857eeaa229742a3cd65c92a8c69e4",
       "backend/noise_lab/__init__.py": "1bbf238f5272f4a3a2eaf5121c5f936f38b20816a67661299ea5ee62f43f8a38",
       "backend/noise_lab/code_parser.py": "386fa2c7ffa333db8e9b5813ac4c65cff7e3fb8b893ba68138a19b0c0deecd62",
@@ -54,14 +54,16 @@
       "backend/quantum_core/noise.py": "42c3f93ebe193d72a3c601ad78d1be965fdb883e052a0a0d09e79f923203338f",
       "backend/quantum_core/pauli.py": "a2e8079315107eb797b6297bcb3706594b4e2ca09f5915245db76c39715399da",
       "backend/quantum_core/paulice.py": "5e1299beb32ee3ab95b5adb26aeb76181cd3fd7297382fc35ee963240d009c5c",
-      "backend/quantum_core/scoring.py": "2ada5c0ada70b032518deef68e05277d21812ca2ec7012da20945e322880f4c0",
+      "backend/quantum_core/scoring.py": "b3dae8c6cb2437bf640eecb7dc84821f45c0234e5573d04bdf445cdb18e3ff43",
       "backend/research.py": "5ba4a0fa4b8074859f9a5bfc47adae54cc2d2b79cfa8ca8400ca9daf2965be2a",
       "backend/timeline_lab/__init__.py": "dba8add215b5c3b75163b83658c1ffc6fb09960f0b7eb3c865e277ae7f2c098e",
+      "backend/timeline_lab/capstone_config.py": "75eb4afa83c8c51c65e7ec1f430387c94e898f8c077801476c40492e9722150b",
       "backend/timeline_lab/capstone_examples.py": "8b7d66e5d34a5b50123fc27876a6c1f22d79e385d634dddb9738ff5bc01712f0",
       "backend/timeline_lab/models.py": "f929e900b991f2a7ce84a7acc0b87bac21d48897b58e17fea4a81dbb6326567a",
-      "backend/timeline_lab/service.py": "9109f32421eef946d6f787c8238b2e0a6abcb5bfb74863277decdb9a47be7fd6",
+      "backend/timeline_lab/service.py": "b64dc5d7189068b253a55abf19f296b5109df472c36588619458113148ea6261",
       "backend/tutorial.py": "70edd19f35a6fae0fb2a3b9cc86e2abd2b88ca7db1ba5ca3e9081997c18577f1",
-      "backend/missions/references.json": "9c1dda879eb3427cb6afef406eb0626616845007514bd24a6cebb65f9ea1d131",
+      "backend/missions/references.json": "c153177c516288ad1c5c8e3e81a218fc3a8232727d39a0ea6f8473b91453dd4b",
+      "backend/reference_solutions/capstone.json": "6d979d856752d63b9f77b5e38a7b7fca46395a296b2546cb296ede5354811b6f",
       "backend/reference_solutions/tutorials.json": "451475f2576ee39c7073922b0ba25e19dd2cee5d2ca5f350bf19f37283fcf0fd"
     },
     "packages": {
@@ -75,7 +77,7 @@
   "results": [
     {
       "level": 1,
-      "seconds": 2.51353029999882,
+      "seconds": 2.733850099990377,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -83,7 +85,10 @@
           "label": "XI",
           "start": 1,
           "end": 2,
-          "score": 0.6816147235629979,
+          "score": 0.6884997207707049,
+          "fidelity": 0.8274532685611461,
+          "retention": 0.8237501131009537,
+          "correct_shot_yield": 0.6816147235629979,
           "draft": {
             "version": 1,
             "levelId": 1,
@@ -154,7 +159,7 @@
     },
     {
       "level": 2,
-      "seconds": 15.494791000004625,
+      "seconds": 26.5732907000056,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -162,7 +167,10 @@
           "label": "IXI",
           "start": 1,
           "end": 2,
-          "score": 0.6723648897972381,
+          "score": 0.6860866222420796,
+          "fidelity": 0.8194288053407247,
+          "retention": 0.8205287456518735,
+          "correct_shot_yield": 0.6723648897972381,
           "draft": {
             "version": 1,
             "levelId": 2,
@@ -233,7 +241,7 @@
     },
     {
       "level": 3,
-      "seconds": 15.980655899998965,
+      "seconds": 23.012225100013893,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -241,7 +249,10 @@
           "label": "IXI",
           "start": 2,
           "end": 3,
-          "score": 0.6656209888427601,
+          "score": 0.7081074349391067,
+          "fidelity": 0.8145333377734423,
+          "retention": 0.8171807806691624,
+          "correct_shot_yield": 0.6656209888427601,
           "draft": {
             "version": 1,
             "levelId": 3,
@@ -312,7 +323,7 @@
     },
     {
       "level": 4,
-      "seconds": 17.226983700005803,
+      "seconds": 19.930973200011067,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -320,7 +331,10 @@
           "label": "IXI",
           "start": 2,
           "end": 3,
-          "score": 0.6594721468958933,
+          "score": 0.716817550973797,
+          "fidelity": 0.8101376810277944,
+          "retention": 0.8140247791699347,
+          "correct_shot_yield": 0.6594721468958933,
           "draft": {
             "version": 1,
             "levelId": 4,
@@ -381,7 +395,7 @@
     },
     {
       "level": 5,
-      "seconds": 21.154443200008245,
+      "seconds": 21.739318699983414,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -389,7 +403,10 @@
           "label": "IXI",
           "start": 3,
           "end": 4,
-          "score": 0.6492965094579561,
+          "score": 0.7214405660643957,
+          "fidelity": 0.8008642797619691,
+          "retention": 0.8107447489741189,
+          "correct_shot_yield": 0.6492965094579561,
           "draft": {
             "version": 1,
             "levelId": 5,
@@ -450,7 +467,7 @@
     },
     {
       "level": 6,
-      "seconds": 21.487257499975385,
+      "seconds": 21.99124419997679,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -458,7 +475,10 @@
           "label": "IXI",
           "start": 3,
           "end": 4,
-          "score": 0.6426000689397053,
+          "score": 0.738620768896213,
+          "fidelity": 0.7956390162147299,
+          "retention": 0.8076527870602541,
+          "correct_shot_yield": 0.6426000689397053,
           "draft": {
             "version": 1,
             "levelId": 6,
@@ -519,7 +539,7 @@
     },
     {
       "level": 7,
-      "seconds": 24.37597970000934,
+      "seconds": 23.24423690000549,
       "result": {
         "kind": "clifford-pauli-reference-search",
         "pauliceUsed": false,
@@ -527,7 +547,10 @@
           "label": "IXI",
           "start": 4,
           "end": 5,
-          "score": 0.6353248974274665,
+          "score": 0.7387498807296121,
+          "fidelity": 0.789773556603663,
+          "retention": 0.8044393131616275,
+          "correct_shot_yield": 0.6353248974274665,
           "draft": {
             "version": 1,
             "levelId": 7,
@@ -588,7 +611,7 @@
     },
     {
       "level": 8,
-      "seconds": 126.52603129998897,
+      "seconds": 96.05978110001888,
       "result": {
         "kind": "custom-t-pauli-search",
         "pauliceUsed": false,
@@ -596,7 +619,10 @@
           "label": "IIXI",
           "start": 4,
           "end": 5,
-          "score": 0.6175343139718612,
+          "score": 0.7440172457492304,
+          "fidelity": 0.770559692986463,
+          "retention": 0.8014100913823816,
+          "correct_shot_yield": 0.6175343139718612,
           "draft": {
             "version": 1,
             "levelId": 8,
@@ -657,7 +683,7 @@
     },
     {
       "level": 9,
-      "seconds": 70.32741430000169,
+      "seconds": 84.25973530000192,
       "result": {
         "kind": "custom-t-pauli-search",
         "pauliceUsed": false,
@@ -665,7 +691,10 @@
           "label": "IIXI",
           "start": 5,
           "end": 6,
-          "score": 0.6093918980306683,
+          "score": 0.7431608512569126,
+          "fidelity": 0.7633985244840413,
+          "retention": 0.7982618232626771,
+          "correct_shot_yield": 0.6093918980306683,
           "draft": {
             "version": 1,
             "levelId": 9,
@@ -726,7 +755,7 @@
     },
     {
       "level": 10,
-      "seconds": 74.47854989999905,
+      "seconds": 81.93042069999501,
       "result": {
         "kind": "custom-t-pauli-search",
         "pauliceUsed": false,
@@ -734,7 +763,10 @@
           "label": "IIXI",
           "start": 5,
           "end": 6,
-          "score": 0.6014786016402718,
+          "score": 0.7518482520503397,
+          "fidelity": 0.7562971049794116,
+          "retention": 0.7952940685349386,
+          "correct_shot_yield": 0.6014786016402718,
           "draft": {
             "version": 1,
             "levelId": 10,

@@ -19,6 +19,7 @@ CACHE = ROOT / 'notebooks/data/level_search_results.json'
 def source_signature():
     paths = sorted((ROOT / 'backend').rglob('*.py'))
     paths += [ROOT / 'backend/missions/references.json',
+              ROOT / 'backend/reference_solutions/capstone.json',
               ROOT / 'backend/reference_solutions/tutorials.json']
     # Canonical text makes the certificate portable across Git CRLF/LF clones.
     hashes = {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_text(encoding='utf-8').encode('utf-8')).hexdigest()
